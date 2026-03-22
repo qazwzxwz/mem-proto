@@ -328,7 +328,7 @@ function activateCard(realIndex) {
 
     fastErase(detailBody, () => {
       const html = buildDetailHTML(realIndex);
-      typewriterReveal(detailBody, html, 4, () => {
+      typewriterReveal(detailBody, html, 1, () => {
         // After typewriter done, smooth-fit the panel
         detailEl.style.overflow = '';
         smoothFitPanel();
@@ -344,7 +344,7 @@ function activateCard(realIndex) {
     detailEl.style.animation = '';
 
     const html = buildDetailHTML(realIndex);
-    typewriterReveal(detailBody, html, 4, () => {
+    typewriterReveal(detailBody, html, 1, () => {
       smoothFitPanel();
     });
   }

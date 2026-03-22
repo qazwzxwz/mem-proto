@@ -679,8 +679,34 @@
   justify-content: space-between;
   align-items: center;
   margin-top: auto;
+  flex-direction: column;
   padding-top: var(--sp-4);
   border-top: 1px solid var(--color-border);
+}
+
+.wizard__nav-row-cont {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: var(--sp-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.flex-niz {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.flex-vverh {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.mt-10 {
+  width: 100%;
+  margin-bottom: 10px;
 }
 
 .wizard__nav-right {
@@ -873,9 +899,6 @@
     display: inline-flex;
   }
 
-  .mt-10 {
-        margin-top: 10px;
-  }
 
   /* Sidebar becomes a slide-in modal */
   .sidebar-overlay {
@@ -1435,7 +1458,7 @@
   }
   .gs-wrapper {
     flex-direction: column;
-    height: calc(100vh - var(--header-height) - var(--sp-6) * 2);
+    height: calc(100vh - var(--header-height) - var(--sp-6) * 2 + 100px);
     border-radius: var(--radius-lg);
   }
   .gallery-showcase {
@@ -1443,11 +1466,11 @@
   }
   .gs-visual {
     width: 100%;
-    height: 35%;
+    height: 25%;
   }
   .gs-content {
     width: 100%;
-    height: 65%;
+    height: 75%;
   }
   .gs-slide {
     padding: var(--sp-6) var(--sp-6);
@@ -1735,7 +1758,7 @@
   .f1-table,
   .f1-scroll-area {
     min-width: 465px;
-    width: 465px;
+    /* width: 465px; */
   }
   /* Prevent nested horizontal scroll on the body area */
   .f1-scroll-area {

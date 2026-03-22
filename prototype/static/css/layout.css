@@ -334,6 +334,7 @@
     min-height: auto;
     scroll-snap-align: none;
     overflow: visible;
+    padding: 0 0 0 0;
     padding-top: var(--sp-16);
     padding-bottom: var(--sp-16);
   }
@@ -341,6 +342,10 @@
     min-height: 100svh;
   }
   .fp-dots { display: none; }
+
+  .container {
+    padding: calc(var(--header-height) + var(--sp-6)) var(--sp-4) var(--sp-6) !important;
+  }
 }
 
 /* ── Footer ── */
