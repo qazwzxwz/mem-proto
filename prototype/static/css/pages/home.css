@@ -873,6 +873,10 @@
     display: inline-flex;
   }
 
+  .mt-10 {
+        margin-top: 10px;
+  }
+
   /* Sidebar becomes a slide-in modal */
   .sidebar-overlay {
     display: block;
