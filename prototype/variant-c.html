@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>МЭМ — Вариант C: Scroll-история</title>
+  <link rel="stylesheet" href="static/css/tokens.css">
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/components.css">
+  <style>
+    body {
+      background: var(--color-bg);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .variant-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--sp-3) var(--sp-6);
+      background: rgba(43,48,52,0.92);
+      backdrop-filter: blur(12px);
+      color: var(--color-text-inverse);
+      font-size: var(--fs-sm);
+    }
+    .variant-bar a {
+      color: var(--color-text-inverse);
+      text-decoration: none;
+      font-weight: var(--fw-semibold);
+      display: flex; align-items: center; gap: var(--sp-2);
+    }
+    .variant-bar a:hover { color: var(--color-accent); }
+    .variant-tag {
+      background: #43A047;
+      padding: var(--sp-1) var(--sp-3);
+      border-radius: var(--radius-full);
+      font-weight: var(--fw-bold);
+      font-size: var(--fs-xs);
+      letter-spacing: 0.05em;
+    }
+
+    .vc-page {
+      padding-top: calc(var(--header-height) + var(--sp-4));
+    }
+
+    /* ── Sticky photo + scrolling text blocks ── */
+    .vc-story {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .vc-story__photo-col {
+      position: sticky;
+      top: calc(var(--header-height) + var(--sp-4));
+      height: calc(100vh - var(--header-height) - var(--sp-8));
+      width: 50%;
+      float: left;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      margin-right: var(--sp-8);
+      margin-left: var(--sp-6);
+    }
+    .vc-story__photo {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.6s var(--ease-out);
+    }
+    .vc-story__photo.active {
+      opacity: 1;
+    }
+    .vc-story__photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .vc-story__photo-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: var(--sp-6);
+      background: linear-gradient(transparent, rgba(43,48,52,0.7));
+      color: var(--color-text-inverse);
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-semibold);
+    }
+
+    .vc-story__text-col {
+      width: 42%;
+      float: right;
+      padding: var(--sp-6) var(--sp-6) var(--sp-6) 0;
+    }
+
+    .vc-block {
+      min-height: 70vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: var(--sp-8) 0;
+      opacity: 0.25;
+      transform: translateY(20px);
+      transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+    }
+    .vc-block.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .vc-block__num {
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-bold);
+      color: var(--color-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: var(--sp-3);
+    }
+    .vc-block__title {
+      font-size: clamp(var(--fs-xl), 3vw, var(--fs-3xl));
+      font-weight: var(--fw-bold);
+      color: var(--color-primary-dark);
+      margin-bottom: var(--sp-4);
+      line-height: var(--lh-tight);
+    }
+    .vc-block__desc {
+      font-size: var(--fs-base);
+      color: var(--color-text-secondary);
+      line-height: var(--lh-relaxed);
+      margin-bottom: var(--sp-6);
+    }
+
+    .vc-block__specs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--sp-3);
+    }
+    .vc-spec-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--sp-2);
+      padding: var(--sp-2) var(--sp-4);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      font-size: var(--fs-sm);
+      white-space: nowrap;
+    }
+    .vc-spec-pill__val {
+      font-weight: var(--fw-bold);
+      color: var(--color-accent);
+    }
+
+    /* ── Bottom summary ── */
+    .vc-clearfix::after {
+      content: '';
+      display: table;
+      clear: both;
+    }
+    .vc-bottom {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: var(--sp-16) var(--sp-6);
+    }
+    .vc-bottom h2 {
+      text-align: center;
+      margin-bottom: var(--sp-8);
+    }
+    .vc-bottom-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-4);
+    }
+    .vc-bottom-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      padding: var(--sp-6);
+      border: 1px solid var(--color-border);
+      text-align: center;
+      transition: all 0.3s var(--ease-out);
+    }
+    .vc-bottom-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lift);
+      border-color: var(--color-primary);
+    }
+    .vc-bottom-card__icon {
+      font-size: 2.5rem;
+      margin-bottom: var(--sp-3);
+    }
+    .vc-bottom-card__value {
+      font-size: var(--fs-2xl);
+      font-weight: var(--fw-bold);
+      color: var(--color-accent);
+    }
+    .vc-bottom-card__label {
+      font-size: var(--fs-sm);
+      color: var(--color-text-secondary);
+      margin-top: var(--sp-1);
+    }
+
+    /* ── Mobile: stack layout ── */
+    @media (max-width: 900px) {
+      .vc-story__photo-col {
+        position: relative;
+        top: auto;
+        width: 100%;
+        float: none;
+        height: 300px;
+        margin: 0 0 var(--sp-4) 0;
+        border-radius: var(--radius-xl);
+        margin-left: 0;
+        margin-right: 0;
+      }
+      .vc-story__text-col {
+        width: 100%;
+        float: none;
+        padding: 0 var(--sp-6);
+      }
+      .vc-block {
+        min-height: auto;
+        padding: var(--sp-6) 0;
+      }
+      .vc-bottom-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    @media (max-width: 500px) {
+      .vc-bottom-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="variant-bar">
+    <a href="variants.html"><span>&larr;</span> Все варианты</a>
+    <span class="variant-tag">ВАРИАНТ C</span>
+    <span>Scroll-история с фото</span>
+  </div>
+
+  <div class="vc-page">
+    <div class="vc-story vc-clearfix">
+
+      <!-- Sticky photo column -->
+      <div class="vc-story__photo-col">
+        <div class="vc-story__photo active" data-photo="0">
+          <img src="static/img/photo1.jpg" alt="МЭМ общий вид">
+          <div class="vc-story__photo-overlay">МЭМ &mdash; общий вид</div>
+        </div>
+        <div class="vc-story__photo" data-photo="1">
+          <img src="static/img/photo2.jpg" alt="Панель управления">
+          <div class="vc-story__photo-overlay">Панель управления</div>
+        </div>
+        <div class="vc-story__photo" data-photo="2">
+          <img src="static/img/photo3.jpg" alt="Внутреннее оснащение">
+          <div class="vc-story__photo-overlay">Внутреннее оснащение</div>
+        </div>
+        <div class="vc-story__photo" data-photo="3">
+          <img src="static/img/photo4.jpg" alt="Генератор">
+          <div class="vc-story__photo-overlay">Генератор</div>
+        </div>
+        <div class="vc-story__photo" data-photo="4">
+          <img src="static/img/photo5.jpg" alt="Насосная станция">
+          <div class="vc-story__photo-overlay">Насосная станция</div>
+        </div>
+        <div class="vc-story__photo" data-photo="5">
+          <img src="static/img/лицевая 1 фото.jpg" alt="МЭМ на объекте">
+          <div class="vc-story__photo-overlay">МЭМ на объекте</div>
+        </div>
+      </div>
+
+      <!-- Scrolling text blocks -->
+      <div class="vc-story__text-col">
+
+        <div class="vc-block active" data-trigger-photo="0">
+          <div class="vc-block__num">01 / Корпус</div>
+          <div class="vc-block__title">Надёжный мобильный корпус</div>
+          <div class="vc-block__desc">Прицепное шасси позволяет доставить модуль на любую площадку одним рейсом. Корпус из сэндвич-панелей 50 мм обеспечивает полную теплоизоляцию и защиту оборудования в любых условиях.</div>
+          <div class="vc-block__specs">
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">1.8 &times; 4.5 &times; 1.5</span> м</div>
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">700</span> кг пустой</div>
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">3 000</span> кг полная</div>
+          </div>
+        </div>
+
+        <div class="vc-block" data-trigger-photo="1">
+          <div class="vc-block__num">02 / Управление</div>
+          <div class="vc-block__title">Центральная панель управления</div>
+          <div class="vc-block__desc">Все системы модуля управляются с единой панели. Запуск генератора, контроль топлива, активация насоса и обогрева &mdash; в одном месте. Защита от короткого замыкания и перегрузок.</div>
+          <div class="vc-block__specs">
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">15 кВт</span> макс. нагрузка</div>
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">Автоматы</span> защита</div>
+          </div>
+        </div>
+
+        <div class="vc-block" data-trigger-photo="2">
+          <div class="vc-block__num">03 / Оснащение</div>
+          <div class="vc-block__title">Полная комплектация</div>
+          <div class="vc-block__desc">Внутри &mdash; всё необходимое для работы: ЗИП-комплекты, инструмент, рукава, аккумуляторы. Каждый элемент имеет своё место, организованное для быстрого доступа.</div>
+          <div class="vc-block__specs">
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">ЗИП</span> комплекты</div>
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">Рукава</span> пожарные</div>
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">АКБ</span> аккумуляторы</div>
+          </div>
+        </div>
+
+        <div class="vc-block" data-trigger-photo="3">
+          <div class="vc-block__num">04 / Энергия</div>
+          <div class="vc-block__title">Генератор до 15 кВт</div>
+          <div class="vc-block__desc">Дизельный или бензиновый генератор &mdash; сердце модуля. Питает инструмент, сварочные аппараты, освещение и обогреватель. Запуск за 30 секунд, непрерывная работа до 12 часов.</div>
+          <div class="vc-block__specs">
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">15 кВт</span> мощность</div>
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">Дизель / бензин</span></div>
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">12 ч</span> автономность</div>
+          </div>
+        </div>
+
+        <div class="vc-block" data-trigger-photo="4">
+          <div class="vc-block__num">05 / Вода</div>
+          <div class="vc-block__title">Насосная станция</div>
+          <div class="vc-block__desc">Встроенный насос подаёт воду под давлением для технических нужд. Подключается к любому источнику: ёмкость, скважина, открытый водоём.</div>
+          <div class="vc-block__specs">
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">40 л/мин</span> расход</div>
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">4 бар</span> давление</div>
+          </div>
+        </div>
+
+        <div class="vc-block" data-trigger-photo="5">
+          <div class="vc-block__num">06 / Безопасность</div>
+          <div class="vc-block__title">Пожаротушение и обогрев</div>
+          <div class="vc-block__desc">Встроенный пожарный шкаф с рукавом 20 м &mdash; мгновенный доступ при огневых работах. Автономный обогреватель 700 Вт защищает оборудование при морозах до &minus;40&deg;C.</div>
+          <div class="vc-block__specs">
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">20 м</span> рукав</div>
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">700 Вт</span> обогрев</div>
+            <div class="vc-spec-pill"><span class="vc-spec-pill__val">&minus;40&deg;C</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Bottom summary ── -->
+    <div class="vc-bottom">
+      <h2>Ключевые характеристики</h2>
+      <div class="divider" style="margin: var(--sp-4) auto var(--sp-8);"></div>
+      <div class="vc-bottom-grid">
+        <div class="vc-bottom-card">
+          <div class="vc-bottom-card__icon">&#128207;</div>
+          <div class="vc-bottom-card__value">1.8 &times; 4.5 &times; 1.5</div>
+          <div class="vc-bottom-card__label">Габариты, м</div>
+        </div>
+        <div class="vc-bottom-card">
+          <div class="vc-bottom-card__icon">&#9878;</div>
+          <div class="vc-bottom-card__value">3 000 кг</div>
+          <div class="vc-bottom-card__label">Полная масса</div>
+        </div>
+        <div class="vc-bottom-card">
+          <div class="vc-bottom-card__icon">&#9889;</div>
+          <div class="vc-bottom-card__value">15 кВт</div>
+          <div class="vc-bottom-card__label">Генератор</div>
+        </div>
+        <div class="vc-bottom-card">
+          <div class="vc-bottom-card__icon">&#127777;</div>
+          <div class="vc-bottom-card__value">700 Вт</div>
+          <div class="vc-bottom-card__label">Обогреватель</div>
+        </div>
+        <div class="vc-bottom-card">
+          <div class="vc-bottom-card__icon">&#128737;</div>
+          <div class="vc-bottom-card__value">50 мм</div>
+          <div class="vc-bottom-card__label">Теплоизоляция</div>
+        </div>
+        <div class="vc-bottom-card">
+          <div class="vc-bottom-card__icon">&#128267;</div>
+          <div class="vc-bottom-card__value">Дизель / бензин</div>
+          <div class="vc-bottom-card__label">Тип топлива</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // IntersectionObserver: swap photos as text blocks enter viewport
+    const photos = document.querySelectorAll('.vc-story__photo');
+    const blocks = document.querySelectorAll('.vc-block');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio > 0.4) {
+          const idx = entry.target.dataset.triggerPhoto;
+
+          // Activate text block
+          blocks.forEach(b => b.classList.toggle('active', b === entry.target));
+
+          // Swap photo
+          photos.forEach(p => p.classList.toggle('active', p.dataset.photo === idx));
+        }
+      });
+    }, { threshold: 0.4 });
+
+    blocks.forEach(b => observer.observe(b));
+  </script>
+
+</body>
+</html>

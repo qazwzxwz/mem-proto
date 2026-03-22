@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>МЭМ — Вариант B: Горизонтальный таймлайн</title>
+  <link rel="stylesheet" href="static/css/tokens.css">
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/components.css">
+  <style>
+    body {
+      background: var(--color-bg);
+      min-height: 100vh;
+    }
+
+    .variant-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--sp-3) var(--sp-6);
+      background: rgba(43,48,52,0.92);
+      backdrop-filter: blur(12px);
+      color: var(--color-text-inverse);
+      font-size: var(--fs-sm);
+    }
+    .variant-bar a {
+      color: var(--color-text-inverse);
+      text-decoration: none;
+      font-weight: var(--fw-semibold);
+      display: flex; align-items: center; gap: var(--sp-2);
+    }
+    .variant-bar a:hover { color: var(--color-accent); }
+    .variant-tag {
+      background: var(--color-primary);
+      padding: var(--sp-1) var(--sp-3);
+      border-radius: var(--radius-full);
+      font-weight: var(--fw-bold);
+      font-size: var(--fs-xs);
+      letter-spacing: 0.05em;
+    }
+
+    .vb-page {
+      padding: calc(var(--header-height) + var(--sp-8)) var(--sp-6) var(--sp-16);
+      max-width: var(--container-max);
+      margin: 0 auto;
+    }
+
+    .vb-hero {
+      text-align: center;
+      margin-bottom: var(--sp-16);
+    }
+    .vb-hero h1 {
+      font-size: clamp(var(--fs-2xl), 4vw, var(--fs-4xl));
+      color: var(--color-primary-dark);
+      margin-bottom: var(--sp-4);
+    }
+    .vb-hero p {
+      color: var(--color-text-secondary);
+      font-size: var(--fs-lg);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ── Horizontal scrolling timeline ── */
+    .vb-timeline-wrap {
+      position: relative;
+      margin-bottom: var(--sp-16);
+      overflow: hidden;
+    }
+    .vb-timeline-wrap::before,
+    .vb-timeline-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 60px;
+      z-index: 5;
+      pointer-events: none;
+    }
+    .vb-timeline-wrap::before {
+      left: 0;
+      background: linear-gradient(90deg, var(--color-bg), transparent);
+    }
+    .vb-timeline-wrap::after {
+      right: 0;
+      background: linear-gradient(-90deg, var(--color-bg), transparent);
+    }
+
+    .vb-timeline {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      padding: var(--sp-8) var(--sp-12);
+      cursor: grab;
+    }
+    .vb-timeline:active { cursor: grabbing; }
+    .vb-timeline::-webkit-scrollbar { display: none; }
+
+    .vb-tl-card {
+      flex: 0 0 340px;
+      scroll-snap-align: center;
+      position: relative;
+      padding: var(--sp-6);
+      margin-right: var(--sp-8);
+    }
+
+    /* Timeline line */
+    .vb-tl-card::before {
+      content: '';
+      position: absolute;
+      top: 32px;
+      left: -40px;
+      right: -40px;
+      height: 2px;
+      background: var(--color-border);
+    }
+    .vb-tl-card:first-child::before { left: 50%; }
+    .vb-tl-card:last-child::before { right: 50%; }
+
+    /* Timeline dot */
+    .vb-tl-dot {
+      position: relative;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      background: var(--color-surface);
+      border: 3px solid var(--color-primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      margin: 0 auto var(--sp-6);
+      z-index: 2;
+      transition: all 0.4s var(--ease-out);
+    }
+    .vb-tl-card:hover .vb-tl-dot,
+    .vb-tl-card.active .vb-tl-dot {
+      background: var(--color-accent);
+      border-color: var(--color-accent);
+      transform: scale(1.15);
+      box-shadow: 0 0 0 6px rgba(233,60,53,0.15);
+    }
+    .vb-tl-card:hover .vb-tl-dot span,
+    .vb-tl-card.active .vb-tl-dot span {
+      filter: brightness(10);
+    }
+
+    .vb-tl-content {
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      padding: var(--sp-6);
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--color-border);
+      transition: all 0.4s var(--ease-out);
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+    }
+    .vb-tl-card:hover .vb-tl-content,
+    .vb-tl-card.active .vb-tl-content {
+      box-shadow: var(--shadow-lift);
+      border-color: var(--color-primary);
+      transform: translateY(-4px);
+    }
+
+    .vb-tl-num {
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-bold);
+      color: var(--color-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: var(--sp-2);
+    }
+    .vb-tl-title {
+      font-size: var(--fs-lg);
+      font-weight: var(--fw-bold);
+      color: var(--color-primary-dark);
+      margin-bottom: var(--sp-3);
+    }
+    .vb-tl-desc {
+      font-size: var(--fs-sm);
+      color: var(--color-text-secondary);
+      line-height: var(--lh-relaxed);
+      margin-bottom: var(--sp-4);
+      flex: 1;
+    }
+
+    .vb-tl-specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-2);
+    }
+    .vb-tl-spec {
+      padding: var(--sp-2) var(--sp-3);
+      background: var(--color-surface-alt);
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+    .vb-tl-spec__val {
+      font-weight: var(--fw-bold);
+      font-size: var(--fs-base);
+      color: var(--color-primary-dark);
+    }
+    .vb-tl-spec__lbl {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      margin-top: 2px;
+    }
+
+    /* Scroll hint */
+    .vb-scroll-hint {
+      text-align: center;
+      margin-top: var(--sp-4);
+      font-size: var(--fs-sm);
+      color: var(--color-text-secondary);
+      display: flex; align-items: center; justify-content: center; gap: var(--sp-2);
+      animation: hintBounce 2s ease-in-out infinite;
+    }
+    @keyframes hintBounce {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(8px); }
+    }
+
+    /* ── Big photo showcase ── */
+    .vb-showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--sp-6);
+      margin-bottom: var(--sp-16);
+    }
+    .vb-showcase__main {
+      grid-row: 1 / 3;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      position: relative;
+      min-height: 400px;
+    }
+    .vb-showcase__main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .vb-showcase__main-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: var(--sp-6);
+      background: linear-gradient(transparent, rgba(43,48,52,0.85));
+      color: var(--color-text-inverse);
+    }
+    .vb-showcase__main-overlay h3 {
+      color: var(--color-text-inverse);
+      font-size: var(--fs-xl);
+      margin-bottom: var(--sp-2);
+    }
+    .vb-showcase__main-overlay p {
+      font-size: var(--fs-sm);
+      opacity: 0.8;
+    }
+    .vb-showcase__side {
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      position: relative;
+    }
+    .vb-showcase__side img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s var(--ease-out);
+    }
+    .vb-showcase__side:hover img {
+      transform: scale(1.06);
+    }
+    .vb-showcase__side-label {
+      position: absolute;
+      bottom: var(--sp-3);
+      left: var(--sp-3);
+      background: rgba(43,48,52,0.75);
+      color: var(--color-text-inverse);
+      padding: var(--sp-1) var(--sp-3);
+      border-radius: var(--radius-full);
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-semibold);
+      backdrop-filter: blur(6px);
+    }
+
+    /* ── Specs comparison row ── */
+    .vb-compare {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--sp-4);
+    }
+    .vb-compare__card {
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      padding: var(--sp-6);
+      text-align: center;
+      border: 1px solid var(--color-border);
+      transition: all 0.3s var(--ease-out);
+    }
+    .vb-compare__card:hover {
+      border-color: var(--color-accent);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lift);
+    }
+    .vb-compare__icon {
+      font-size: 2rem;
+      margin-bottom: var(--sp-3);
+    }
+    .vb-compare__value {
+      font-size: var(--fs-2xl);
+      font-weight: var(--fw-bold);
+      color: var(--color-accent);
+      margin-bottom: var(--sp-1);
+    }
+    .vb-compare__label {
+      font-size: var(--fs-sm);
+      color: var(--color-text-secondary);
+    }
+
+    @media (max-width: 768px) {
+      .vb-tl-card {
+        flex: 0 0 280px;
+      }
+      .vb-showcase {
+        grid-template-columns: 1fr;
+      }
+      .vb-showcase__main {
+        grid-row: auto;
+        min-height: 250px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="variant-bar">
+    <a href="variants.html"><span>&larr;</span> Все варианты</a>
+    <span class="variant-tag">ВАРИАНТ B</span>
+    <span>Горизонтальный таймлайн</span>
+  </div>
+
+  <div class="vb-page">
+    <div class="vb-hero">
+      <h1>Галерея и характеристики</h1>
+      <div class="divider" style="margin: var(--sp-4) auto;"></div>
+      <p>Пролистайте таймлайн, чтобы исследовать все системы МЭМ. Каждый узел &mdash; отдельное направление возможностей.</p>
+    </div>
+
+    <!-- ── Timeline ── -->
+    <div class="vb-timeline-wrap">
+      <div class="vb-timeline" id="timeline">
+
+        <div class="vb-tl-card active">
+          <div class="vb-tl-dot"><span>&#9889;</span></div>
+          <div class="vb-tl-content">
+            <div class="vb-tl-num">Система 01</div>
+            <div class="vb-tl-title">Генератор</div>
+            <div class="vb-tl-desc">Дизельный или бензиновый генератор обеспечивает полную энергетическую автономность объекта. Питание для инструментов, сварки и освещения.</div>
+            <div class="vb-tl-specs">
+              <div class="vb-tl-spec"><div class="vb-tl-spec__val">15 кВт</div><div class="vb-tl-spec__lbl">мощность</div></div>
+              <div class="vb-tl-spec"><div class="vb-tl-spec__val">12 ч</div><div class="vb-tl-spec__lbl">без перерыва</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vb-tl-card">
+          <div class="vb-tl-dot"><span>&#128293;</span></div>
+          <div class="vb-tl-content">
+            <div class="vb-tl-num">Система 02</div>
+            <div class="vb-tl-title">Пожаротушение</div>
+            <div class="vb-tl-desc">Встроенный пожарный шкаф с рукавом и огнетушителями. Мгновенный доступ при сварочных и огневых работах на объекте.</div>
+            <div class="vb-tl-specs">
+              <div class="vb-tl-spec"><div class="vb-tl-spec__val">20 м</div><div class="vb-tl-spec__lbl">рукав</div></div>
+              <div class="vb-tl-spec"><div class="vb-tl-spec__val">Класс K</div><div class="vb-tl-spec__lbl">шкаф</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vb-tl-card">
+          <div class="vb-tl-dot"><span>&#128167;</span></div>
+          <div class="vb-tl-content">
+            <div class="vb-tl-num">Система 03</div>
+            <div class="vb-tl-title">Насосная станция</div>
+            <div class="vb-tl-desc">Подача воды под давлением для технических нужд. Подключение к любому источнику: ёмкость, скважина, открытый водоём.</div>
+            <div class="vb-tl-specs">
+              <div class="vb-tl-spec"><div class="vb-tl-spec__val">40 л/мин</div><div class="vb-tl-spec__lbl">расход</div></div>
+              <div class="vb-tl-spec"><div class="vb-tl-spec__val">4 бар</div><div class="vb-tl-spec__lbl">давление</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vb-tl-card">
+          <div class="vb-tl-dot"><span>&#127777;</span></div>
+          <div class="vb-tl-content">
+            <div class="vb-tl-num">Система 04</div>
+            <div class="vb-tl-title">Климат-контроль</div>
+            <div class="vb-tl-desc">Сэндвич-панели 50 мм и автономный обогреватель. Оборудование и персонал защищены при экстремальных температурах.</div>
+            <div class="vb-tl-specs">
+              <div class="vb-tl-spec"><div class="vb-tl-spec__val">700 Вт</div><div class="vb-tl-spec__lbl">обогрев</div></div>
+              <div class="vb-tl-spec"><div class="vb-tl-spec__val">&minus;40&deg;C</div><div class="vb-tl-spec__lbl">до</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vb-tl-card">
+          <div class="vb-tl-dot"><span>&#128267;</span></div>
+          <div class="vb-tl-content">
+            <div class="vb-tl-num">Система 05</div>
+            <div class="vb-tl-title">Топливная система</div>
+            <div class="vb-tl-desc">Бак для дизельного или бензинового топлива с датчиком уровня. Обеспечивает непрерывную работу генератора и обогревателя.</div>
+            <div class="vb-tl-specs">
+              <div class="vb-tl-spec"><div class="vb-tl-spec__val">Дизель</div><div class="vb-tl-spec__lbl">тип</div></div>
+              <div class="vb-tl-spec"><div class="vb-tl-spec__val">Датчик</div><div class="vb-tl-spec__lbl">контроль</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="vb-tl-card">
+          <div class="vb-tl-dot"><span>&#128230;</span></div>
+          <div class="vb-tl-content">
+            <div class="vb-tl-num">Система 06</div>
+            <div class="vb-tl-title">Хранение и ЗИП</div>
+            <div class="vb-tl-desc">Отсеки для инструментов, ЗИП-комплектов, рукавов и аккумуляторов. Всё защищено от погоды, организовано и под рукой.</div>
+            <div class="vb-tl-specs">
+              <div class="vb-tl-spec"><div class="vb-tl-spec__val">4.5 м</div><div class="vb-tl-spec__lbl">длина</div></div>
+              <div class="vb-tl-spec"><div class="vb-tl-spec__val">1.5 м</div><div class="vb-tl-spec__lbl">высота</div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="vb-scroll-hint">&larr; Листайте &rarr;</div>
+    </div>
+
+    <!-- ── Photo showcase ── -->
+    <div class="vb-showcase">
+      <div class="vb-showcase__main">
+        <img src="static/img/photo1.jpg" alt="МЭМ общий вид">
+        <div class="vb-showcase__main-overlay">
+          <h3>Многофункциональный энергетический модуль</h3>
+          <p>6 систем. 1 корпус. Полная автономность.</p>
+        </div>
+      </div>
+      <div class="vb-showcase__side">
+        <img src="static/img/photo2.jpg" alt="Панель управления">
+        <div class="vb-showcase__side-label">Панель управления</div>
+      </div>
+      <div class="vb-showcase__side">
+        <img src="static/img/photo3.jpg" alt="Внутреннее оснащение">
+        <div class="vb-showcase__side-label">Внутреннее оснащение</div>
+      </div>
+    </div>
+
+    <!-- ── Bottom spec cards ── -->
+    <div class="vb-compare">
+      <div class="vb-compare__card">
+        <div class="vb-compare__icon">&#128207;</div>
+        <div class="vb-compare__value">1.8 &times; 4.5</div>
+        <div class="vb-compare__label">Габариты, м (Ш &times; Д)</div>
+      </div>
+      <div class="vb-compare__card">
+        <div class="vb-compare__icon">&#9878;</div>
+        <div class="vb-compare__value">3 000</div>
+        <div class="vb-compare__label">Полная масса, кг</div>
+      </div>
+      <div class="vb-compare__card">
+        <div class="vb-compare__icon">&#9889;</div>
+        <div class="vb-compare__value">15 кВт</div>
+        <div class="vb-compare__label">Генератор</div>
+      </div>
+      <div class="vb-compare__card">
+        <div class="vb-compare__icon">&#127777;</div>
+        <div class="vb-compare__value">700 Вт</div>
+        <div class="vb-compare__label">Обогреватель</div>
+      </div>
+      <div class="vb-compare__card">
+        <div class="vb-compare__icon">&#128737;</div>
+        <div class="vb-compare__value">50 мм</div>
+        <div class="vb-compare__label">Теплоизоляция</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Drag-to-scroll for timeline
+    const tl = document.getElementById('timeline');
+    let isDown = false, startX, scrollLeft;
+    tl.addEventListener('mousedown', e => {
+      isDown = true; tl.style.cursor = 'grabbing';
+      startX = e.pageX - tl.offsetLeft;
+      scrollLeft = tl.scrollLeft;
+    });
+    tl.addEventListener('mouseleave', () => { isDown = false; tl.style.cursor = 'grab'; });
+    tl.addEventListener('mouseup', () => { isDown = false; tl.style.cursor = 'grab'; });
+    tl.addEventListener('mousemove', e => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - tl.offsetLeft;
+      tl.scrollLeft = scrollLeft - (x - startX) * 1.5;
+    });
+  </script>
+
+</body>
+</html>

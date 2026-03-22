@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Профиль — МЭМ</title>
+  <link rel="stylesheet" href="static/css/tokens.css">
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/components.css">
+  <link rel="stylesheet" href="static/css/layout.css">
+  <link rel="stylesheet" href="static/css/pages/profile.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header" role="banner">
+    <div class="header__inner">
+      <a href="index.html" class="header__logo" aria-label="МЭМ — на главную">
+        
+        <span>МЭМ</span>
+      </a>
+      <nav class="header__nav" aria-label="Основная навигация">
+        <a href="index.html">Главная</a>
+        
+        <a href="profile.html" class="active">Профиль</a>
+        <a href="admin.html">Админ</a>
+        <div class="nav-auth-group">
+          <a href="#" class="btn btn--ghost btn--sm" data-action="logout">Выйти</a>
+        </div>
+      </nav>
+      <div class="header__actions">
+        
+        <a href="#" class="btn btn--ghost btn--sm header__auth-btn" data-action="logout">Выйти</a>
+      </div>
+      <button class="burger" aria-label="Открыть меню" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="page__content">
+      <h1 class="page__title">Профиль <span class="profile-name text-secondary"></span></h1>
+
+      <!-- Tabs -->
+      <div class="profile-tabs" role="tablist">
+        <button class="profile-tab profile-tab--active" role="tab" data-target="panel-orders" aria-selected="true">Мои заявки</button>
+        <button class="profile-tab" role="tab" data-target="panel-drafts" aria-selected="false">Черновики</button>
+      </div>
+
+      <!-- Orders panel -->
+      <div id="panel-orders" class="profile-panel profile-panel--active" role="tabpanel">
+        <div id="orders-list"></div>
+      </div>
+
+      <!-- Drafts panel -->
+      <div id="panel-drafts" class="profile-panel" role="tabpanel">
+        <div id="draft-area"></div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { initHeader } from './static/js/app.js';
+    import { init as initProfile } from './static/js/profile.js';
+    initHeader();
+    initProfile();
+  </script>
+</body>
+</html>

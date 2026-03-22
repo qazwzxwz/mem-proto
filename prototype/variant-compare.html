@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>МЭМ — Варианты таблицы сравнения</title>
+  <link rel="stylesheet" href="static/css/tokens.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-family);
+      background: #f0f2f5;
+      color: var(--color-text);
+      line-height: var(--lh-base);
+    }
+
+    /* ── Hub navigation ── */
+    .hub {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--color-border);
+      padding: var(--sp-4) var(--sp-6);
+    }
+    .hub__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: var(--sp-6);
+      flex-wrap: wrap;
+    }
+    .hub__title {
+      font-size: var(--fs-lg);
+      font-weight: var(--fw-bold);
+      color: var(--color-primary-dark);
+      white-space: nowrap;
+    }
+    .hub__links {
+      display: flex;
+      gap: var(--sp-3);
+      flex-wrap: wrap;
+    }
+    .hub__link {
+      padding: var(--sp-2) var(--sp-4);
+      border-radius: var(--radius-full);
+      background: var(--color-surface-alt);
+      color: var(--color-text);
+      text-decoration: none;
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-medium);
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+    .hub__link:hover {
+      background: var(--color-primary);
+      color: white;
+    }
+    .hub__back {
+      margin-left: auto;
+      color: var(--color-text-secondary);
+      text-decoration: none;
+      font-size: var(--fs-sm);
+    }
+
+    /* ── Variant section wrapper ── */
+    .variant-section {
+      min-height: 100vh;
+      padding: var(--sp-16) var(--sp-6) var(--sp-24);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .variant-section:nth-child(odd) {
+      background: var(--color-bg);
+    }
+    .variant-label {
+      display: inline-block;
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-bold);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--color-accent);
+      background: rgba(233,60,53,0.08);
+      padding: var(--sp-1) var(--sp-4);
+      border-radius: var(--radius-full);
+      margin-bottom: var(--sp-4);
+    }
+    .variant-title {
+      font-size: clamp(var(--fs-2xl), 3vw, var(--fs-3xl));
+      font-weight: var(--fw-bold);
+      color: var(--color-primary-dark);
+      margin-bottom: var(--sp-2);
+      text-align: center;
+    }
+    .variant-desc {
+      font-size: var(--fs-md);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--sp-10);
+      text-align: center;
+      max-width: 700px;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       VARIANT F1: Feature Matrix — МЭМ vs Отдельно
+       Scrollable container, sticky head/foot,
+       green palette from the solution block
+       ═══════════════════════════════════════════════════ */
+
+    /* Outer card — fixed height window */
+    .f1-table-wrap {
+      width: 100%;
+      max-width: 1100px;
+      border-radius: var(--radius-xl);
+      box-shadow:
+        0 8px 32px rgba(0,0,0,0.12),
+        0 0 0 1px rgba(0,0,0,0.04);
+      background: #fff;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      max-height: 72vh;
+      position: relative;
+    }
+
+    /* Fade-out hints at top/bottom of scroll area */
+    .f1-scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      /* subtle scrollbar */
+      scrollbar-width: thin;
+      scrollbar-color: rgba(46,125,50,0.25) transparent;
+    }
+    .f1-scroll-area::-webkit-scrollbar { width: 6px; }
+    .f1-scroll-area::-webkit-scrollbar-track { background: transparent; }
+    .f1-scroll-area::-webkit-scrollbar-thumb {
+      background: rgba(46,125,50,0.25);
+      border-radius: 3px;
+    }
+    .f1-scroll-area::-webkit-scrollbar-thumb:hover {
+      background: rgba(46,125,50,0.4);
+    }
+
+    /* Shared table reset for head / body / foot tables */
+    .f1-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #fff;
+      table-layout: fixed;
+    }
+    /* Column widths — synced across all 3 tables */
+    .f1-table .f1-col-w1 { width: 35%; }
+    .f1-table .f1-col-w2 { width: 25%; }
+    .f1-table .f1-col-w3 { width: 22%; }
+    .f1-table .f1-col-w4 { width: 18%; }
+
+    /* ── Fixed header (outside scroll) ── */
+    .f1-table--head {
+      border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .f1-table--head th {
+      padding: var(--sp-5) var(--sp-6);
+      font-size: var(--fs-sm);
+      font-weight: var(--fw-bold);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      text-align: center;
+      border-bottom: 2px solid rgba(46,125,50,0.15);
+      background: #fff;
+    }
+    .f1-table--head th:first-child {
+      text-align: left;
+      background: #f8faf8;
+      color: #3d4f42;
+      padding-left: var(--sp-8);
+    }
+    /* МЭМ column header — solution-block green */
+    .f1-table .f1-col-mem {
+      background: #2E7D32;
+      color: #fff;
+      position: relative;
+    }
+    .f1-col-mem::after {
+      content: '✓ Рекомендуем';
+      position: absolute;
+      top: var(--sp-2);
+      right: var(--sp-3);
+      font-size: 10px;
+      background: rgba(255,255,255,0.18);
+      padding: 2px 10px;
+      border-radius: var(--radius-full);
+      letter-spacing: 0.08em;
+    }
+    .f1-table .f1-col-separate {
+      background: #f5f5f5;
+      color: var(--color-text);
+    }
+    .f1-table .f1-col-none {
+      background: #f0f0f0;
+      color: var(--color-text-secondary);
+    }
+
+    /* ── Body rows ── */
+    .f1-table tbody td {
+      padding: var(--sp-4) var(--sp-6);
+      text-align: center;
+      border-bottom: 1px solid rgba(0,0,0,0.045);
+      font-size: var(--fs-sm);
+      vertical-align: middle;
+      transition: background 0.2s;
+    }
+    /* Subtle green tint on МЭМ column cells */
+    .f1-table tbody td:nth-child(2) {
+      background: rgba(232,245,233,0.35);
+    }
+    .f1-table tbody tr:hover td {
+      background: rgba(46,125,50,0.05);
+    }
+    .f1-table tbody tr:hover td:nth-child(2) {
+      background: rgba(46,125,50,0.1);
+    }
+    .f1-table tbody td:first-child {
+      text-align: left;
+      font-weight: var(--fw-medium);
+      color: var(--color-text);
+      padding-left: var(--sp-8);
+      background: transparent;
+    }
+    .f1-table tbody td:first-child .f1-feat-desc {
+      display: block;
+      font-size: var(--fs-xs);
+      color: var(--color-text-secondary);
+      font-weight: var(--fw-regular);
+      margin-top: 2px;
+    }
+
+    /* ── Fixed footer (outside scroll) ── */
+    .f1-table--foot {
+      border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .f1-table--foot td {
+      padding: var(--sp-6) var(--sp-6);
+      border-top: 2px solid rgba(46,125,50,0.15);
+      text-align: center;
+      font-weight: var(--fw-bold);
+      background: #fff;
+    }
+    .f1-table tfoot td:nth-child(2) {
+      background: linear-gradient(160deg, #f0f4f2 0%, #e8efe9 40%, #f5f8f5 100%);
+    }
+    .f1-table tfoot td:first-child {
+      text-align: left;
+      padding-left: var(--sp-8);
+    }
+
+    /* Icons — solution-palette greens */
+    .f1-check { color: #2E7D32; font-size: 1.4em; }
+    .f1-cross { color: #C62828; font-size: 1.2em; }
+    .f1-partial { color: #E65100; font-size: 1em; }
+    .f1-price-mem {
+      font-size: var(--fs-xl);
+      color: #1B5E20;
+      font-weight: 800;
+    }
+    .f1-price-sep {
+      font-size: var(--fs-xl);
+      color: #C62828;
+    }
+    .f1-price-sub {
+      display: block;
+      font-size: var(--fs-xs);
+      color: #3d4f42;
+      font-weight: var(--fw-regular);
+      margin-top: 2px;
+    }
+
+    /* Category divider rows */
+    .f1-category {
+      background: transparent !important;
+    }
+    .f1-category td {
+      font-weight: var(--fw-bold) !important;
+      font-size: var(--fs-xs) !important;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #2E7D32 !important;
+      padding: var(--sp-3) var(--sp-8) !important;
+      border-bottom: 1px solid rgba(46,125,50,0.12) !important;
+      background: rgba(232,245,233,0.3) !important;
+    }
+    .f1-category td:nth-child(2) {
+      background: rgba(232,245,233,0.5) !important;
+    }
+
+    /* Scroll shadow indicator */
+    .f1-scroll-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-2);
+      padding: var(--sp-2);
+      font-size: var(--fs-xs);
+      color: #3d4f42;
+      background: linear-gradient(180deg, rgba(232,245,233,0.5) 0%, rgba(232,245,233,0) 100%);
+      text-align: center;
+      opacity: 0.8;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .f1-scroll-hint--hidden { opacity: 0; }
+    .f1-scroll-hint__arrow {
+      animation: f1ScrollBounce 1.5s ease-in-out infinite;
+      display: inline-block;
+    }
+    @keyframes f1ScrollBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(3px); }
+    }
+
+    /* ═══════════════════════════════════════════════════
+       VARIANT F2: Model Comparison Cards
+       ═══════════════════════════════════════════════════ */
+    .f2-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-6);
+      max-width: 1100px;
+      width: 100%;
+    }
+    .f2-card {
+      background: #fff;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      transition: transform 0.35s var(--ease-spring), box-shadow 0.35s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .f2-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-xl);
+    }
+    .f2-card--featured {
+      border: 2px solid var(--color-accent);
+      transform: scale(1.03);
+    }
+    .f2-card--featured:hover {
+      transform: scale(1.03) translateY(-4px);
+    }
+    .f2-card__badge {
+      position: absolute;
+      top: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-accent);
+      color: #fff;
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-bold);
+      padding: var(--sp-1) var(--sp-4);
+      border-radius: 0 0 var(--radius-md) var(--radius-md);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      z-index: 2;
+    }
+    .f2-card__header {
+      padding: var(--sp-8) var(--sp-6) var(--sp-4);
+      text-align: center;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .f2-card__model {
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-bold);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--sp-2);
+    }
+    .f2-card__name {
+      font-size: var(--fs-xl);
+      font-weight: var(--fw-bold);
+      color: var(--color-primary-dark);
+      margin-bottom: var(--sp-3);
+    }
+    .f2-card__price {
+      font-size: var(--fs-3xl);
+      font-weight: 800;
+      color: var(--color-primary-dark);
+      line-height: 1;
+    }
+    .f2-card__price-sub {
+      font-size: var(--fs-sm);
+      color: var(--color-text-secondary);
+      font-weight: var(--fw-regular);
+    }
+    .f2-card__body {
+      padding: var(--sp-6);
+      flex: 1;
+    }
+    .f2-feat {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      padding: var(--sp-3) 0;
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+      font-size: var(--fs-sm);
+    }
+    .f2-feat:last-child { border-bottom: none; }
+    .f2-feat__icon {
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+    .f2-feat__icon--yes {
+      background: #E8F5E9;
+      color: #2E7D32;
+    }
+    .f2-feat__icon--no {
+      background: #FFEBEE;
+      color: #C62828;
+    }
+    .f2-feat__icon--partial {
+      background: #FFF8E1;
+      color: #F57F17;
+    }
+    .f2-feat__text {
+      flex: 1;
+    }
+    .f2-feat__val {
+      font-weight: var(--fw-bold);
+      color: var(--color-primary-dark);
+      white-space: nowrap;
+    }
+    .f2-card__footer {
+      padding: var(--sp-4) var(--sp-6) var(--sp-6);
+    }
+    .f2-card__btn {
+      display: block;
+      width: 100%;
+      padding: var(--sp-3) var(--sp-4);
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: var(--fs-base);
+      font-weight: var(--fw-semibold);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+    .f2-card__btn--primary {
+      background: var(--color-accent);
+      color: #fff;
+    }
+    .f2-card__btn--primary:hover {
+      background: var(--color-accent-hover);
+      transform: translateY(-1px);
+    }
+    .f2-card__btn--secondary {
+      background: var(--color-surface-alt);
+      color: var(--color-text);
+    }
+    .f2-card__btn--secondary:hover {
+      background: var(--color-border);
+    }
+
+    /* Highlight feature differences */
+    .f2-card--featured .f2-card__price {
+      color: var(--color-accent);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       VARIANT F3: Visual Side-by-Side Infographic
+       ═══════════════════════════════════════════════════ */
+    .f3-container {
+      max-width: 1000px;
+      width: 100%;
+    }
+    .f3-versus {
+      display: grid;
+      grid-template-columns: 1fr 80px 1fr;
+      gap: 0;
+      align-items: stretch;
+      margin-bottom: var(--sp-12);
+    }
+    .f3-side {
+      border-radius: var(--radius-xl);
+      padding: var(--sp-8);
+      position: relative;
+    }
+    .f3-side--mem {
+      background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 50%, #388E3C 100%);
+      color: #fff;
+      box-shadow: 0 12px 40px rgba(46,125,50,0.3);
+    }
+    .f3-side--old {
+      background: linear-gradient(135deg, #424242 0%, #616161 50%, #757575 100%);
+      color: #fff;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+    }
+    .f3-side__header {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      margin-bottom: var(--sp-8);
+    }
+    .f3-side__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    .f3-side__title {
+      font-size: var(--fs-xl);
+      font-weight: var(--fw-bold);
+    }
+    .f3-side__subtitle {
+      font-size: var(--fs-xs);
+      opacity: 0.7;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .f3-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+    }
+    .f3-vs-badge {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-full);
+      background: var(--color-accent);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: var(--fs-lg);
+      box-shadow: 0 4px 20px rgba(233,60,53,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .f3-metric {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-4);
+      padding: var(--sp-4) 0;
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+    }
+    .f3-metric:last-child { border-bottom: none; }
+    .f3-metric__emoji {
+      font-size: 1.5rem;
+      width: 36px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .f3-metric__info { flex: 1; }
+    .f3-metric__label {
+      font-size: var(--fs-xs);
+      opacity: 0.7;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .f3-metric__value {
+      font-size: var(--fs-lg);
+      font-weight: var(--fw-bold);
+    }
+    .f3-metric__bar-wrap {
+      height: 6px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 3px;
+      margin-top: var(--sp-2);
+      overflow: hidden;
+    }
+    .f3-metric__bar {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 1.2s var(--ease-out);
+    }
+    .f3-side--mem .f3-metric__bar { background: #81C784; }
+    .f3-side--old .f3-metric__bar { background: #EF9A9A; }
+
+    /* Bottom summary row */
+    .f3-summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-4);
+      max-width: 1000px;
+      width: 100%;
+    }
+    .f3-stat {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: var(--sp-6);
+      text-align: center;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s var(--ease-spring);
+    }
+    .f3-stat:hover {
+      transform: translateY(-2px);
+    }
+    .f3-stat__value {
+      font-size: var(--fs-3xl);
+      font-weight: 800;
+      color: var(--color-accent);
+      line-height: 1;
+      margin-bottom: var(--sp-2);
+    }
+    .f3-stat__label {
+      font-size: var(--fs-sm);
+      color: var(--color-text-secondary);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       Responsive
+       ═══════════════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      .f2-grid {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+      }
+      .f2-card--featured {
+        transform: none;
+        order: -1;
+      }
+      .f2-card--featured:hover {
+        transform: translateY(-4px);
+      }
+      .f3-versus {
+        grid-template-columns: 1fr;
+        gap: var(--sp-4);
+      }
+      .f3-divider {
+        height: 60px;
+      }
+      .f3-summary {
+        grid-template-columns: 1fr;
+      }
+    }
+    @media (max-width: 600px) {
+      .variant-section {
+        padding: var(--sp-10) var(--sp-3) var(--sp-16);
+      }
+      .f1-table thead th { font-size: var(--fs-xs); padding: var(--sp-3); }
+      .f1-table tbody td { padding: var(--sp-3); font-size: var(--fs-xs); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ Hub Nav ═══ -->
+  <nav class="hub">
+    <div class="hub__inner">
+      <span class="hub__title">Таблица сравнения — Варианты</span>
+      <div class="hub__links">
+        <a href="#f1" class="hub__link">F1: Матрица</a>
+        <a href="#f2" class="hub__link">F2: Модели</a>
+        <a href="#f3" class="hub__link">F3: Инфографика</a>
+      </div>
+      <a href="index.html" class="hub__back">&larr; Главная</a>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════
+       VARIANT F1 — Feature Matrix: МЭМ vs Покупка по отдельности
+       ═══════════════════════════════════════════════════════ -->
+  <section class="variant-section" id="f1">
+    <span class="variant-label">Вариант F1</span>
+    <h2 class="variant-title">Матрица характеристик</h2>
+    <p class="variant-desc">Классическая таблица: МЭМ против покупки каждого компонента по отдельности. Акцент на экономии и удобстве.</p>
+
+    <div class="f1-table-wrap" id="f1-wrap">
+      <!-- Fixed header -->
+      <table class="f1-table f1-table--head">
+        <colgroup>
+          <col class="f1-col-w1"><col class="f1-col-w2"><col class="f1-col-w3"><col class="f1-col-w4">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Характеристика</th>
+            <th class="f1-col-mem">МЭМ<br><small style="font-weight:400;opacity:0.85;">Всё в одном модуле</small></th>
+            <th class="f1-col-separate">По отдельности<br><small style="font-weight:400;">Генератор + Оборудование</small></th>
+            <th class="f1-col-none">Без решения<br><small style="font-weight:400;">«И так сойдёт»</small></th>
+          </tr>
+        </thead>
+      </table>
+
+      <!-- Scrollable body -->
+      <div class="f1-scroll-area" id="f1-scroll">
+        <table class="f1-table f1-table--body">
+          <colgroup>
+            <col class="f1-col-w1"><col class="f1-col-w2"><col class="f1-col-w3"><col class="f1-col-w4">
+          </colgroup>
+          <tbody>
+            <tr class="f1-category"><td colspan="4">Электроснабжение</td></tr>
+            <tr>
+              <td>Автономная генерация<span class="f1-feat-desc">Дизельный / бензиновый генератор</span></td>
+              <td><span class="f1-check">&#10003;</span> до 15 кВт</td>
+              <td><span class="f1-check">&#10003;</span> нужен отдельный</td>
+              <td><span class="f1-cross">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Время запуска<span class="f1-feat-desc">От нажатия до готовности</span></td>
+              <td><strong>30 сек</strong></td>
+              <td>3—10 мин</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Непрерывная работа<span class="f1-feat-desc">Без дозаправки</span></td>
+              <td><strong>12 часов</strong></td>
+              <td>5—8 часов</td>
+              <td>—</td>
+            </tr>
+
+            <tr class="f1-category"><td colspan="4">Пожарная безопасность</td></tr>
+            <tr>
+              <td>Пожарный шкаф<span class="f1-feat-desc">Рукав, огнетушитель, комплект</span></td>
+              <td><span class="f1-check">&#10003;</span> Встроен, класс K</td>
+              <td><span class="f1-partial">&#9679;</span> Искать по объекту</td>
+              <td><span class="f1-cross">&#10007;</span> Нет</td>
+            </tr>
+            <tr>
+              <td>Длина пожарного рукава</td>
+              <td><strong>20 м</strong></td>
+              <td>5—10 м (ручной)</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Сертификация<span class="f1-feat-desc">Соответствие нормам ПБ</span></td>
+              <td><span class="f1-check">&#10003;</span></td>
+              <td><span class="f1-partial">&#9679;</span> По каждому элементу</td>
+              <td><span class="f1-cross">&#10007;</span></td>
+            </tr>
+
+            <tr class="f1-category"><td colspan="4">Водоснабжение</td></tr>
+            <tr>
+              <td>Насосная станция<span class="f1-feat-desc">Автономная подача воды</span></td>
+              <td><span class="f1-check">&#10003;</span> 40 л/мин, 4 бар</td>
+              <td><span class="f1-partial">&#9679;</span> Отдельный насос</td>
+              <td><span class="f1-cross">&#10007;</span></td>
+            </tr>
+
+            <tr class="f1-category"><td colspan="4">Климатическая защита</td></tr>
+            <tr>
+              <td>Утепление корпуса<span class="f1-feat-desc">Сэндвич-панели</span></td>
+              <td><span class="f1-check">&#10003;</span> 50 мм</td>
+              <td><span class="f1-cross">&#10007;</span> Нет корпуса</td>
+              <td><span class="f1-cross">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Рабочая температура</td>
+              <td><strong>&minus;40°C</strong></td>
+              <td>Зависит от оборудования</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Встроенный обогрев</td>
+              <td><span class="f1-check">&#10003;</span> 700 Вт</td>
+              <td><span class="f1-cross">&#10007;</span></td>
+              <td><span class="f1-cross">&#10007;</span></td>
+            </tr>
+
+            <tr class="f1-category"><td colspan="4">Логистика и хранение</td></tr>
+            <tr>
+              <td>Мобильность<span class="f1-feat-desc">Перемещение между объектами</span></td>
+              <td><span class="f1-check">&#10003;</span> На прицепе</td>
+              <td><span class="f1-cross">&#10007;</span> Перевозить каждый отдельно</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <td>Организованное хранение<span class="f1-feat-desc">Инструмент, ЗИП, расходники</span></td>
+              <td><span class="f1-check">&#10003;</span> Всё в модуле</td>
+              <td><span class="f1-cross">&#10007;</span> Раскидано по площадке</td>
+              <td><span class="f1-cross">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Защита от краж и непогоды</td>
+              <td><span class="f1-check">&#10003;</span> Запирающийся модуль</td>
+              <td><span class="f1-cross">&#10007;</span></td>
+              <td><span class="f1-cross">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Время развёртывания</td>
+              <td><strong>15 минут</strong></td>
+              <td>1—3 часа</td>
+              <td>—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Scroll hint -->
+      <div class="f1-scroll-hint" id="f1-hint">
+        <span class="f1-scroll-hint__arrow">&darr;</span> Прокрутите для просмотра всех характеристик
+      </div>
+
+      <!-- Fixed footer -->
+      <table class="f1-table f1-table--foot">
+        <colgroup>
+          <col class="f1-col-w1"><col class="f1-col-w2"><col class="f1-col-w3"><col class="f1-col-w4">
+        </colgroup>
+        <tfoot>
+          <tr>
+            <td>Ориентировочная стоимость</td>
+            <td>
+              <span class="f1-price-mem">от 450 000 ₽</span>
+              <span class="f1-price-sub">МЭМ-S (базовый)</span>
+            </td>
+            <td>
+              <span class="f1-price-sep">от 680 000 ₽</span>
+              <span class="f1-price-sub">Генератор + насос + сварка + огнетушитель + хранение</span>
+            </td>
+            <td>
+              <span style="color:var(--color-text-secondary)">—</span>
+              <span class="f1-price-sub">Убытки от простоев</span>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       VARIANT F2 — Model Comparison Cards (S / M / L)
+       ═══════════════════════════════════════════════════════ -->
+  <section class="variant-section" id="f2">
+    <span class="variant-label">Вариант F2</span>
+    <h2 class="variant-title">Сравнение моделей МЭМ</h2>
+    <p class="variant-desc">Карточки моделей с подсветкой отличий. Подходит для выбора конкретной конфигурации.</p>
+
+    <div class="f2-grid">
+      <!-- МЭМ-S -->
+      <div class="f2-card">
+        <div class="f2-card__header">
+          <div class="f2-card__model">Базовый</div>
+          <div class="f2-card__name">МЭМ-S</div>
+          <div class="f2-card__price">450 000 <span class="f2-card__price-sub">₽</span></div>
+        </div>
+        <div class="f2-card__body">
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--yes">&#10003;</span>
+            <span class="f2-feat__text">Генератор</span>
+            <span class="f2-feat__val">5 кВт</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--yes">&#10003;</span>
+            <span class="f2-feat__text">Базовый ЗИП</span>
+            <span class="f2-feat__val">&#10003;</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--no">&#10007;</span>
+            <span class="f2-feat__text">Сварочный аппарат</span>
+            <span class="f2-feat__val">—</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--no">&#10007;</span>
+            <span class="f2-feat__text">Насосная станция</span>
+            <span class="f2-feat__val">—</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--no">&#10007;</span>
+            <span class="f2-feat__text">Система пожаротушения</span>
+            <span class="f2-feat__val">—</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--no">&#10007;</span>
+            <span class="f2-feat__text">Теплоаккумулятор</span>
+            <span class="f2-feat__val">—</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--no">&#10007;</span>
+            <span class="f2-feat__text">Доп. АКБ 5 кВт·ч</span>
+            <span class="f2-feat__val">—</span>
+          </div>
+        </div>
+        <div class="f2-card__footer">
+          <button class="f2-card__btn f2-card__btn--secondary">Подробнее</button>
+        </div>
+      </div>
+
+      <!-- МЭМ-M (featured) -->
+      <div class="f2-card f2-card--featured">
+        <div class="f2-card__badge">Популярный выбор</div>
+        <div class="f2-card__header">
+          <div class="f2-card__model">Стандарт</div>
+          <div class="f2-card__name">МЭМ-M</div>
+          <div class="f2-card__price">720 000 <span class="f2-card__price-sub">₽</span></div>
+        </div>
+        <div class="f2-card__body">
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--yes">&#10003;</span>
+            <span class="f2-feat__text">Генератор</span>
+            <span class="f2-feat__val">10 кВт</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--yes">&#10003;</span>
+            <span class="f2-feat__text">Расширенный ЗИП</span>
+            <span class="f2-feat__val">&#10003;</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--yes">&#10003;</span>
+            <span class="f2-feat__text">Сварочный аппарат</span>
+            <span class="f2-feat__val">85 000 ₽</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--yes">&#10003;</span>
+            <span class="f2-feat__text">Насосная станция</span>
+            <span class="f2-feat__val">65 000 ₽</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--no">&#10007;</span>
+            <span class="f2-feat__text">Система пожаротушения</span>
+            <span class="f2-feat__val">—</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--no">&#10007;</span>
+            <span class="f2-feat__text">Теплоаккумулятор</span>
+            <span class="f2-feat__val">—</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--no">&#10007;</span>
+            <span class="f2-feat__text">Доп. АКБ 5 кВт·ч</span>
+            <span class="f2-feat__val">—</span>
+          </div>
+        </div>
+        <div class="f2-card__footer">
+          <button class="f2-card__btn f2-card__btn--primary">Выбрать</button>
+        </div>
+      </div>
+
+      <!-- МЭМ-L -->
+      <div class="f2-card">
+        <div class="f2-card__header">
+          <div class="f2-card__model">Максимальный</div>
+          <div class="f2-card__name">МЭМ-L</div>
+          <div class="f2-card__price">1 050 000 <span class="f2-card__price-sub">₽</span></div>
+        </div>
+        <div class="f2-card__body">
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--yes">&#10003;</span>
+            <span class="f2-feat__text">Генератор</span>
+            <span class="f2-feat__val">15 кВт</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--yes">&#10003;</span>
+            <span class="f2-feat__text">Полный ЗИП</span>
+            <span class="f2-feat__val">&#10003;</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--yes">&#10003;</span>
+            <span class="f2-feat__text">Сварочный аппарат</span>
+            <span class="f2-feat__val">85 000 ₽</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--yes">&#10003;</span>
+            <span class="f2-feat__text">Насосная станция</span>
+            <span class="f2-feat__val">65 000 ₽</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--yes">&#10003;</span>
+            <span class="f2-feat__text">Система пожаротушения</span>
+            <span class="f2-feat__val">95 000 ₽</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--yes">&#10003;</span>
+            <span class="f2-feat__text">Теплоаккумулятор</span>
+            <span class="f2-feat__val">55 000 ₽</span>
+          </div>
+          <div class="f2-feat">
+            <span class="f2-feat__icon f2-feat__icon--yes">&#10003;</span>
+            <span class="f2-feat__text">Доп. АКБ 5 кВт·ч</span>
+            <span class="f2-feat__val">120 000 ₽</span>
+          </div>
+        </div>
+        <div class="f2-card__footer">
+          <button class="f2-card__btn f2-card__btn--secondary">Подробнее</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════
+       VARIANT F3 — Visual Side-by-Side Infographic
+       ═══════════════════════════════════════════════════════ -->
+  <section class="variant-section" id="f3">
+    <span class="variant-label">Вариант F3</span>
+    <h2 class="variant-title">МЭМ vs Традиционный подход</h2>
+    <p class="variant-desc">Визуальное сравнение с анимированными показателями и акцентом на выигрыш от МЭМ.</p>
+
+    <div class="f3-container">
+      <div class="f3-versus">
+        <!-- МЭМ side -->
+        <div class="f3-side f3-side--mem">
+          <div class="f3-side__header">
+            <div class="f3-side__icon">&#9889;</div>
+            <div>
+              <div class="f3-side__title">МЭМ</div>
+              <div class="f3-side__subtitle">Всё в одном модуле</div>
+            </div>
+          </div>
+
+          <div class="f3-metric">
+            <span class="f3-metric__emoji">&#9201;</span>
+            <div class="f3-metric__info">
+              <div class="f3-metric__label">Развёртывание</div>
+              <div class="f3-metric__value">15 минут</div>
+              <div class="f3-metric__bar-wrap">
+                <div class="f3-metric__bar" data-width="15" style="width: 15%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="f3-metric">
+            <span class="f3-metric__emoji">&#128176;</span>
+            <div class="f3-metric__info">
+              <div class="f3-metric__label">Стоимость решения</div>
+              <div class="f3-metric__value">от 450 000 ₽</div>
+              <div class="f3-metric__bar-wrap">
+                <div class="f3-metric__bar" data-width="45" style="width: 45%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="f3-metric">
+            <span class="f3-metric__emoji">&#128295;</span>
+            <div class="f3-metric__info">
+              <div class="f3-metric__label">Единиц оборудования</div>
+              <div class="f3-metric__value">1 модуль</div>
+              <div class="f3-metric__bar-wrap">
+                <div class="f3-metric__bar" data-width="10" style="width: 10%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="f3-metric">
+            <span class="f3-metric__emoji">&#127777;</span>
+            <div class="f3-metric__info">
+              <div class="f3-metric__label">Мин. рабочая температура</div>
+              <div class="f3-metric__value">&minus;40°C</div>
+              <div class="f3-metric__bar-wrap">
+                <div class="f3-metric__bar" data-width="95" style="width: 95%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="f3-metric">
+            <span class="f3-metric__emoji">&#128274;</span>
+            <div class="f3-metric__info">
+              <div class="f3-metric__label">Защита от краж</div>
+              <div class="f3-metric__value">Запирающийся модуль</div>
+              <div class="f3-metric__bar-wrap">
+                <div class="f3-metric__bar" data-width="100" style="width: 100%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="f3-metric">
+            <span class="f3-metric__emoji">&#128666;</span>
+            <div class="f3-metric__info">
+              <div class="f3-metric__label">Логистика</div>
+              <div class="f3-metric__value">1 прицеп</div>
+              <div class="f3-metric__bar-wrap">
+                <div class="f3-metric__bar" data-width="10" style="width: 10%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VS badge -->
+        <div class="f3-divider">
+          <div class="f3-vs-badge">VS</div>
+        </div>
+
+        <!-- Traditional side -->
+        <div class="f3-side f3-side--old">
+          <div class="f3-side__header">
+            <div class="f3-side__icon">&#128230;</div>
+            <div>
+              <div class="f3-side__title">Как раньше</div>
+              <div class="f3-side__subtitle">Всё по отдельности</div>
+            </div>
+          </div>
+
+          <div class="f3-metric">
+            <span class="f3-metric__emoji">&#9201;</span>
+            <div class="f3-metric__info">
+              <div class="f3-metric__label">Развёртывание</div>
+              <div class="f3-metric__value">1—3 часа</div>
+              <div class="f3-metric__bar-wrap">
+                <div class="f3-metric__bar" data-width="80" style="width: 80%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="f3-metric">
+            <span class="f3-metric__emoji">&#128176;</span>
+            <div class="f3-metric__info">
+              <div class="f3-metric__label">Стоимость решения</div>
+              <div class="f3-metric__value">от 680 000 ₽</div>
+              <div class="f3-metric__bar-wrap">
+                <div class="f3-metric__bar" data-width="70" style="width: 70%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="f3-metric">
+            <span class="f3-metric__emoji">&#128295;</span>
+            <div class="f3-metric__info">
+              <div class="f3-metric__label">Единиц оборудования</div>
+              <div class="f3-metric__value">5—8 единиц</div>
+              <div class="f3-metric__bar-wrap">
+                <div class="f3-metric__bar" data-width="70" style="width: 70%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="f3-metric">
+            <span class="f3-metric__emoji">&#127777;</span>
+            <div class="f3-metric__info">
+              <div class="f3-metric__label">Мин. рабочая температура</div>
+              <div class="f3-metric__value">&minus;10°C (в лучшем случае)</div>
+              <div class="f3-metric__bar-wrap">
+                <div class="f3-metric__bar" data-width="25" style="width: 25%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="f3-metric">
+            <span class="f3-metric__emoji">&#128274;</span>
+            <div class="f3-metric__info">
+              <div class="f3-metric__label">Защита от краж</div>
+              <div class="f3-metric__value">Нет — оборудование на улице</div>
+              <div class="f3-metric__bar-wrap">
+                <div class="f3-metric__bar" data-width="5" style="width: 5%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="f3-metric">
+            <span class="f3-metric__emoji">&#128666;</span>
+            <div class="f3-metric__info">
+              <div class="f3-metric__label">Логистика</div>
+              <div class="f3-metric__value">3—5 рейсов</div>
+              <div class="f3-metric__bar-wrap">
+                <div class="f3-metric__bar" data-width="60" style="width: 60%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary stats -->
+      <div class="f3-summary">
+        <div class="f3-stat">
+          <div class="f3-stat__value">x12</div>
+          <div class="f3-stat__label">Быстрее развёртывание</div>
+        </div>
+        <div class="f3-stat">
+          <div class="f3-stat__value">34%</div>
+          <div class="f3-stat__label">Экономия бюджета</div>
+        </div>
+        <div class="f3-stat">
+          <div class="f3-stat__value">1</div>
+          <div class="f3-stat__label">Единица вместо пяти</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ Animate bars on scroll ═══ -->
+  <script>
+    // Animate progress bars when they enter the viewport
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const bars = entry.target.querySelectorAll('.f3-metric__bar');
+          bars.forEach((bar, i) => {
+            const w = bar.getAttribute('data-width');
+            bar.style.width = '0%';
+            setTimeout(() => {
+              bar.style.width = w + '%';
+            }, 100 + i * 120);
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    document.querySelectorAll('.f3-versus').forEach(el => observer.observe(el));
+
+    // F1: Hide scroll hint when user scrolls inside the table
+    const f1Scroll = document.getElementById('f1-scroll');
+    const f1Hint = document.getElementById('f1-hint');
+    if (f1Scroll && f1Hint) {
+      f1Scroll.addEventListener('scroll', () => {
+        const atBottom = f1Scroll.scrollTop + f1Scroll.clientHeight >= f1Scroll.scrollHeight - 20;
+        f1Hint.classList.toggle('f1-scroll-hint--hidden', f1Scroll.scrollTop > 30 || atBottom);
+      }, { passive: true });
+      // Also hide if table fits without scrolling
+      requestAnimationFrame(() => {
+        if (f1Scroll.scrollHeight <= f1Scroll.clientHeight + 10) {
+          f1Hint.style.display = 'none';
+        }
+      });
+    }
+
+    // Smooth scroll for hub links
+    document.querySelectorAll('.hub__link').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+
+</body>
+</html>

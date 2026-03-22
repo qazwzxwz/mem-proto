@@ -1,0 +1,58 @@
+/* ============================================
+   Auth pages (login / register)
+   ============================================ */
+.auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--color-bg);
+  padding: var(--sp-6);
+}
+
+.auth__card {
+  width: 100%;
+  max-width: 440px;
+  padding: var(--sp-10);
+  text-align: center;
+}
+
+.auth__logo {
+  margin-bottom: var(--sp-8);
+}
+.auth__logo a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--color-primary-dark);
+}
+
+.auth__title {
+  font-size: var(--fs-2xl);
+  margin-bottom: var(--sp-2);
+}
+.auth__subtitle {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--sp-8);
+}
+
+.auth__form .form-group {
+  text-align: left;
+}
+
+.auth__form .btn {
+  width: 100%;
+  margin-top: var(--sp-4);
+}
+
+.auth__alt {
+  margin-top: var(--sp-6);
+  font-size: var(--fs-sm);
+  color: var(--color-text-secondary);
+}
+.auth__alt a {
+  font-weight: var(--fw-semibold);
+  color: var(--color-primary);
+}

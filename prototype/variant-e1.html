@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>МЭМ — Вариант E1: Scroll + Swipe</title>
+  <link rel="stylesheet" href="static/css/tokens.css">
+  <link rel="stylesheet" href="static/css/base.css">
+  <link rel="stylesheet" href="static/css/components.css">
+  <style>
+    body { background: #1a1d20; min-height: 100vh; overflow-x: hidden; }
+
+    .variant-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: var(--sp-3) var(--sp-6);
+      background: rgba(26,29,32,0.95); backdrop-filter: blur(12px);
+      color: var(--color-text-inverse); font-size: var(--fs-sm);
+    }
+    .variant-bar a { color: var(--color-text-inverse); text-decoration: none; font-weight: var(--fw-semibold); display: flex; align-items: center; gap: var(--sp-2); }
+    .variant-bar a:hover { color: var(--color-accent); }
+    .variant-tag { background: var(--color-accent); padding: var(--sp-1) var(--sp-3); border-radius: var(--radius-full); font-weight: var(--fw-bold); font-size: var(--fs-xs); letter-spacing: 0.05em; }
+
+    /* ── Hero ── */
+    .e1-hero {
+      min-height: 70vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: calc(var(--header-height) + var(--sp-8)) var(--sp-6) var(--sp-16);
+    }
+    .e1-hero h1 { font-size: clamp(var(--fs-2xl), 5vw, var(--fs-4xl)); color: #fff; margin-bottom: var(--sp-4); }
+    .e1-hero p { color: rgba(255,255,255,0.5); font-size: var(--fs-lg); max-width: 500px; }
+    .e1-hero .divider { background: var(--color-accent); margin: var(--sp-4) auto; }
+    .e1-scroll-cue {
+      margin-top: var(--sp-10);
+      color: rgba(255,255,255,0.3);
+      font-size: var(--fs-sm);
+      animation: cueBounce 2s ease-in-out infinite;
+    }
+    @keyframes cueBounce { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(8px); } }
+
+    /* ═══════════════════════════════════════════
+       SECTION — each problem/solution block
+       ═══════════════════════════════════════════ */
+    .e1-section {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ── Left: Sticky visual ── */
+    .e1-visual {
+      position: sticky;
+      top: 0;
+      width: 50%;
+      height: 100vh;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    /* Problem layer & Solution layer */
+    .e1-visual__layer {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.8s cubic-bezier(0.77,0,0.175,1), opacity 0.8s ease;
+    }
+    .e1-visual__problem {
+      z-index: 2;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: var(--sp-4);
+    }
+    .e1-visual__solution {
+      z-index: 1;
+    }
+    .e1-visual__solution img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+
+    /* When solved */
+    .e1-section.solved .e1-visual__problem {
+      transform: translateX(-110%);
+      opacity: 0;
+    }
+
+    /* Problem visuals — dramatic mood backgrounds */
+    .e1-visual__problem-bg {
+      position: absolute; inset: 0;
+    }
+    .e1-visual__problem-icon {
+      position: relative; z-index: 2;
+      font-size: 6rem;
+      filter: drop-shadow(0 0 40px rgba(233,60,53,0.5));
+      animation: iconPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes iconPulse {
+      0%,100% { transform: scale(1); filter: drop-shadow(0 0 40px rgba(233,60,53,0.5)); }
+      50% { transform: scale(1.08); filter: drop-shadow(0 0 60px rgba(233,60,53,0.8)); }
+    }
+    .e1-visual__problem-label {
+      position: relative; z-index: 2;
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-bold);
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: rgba(255,255,255,0.4);
+    }
+
+    /* Solution overlay label */
+    .e1-visual__solution-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: var(--sp-6);
+      background: linear-gradient(transparent, rgba(43,48,52,0.8));
+      color: #fff;
+      font-weight: var(--fw-semibold);
+      font-size: var(--fs-sm);
+      opacity: 0;
+      transition: opacity 0.6s 0.4s;
+    }
+    .e1-section.solved .e1-visual__solution-overlay { opacity: 1; }
+
+    /* ── Right: Content panel ── */
+    .e1-content {
+      width: 50%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Horizontal slider for problem/solution text */
+    .e1-slider {
+      display: flex;
+      width: 200%;
+      transition: transform 0.8s cubic-bezier(0.77,0,0.175,1);
+    }
+    .e1-section.solved .e1-slider {
+      transform: translateX(-50%);
+    }
+
+    .e1-slide {
+      width: 50%;
+      padding: var(--sp-10) var(--sp-8);
+      box-sizing: border-box;
+      flex-shrink: 0;
+    }
+
+    /* ── PROBLEM slide — screaming ── */
+    .e1-problem {
+      background: linear-gradient(135deg, #1a1d20, #2a1012);
+      display: flex; flex-direction: column; justify-content: center;
+      min-height: 100vh;
+    }
+    .e1-problem__alert {
+      display: inline-flex; align-items: center; gap: var(--sp-2);
+      background: rgba(233,60,53,0.15);
+      border: 1px solid rgba(233,60,53,0.3);
+      color: var(--color-accent);
+      padding: var(--sp-2) var(--sp-4);
+      border-radius: var(--radius-full);
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-bold);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: var(--sp-6);
+      width: fit-content;
+      animation: alertBlink 2s ease-in-out infinite;
+    }
+    @keyframes alertBlink {
+      0%,100% { border-color: rgba(233,60,53,0.3); }
+      50% { border-color: rgba(233,60,53,0.8); }
+    }
+    .e1-problem__title {
+      font-size: clamp(var(--fs-2xl), 4vw, 3.5rem);
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.05;
+      margin-bottom: var(--sp-6);
+      text-transform: uppercase;
+    }
+    .e1-problem__title em {
+      font-style: normal;
+      color: var(--color-accent);
+      display: inline;
+    }
+    .e1-problem__desc {
+      font-size: var(--fs-lg);
+      color: rgba(255,255,255,0.6);
+      line-height: var(--lh-relaxed);
+      margin-bottom: var(--sp-8);
+      max-width: 440px;
+    }
+    .e1-problem__cta {
+      display: inline-flex; align-items: center; gap: var(--sp-3);
+      color: var(--color-accent);
+      font-weight: var(--fw-bold);
+      font-size: var(--fs-base);
+      cursor: pointer;
+      background: none; border: 2px solid var(--color-accent);
+      padding: var(--sp-3) var(--sp-6);
+      border-radius: var(--radius-full);
+      font-family: var(--font-family);
+      transition: all 0.3s;
+    }
+    .e1-problem__cta:hover {
+      background: var(--color-accent);
+      color: #fff;
+    }
+    .e1-problem__cta svg { width: 20px; height: 20px; fill: currentColor; transition: transform 0.3s; }
+    .e1-problem__cta:hover svg { transform: translateX(4px); }
+
+    /* ── SOLUTION slide — calm ── */
+    .e1-solution {
+      background: linear-gradient(135deg, #f7f9fa, #eef1f3);
+      display: flex; flex-direction: column; justify-content: center;
+      min-height: 100vh;
+    }
+    .e1-solution__badge {
+      display: inline-flex; align-items: center; gap: var(--sp-2);
+      background: rgba(67,160,71,0.1);
+      color: #2E7D32;
+      padding: var(--sp-2) var(--sp-4);
+      border-radius: var(--radius-full);
+      font-size: var(--fs-xs);
+      font-weight: var(--fw-bold);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--sp-6);
+      width: fit-content;
+    }
+    .e1-solution__title {
+      font-size: clamp(var(--fs-xl), 3vw, var(--fs-3xl));
+      font-weight: var(--fw-bold);
+      color: var(--color-primary-dark);
+      margin-bottom: var(--sp-4);
+      line-height: var(--lh-tight);
+    }
+    .e1-solution__desc {
+      font-size: var(--fs-base);
+      color: var(--color-text-secondary);
+      line-height: var(--lh-relaxed);
+      margin-bottom: var(--sp-6);
+      max-width: 420px;
+    }
+    .e1-solution__specs {
+      display: flex; flex-direction: column; gap: var(--sp-3);
+    }
+    .e1-spec-row {
+      display: flex; align-items: center; gap: var(--sp-3);
+      padding: var(--sp-3) var(--sp-4);
+      background: #fff;
+      border-radius: var(--radius-lg);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .e1-spec-row__val {
+      font-weight: var(--fw-bold);
+      color: var(--color-accent);
+      font-size: var(--fs-lg);
+      min-width: 90px;
+    }
+    .e1-spec-row__label {
+      color: var(--color-text-secondary);
+      font-size: var(--fs-sm);
+    }
+    .e1-solution__back {
+      margin-top: var(--sp-6);
+      display: inline-flex; align-items: center; gap: var(--sp-2);
+      color: var(--color-text-secondary);
+      font-size: var(--fs-sm);
+      cursor: pointer;
+      background: none; border: none;
+      font-family: var(--font-family);
+      font-weight: var(--fw-semibold);
+      transition: color 0.2s;
+      padding: 0;
+    }
+    .e1-solution__back:hover { color: var(--color-primary-dark); }
+
+    /* ── Swipe indicator ── */
+    .e1-swipe-hint {
+      position: absolute;
+      bottom: var(--sp-6);
+      right: var(--sp-6);
+      display: flex; align-items: center; gap: var(--sp-2);
+      color: rgba(255,255,255,0.25);
+      font-size: var(--fs-xs);
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.5s;
+    }
+    .e1-section.solved .e1-swipe-hint { opacity: 0; }
+    .e1-swipe-hint__arrow {
+      animation: swipeRight 1.5s ease-in-out infinite;
+      font-size: var(--fs-lg);
+    }
+    @keyframes swipeRight { 0%,100%{ transform: translateX(0); } 50%{ transform: translateX(10px); } }
+
+    /* ── Section divider ── */
+    .e1-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    }
+
+    /* ── Bottom summary ── */
+    .e1-summary {
+      padding: var(--sp-16) var(--sp-6);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .e1-summary h2 {
+      text-align: center;
+      color: #fff;
+      margin-bottom: var(--sp-3);
+    }
+    .e1-summary .divider { background: var(--color-accent); margin: var(--sp-3) auto var(--sp-10); }
+    .e1-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: var(--sp-4);
+    }
+    .e1-sum-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-xl);
+      padding: var(--sp-6);
+      text-align: center;
+      transition: all 0.3s;
+    }
+    .e1-sum-card:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: var(--color-accent);
+      transform: translateY(-3px);
+    }
+    .e1-sum-card__val {
+      font-size: var(--fs-2xl);
+      font-weight: var(--fw-bold);
+      color: var(--color-accent);
+      margin-bottom: var(--sp-1);
+    }
+    .e1-sum-card__lbl {
+      font-size: var(--fs-sm);
+      color: rgba(255,255,255,0.45);
+    }
+
+    /* ── Mood backgrounds for each problem ── */
+    .mood-fire { background: radial-gradient(ellipse at center, #4a1a0a 0%, #1a1d20 70%); }
+    .mood-ice { background: radial-gradient(ellipse at center, #0a2a4a 0%, #1a1d20 70%); }
+    .mood-water { background: radial-gradient(ellipse at center, #0a1a2a 0%, #1a1d20 70%); }
+    .mood-chaos { background: radial-gradient(ellipse at center, #2a2a0a 0%, #1a1d20 70%); }
+    .mood-dark { background: radial-gradient(ellipse at center, #0a0a0a 0%, #1a1d20 70%); }
+    .mood-transport { background: radial-gradient(ellipse at center, #1a1a2a 0%, #1a1d20 70%); }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .e1-section { flex-direction: column; }
+      .e1-visual { width: 100%; height: 40vh; position: relative; }
+      .e1-content { width: 100%; min-height: auto; }
+      .e1-slide { padding: var(--sp-6); }
+      .e1-problem, .e1-solution { min-height: auto; padding: var(--sp-8) var(--sp-6); }
+      .e1-problem__title { font-size: var(--fs-2xl); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="variant-bar">
+    <a href="variants-combined.html"><span>&larr;</span> Все варианты</a>
+    <span class="variant-tag">E1</span>
+    <span>Scroll + Swipe-reveal</span>
+  </div>
+
+  <!-- ── Hero ── -->
+  <div class="e1-hero">
+    <h1>Галерея и характеристики</h1>
+    <div class="divider"></div>
+    <p>Реальные проблемы. Реальные решения. Листайте вниз и свайпайте вправо, чтобы увидеть, как МЭМ решает каждую из них.</p>
+    <div class="e1-scroll-cue">&#8595; Листайте вниз</div>
+  </div>
+
+  <!-- ═══ SECTION 1: No electricity ═══ -->
+  <div class="e1-section" data-section="0">
+    <div class="e1-visual">
+      <div class="e1-visual__layer e1-visual__problem">
+        <div class="e1-visual__problem-bg mood-dark"></div>
+        <div class="e1-visual__problem-icon">&#9889;</div>
+        <div class="e1-visual__problem-label">Критическая ситуация</div>
+      </div>
+      <div class="e1-visual__layer e1-visual__solution">
+        <img src="static/img/photo4.jpg" alt="Генератор МЭМ">
+        <div class="e1-visual__solution-overlay">Генератор МЭМ &mdash; до 15 кВт автономной мощности</div>
+      </div>
+    </div>
+
+    <div class="e1-content">
+      <div class="e1-slider">
+        <div class="e1-slide e1-problem">
+          <div class="e1-problem__alert">&#9888; Проблема на объекте</div>
+          <h2 class="e1-problem__title"><em>Нет</em> электричества.<br>Объект <em>парализован.</em></h2>
+          <p class="e1-problem__desc">Удалённая площадка. Ноль розеток. Сварка, болгарка, освещение &mdash; всё мертво. Люди стоят, деньги горят.</p>
+          <button class="e1-problem__cta" data-action="solve">
+            Как МЭМ решает это
+            <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+          </button>
+        </div>
+        <div class="e1-slide e1-solution">
+          <div class="e1-solution__badge">&#10003; Решено с МЭМ</div>
+          <h2 class="e1-solution__title">Встроенный генератор до 15 кВт</h2>
+          <p class="e1-solution__desc">Дизельный или бензиновый генератор запускается за 30 секунд. Питает весь инструмент, сварку и освещение. Без перерыва &mdash; до 12 часов.</p>
+          <div class="e1-solution__specs">
+            <div class="e1-spec-row"><span class="e1-spec-row__val">15 кВт</span><span class="e1-spec-row__label">выходная мощность</span></div>
+            <div class="e1-spec-row"><span class="e1-spec-row__val">12 ч</span><span class="e1-spec-row__label">непрерывная работа</span></div>
+            <div class="e1-spec-row"><span class="e1-spec-row__val">30 сек</span><span class="e1-spec-row__label">время запуска</span></div>
+          </div>
+          <button class="e1-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
+        </div>
+      </div>
+      <div class="e1-swipe-hint"><span class="e1-swipe-hint__arrow">&rarr;</span> свайп</div>
+    </div>
+  </div>
+
+  <div class="e1-divider"></div>
+
+  <!-- ═══ SECTION 2: Fire ═══ -->
+  <div class="e1-section" data-section="1">
+    <div class="e1-visual">
+      <div class="e1-visual__layer e1-visual__problem">
+        <div class="e1-visual__problem-bg mood-fire"></div>
+        <div class="e1-visual__problem-icon">&#128293;</div>
+        <div class="e1-visual__problem-label">Угроза безопасности</div>
+      </div>
+      <div class="e1-visual__layer e1-visual__solution">
+        <img src="static/img/photo3.jpg" alt="Пожарный шкаф МЭМ">
+        <div class="e1-visual__solution-overlay">Встроенный пожарный шкаф с рукавом 20 м</div>
+      </div>
+    </div>
+
+    <div class="e1-content">
+      <div class="e1-slider">
+        <div class="e1-slide e1-problem">
+          <div class="e1-problem__alert">&#128293; Угроза возгорания</div>
+          <h2 class="e1-problem__title">Сварка идёт.<br><em>Огнетушитель</em> &mdash; через <em>100 метров.</em></h2>
+          <p class="e1-problem__desc">Огневые работы в пожароопасных условиях. Средства тушения разбросаны по объекту. Пока найдёшь &mdash; поздно.</p>
+          <button class="e1-problem__cta" data-action="solve">
+            Как МЭМ решает это
+            <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+          </button>
+        </div>
+        <div class="e1-slide e1-solution">
+          <div class="e1-solution__badge">&#10003; Решено с МЭМ</div>
+          <h2 class="e1-solution__title">Пожарный шкаф прямо в корпусе</h2>
+          <p class="e1-solution__desc">Рукав 20 метров, огнетушители, всё под рукой. Пожарный шкаф со стеклянной дверцей &mdash; видно, доступно, мгновенно.</p>
+          <div class="e1-solution__specs">
+            <div class="e1-spec-row"><span class="e1-spec-row__val">20 м</span><span class="e1-spec-row__label">длина пожарного рукава</span></div>
+            <div class="e1-spec-row"><span class="e1-spec-row__val">Класс K</span><span class="e1-spec-row__label">пожарный шкаф</span></div>
+          </div>
+          <button class="e1-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
+        </div>
+      </div>
+      <div class="e1-swipe-hint"><span class="e1-swipe-hint__arrow">&rarr;</span> свайп</div>
+    </div>
+  </div>
+
+  <div class="e1-divider"></div>
+
+  <!-- ═══ SECTION 3: Freezing ═══ -->
+  <div class="e1-section" data-section="2">
+    <div class="e1-visual">
+      <div class="e1-visual__layer e1-visual__problem">
+        <div class="e1-visual__problem-bg mood-ice"></div>
+        <div class="e1-visual__problem-icon">&#10052;</div>
+        <div class="e1-visual__problem-label">Экстремальные условия</div>
+      </div>
+      <div class="e1-visual__layer e1-visual__solution">
+        <img src="static/img/photo1.jpg" alt="Утеплённый МЭМ">
+        <div class="e1-visual__solution-overlay">Утеплённый корпус 50 мм + обогрев 700 Вт</div>
+      </div>
+    </div>
+
+    <div class="e1-content">
+      <div class="e1-slider">
+        <div class="e1-slide e1-problem">
+          <div class="e1-problem__alert">&#10052; Экстремальный холод</div>
+          <h2 class="e1-problem__title"><em>&minus;40&deg;C.</em><br>Оборудование <em>замёрзло.</em></h2>
+          <p class="e1-problem__desc">Топливо густеет, аккумуляторы сдохли, руки не гнутся. Работать невозможно. Сроки горят, штрафы копятся.</p>
+          <button class="e1-problem__cta" data-action="solve">
+            Как МЭМ решает это
+            <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+          </button>
+        </div>
+        <div class="e1-slide e1-solution">
+          <div class="e1-solution__badge">&#10003; Решено с МЭМ</div>
+          <h2 class="e1-solution__title">Утеплённый корпус + обогрев</h2>
+          <p class="e1-solution__desc">Сэндвич-панели 50 мм не пропускают мороз. Автономный обогреватель 700 Вт держит рабочую температуру внутри.</p>
+          <div class="e1-solution__specs">
+            <div class="e1-spec-row"><span class="e1-spec-row__val">50 мм</span><span class="e1-spec-row__label">сэндвич-панели</span></div>
+            <div class="e1-spec-row"><span class="e1-spec-row__val">700 Вт</span><span class="e1-spec-row__label">мощность обогревателя</span></div>
+            <div class="e1-spec-row"><span class="e1-spec-row__val">&minus;40&deg;C</span><span class="e1-spec-row__label">рабочий диапазон</span></div>
+          </div>
+          <button class="e1-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
+        </div>
+      </div>
+      <div class="e1-swipe-hint"><span class="e1-swipe-hint__arrow">&rarr;</span> свайп</div>
+    </div>
+  </div>
+
+  <div class="e1-divider"></div>
+
+  <!-- ═══ SECTION 4: No water ═══ -->
+  <div class="e1-section" data-section="3">
+    <div class="e1-visual">
+      <div class="e1-visual__layer e1-visual__problem">
+        <div class="e1-visual__problem-bg mood-water"></div>
+        <div class="e1-visual__problem-icon">&#128167;</div>
+        <div class="e1-visual__problem-label">Нет ресурсов</div>
+      </div>
+      <div class="e1-visual__layer e1-visual__solution">
+        <img src="static/img/photo5.jpg" alt="Насосная станция МЭМ">
+        <div class="e1-visual__solution-overlay">Встроенная насосная станция &mdash; 40 л/мин</div>
+      </div>
+    </div>
+
+    <div class="e1-content">
+      <div class="e1-slider">
+        <div class="e1-slide e1-problem">
+          <div class="e1-problem__alert">&#128167; Дефицит воды</div>
+          <h2 class="e1-problem__title">Вода нужна <em>сейчас.</em><br>Водопровода <em>нет.</em></h2>
+          <p class="e1-problem__desc">Промывка, охлаждение, тушение &mdash; всё требует воду. А её нет. Вёдрами не натаскаешь.</p>
+          <button class="e1-problem__cta" data-action="solve">
+            Как МЭМ решает это
+            <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+          </button>
+        </div>
+        <div class="e1-slide e1-solution">
+          <div class="e1-solution__badge">&#10003; Решено с МЭМ</div>
+          <h2 class="e1-solution__title">Насосная станция в модуле</h2>
+          <p class="e1-solution__desc">Подключается к любому источнику: ёмкость, скважина, открытый водоём. Подаёт воду под давлением для любых нужд.</p>
+          <div class="e1-solution__specs">
+            <div class="e1-spec-row"><span class="e1-spec-row__val">40 л/мин</span><span class="e1-spec-row__label">производительность</span></div>
+            <div class="e1-spec-row"><span class="e1-spec-row__val">4 бар</span><span class="e1-spec-row__label">давление</span></div>
+          </div>
+          <button class="e1-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
+        </div>
+      </div>
+      <div class="e1-swipe-hint"><span class="e1-swipe-hint__arrow">&rarr;</span> свайп</div>
+    </div>
+  </div>
+
+  <div class="e1-divider"></div>
+
+  <!-- ═══ SECTION 5: Equipment chaos ═══ -->
+  <div class="e1-section" data-section="4">
+    <div class="e1-visual">
+      <div class="e1-visual__layer e1-visual__problem">
+        <div class="e1-visual__problem-bg mood-chaos"></div>
+        <div class="e1-visual__problem-icon">&#128230;</div>
+        <div class="e1-visual__problem-label">Хаос на площадке</div>
+      </div>
+      <div class="e1-visual__layer e1-visual__solution">
+        <img src="static/img/photo2.jpg" alt="Организованное хранение МЭМ">
+        <div class="e1-visual__solution-overlay">Всё оборудование &mdash; в одном защищённом модуле</div>
+      </div>
+    </div>
+
+    <div class="e1-content">
+      <div class="e1-slider">
+        <div class="e1-slide e1-problem">
+          <div class="e1-problem__alert">&#128230; Потери и хаос</div>
+          <h2 class="e1-problem__title">Инструменты <em>разбросаны.</em><br>ЗИП <em>потерян.</em></h2>
+          <p class="e1-problem__desc">Рукава в одном углу, ключи в другом, аккумуляторы &mdash; неизвестно где. Кражи, порча от дождя, потеря времени.</p>
+          <button class="e1-problem__cta" data-action="solve">
+            Как МЭМ решает это
+            <svg viewBox="0 0 24 24"><path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></svg>
+          </button>
+        </div>
+        <div class="e1-slide e1-solution">
+          <div class="e1-solution__badge">&#10003; Решено с МЭМ</div>
+          <h2 class="e1-solution__title">Организованное хранение</h2>
+          <p class="e1-solution__desc">Каждый инструмент, каждый комплект ЗИП, рукава и аккумуляторы &mdash; на своём месте, защищены от непогоды и краж.</p>
+          <div class="e1-solution__specs">
+            <div class="e1-spec-row"><span class="e1-spec-row__val">4.5 м</span><span class="e1-spec-row__label">длина модуля</span></div>
+            <div class="e1-spec-row"><span class="e1-spec-row__val">3 000 кг</span><span class="e1-spec-row__label">полная масса</span></div>
+          </div>
+          <button class="e1-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
+        </div>
+      </div>
+      <div class="e1-swipe-hint"><span class="e1-swipe-hint__arrow">&rarr;</span> свайп</div>
+    </div>
+  </div>
+
+  <!-- ── Summary ── -->
+  <div class="e1-summary">
+    <h2>МЭМ в цифрах</h2>
+    <div class="divider"></div>
+    <div class="e1-summary-grid">
+      <div class="e1-sum-card"><div class="e1-sum-card__val">15 кВт</div><div class="e1-sum-card__lbl">Генератор</div></div>
+      <div class="e1-sum-card"><div class="e1-sum-card__val">700 Вт</div><div class="e1-sum-card__lbl">Обогрев</div></div>
+      <div class="e1-sum-card"><div class="e1-sum-card__val">3 т</div><div class="e1-sum-card__lbl">Полная масса</div></div>
+      <div class="e1-sum-card"><div class="e1-sum-card__val">50 мм</div><div class="e1-sum-card__lbl">Панели</div></div>
+      <div class="e1-sum-card"><div class="e1-sum-card__val">5</div><div class="e1-sum-card__lbl">Проблем решено</div></div>
+    </div>
+  </div>
+
+  <script>
+    // Solve / Back buttons
+    document.querySelectorAll('[data-action="solve"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.closest('.e1-section').classList.add('solved');
+      });
+    });
+    document.querySelectorAll('[data-action="back"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.closest('.e1-section').classList.remove('solved');
+      });
+    });
+
+    // Touch swipe on content area
+    document.querySelectorAll('.e1-content').forEach(content => {
+      let startX = 0;
+      content.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+      content.addEventListener('touchend', e => {
+        const dx = startX - e.changedTouches[0].clientX;
+        const section = content.closest('.e1-section');
+        if (Math.abs(dx) > 60) {
+          if (dx > 0) section.classList.add('solved');
+          else section.classList.remove('solved');
+        }
+      }, { passive: true });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liquid Glass — Demo</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* ── Vivid background for glass distortion visibility ── */
+    .demo-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 30%, rgba(100, 0, 220, 0.4) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 70%, rgba(0, 120, 220, 0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 50% 10%, rgba(220, 40, 100, 0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 45% at 70% 20%, rgba(255, 180, 50, 0.2) 0%, transparent 60%),
+        #0c0c1e;
+    }
+    .demo-bg__blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.5;
+    }
+    .demo-bg__blob--1 {
+      width: 400px; height: 400px;
+      top: 10%; left: 5%;
+      background: rgba(120, 0, 255, 0.35);
+      animation: blobMove1 14s ease-in-out infinite alternate;
+    }
+    .demo-bg__blob--2 {
+      width: 350px; height: 350px;
+      bottom: 15%; right: 8%;
+      background: rgba(0, 180, 120, 0.3);
+      animation: blobMove2 11s ease-in-out infinite alternate;
+    }
+    .demo-bg__blob--3 {
+      width: 300px; height: 300px;
+      top: 50%; left: 40%;
+      background: rgba(255, 100, 50, 0.25);
+      animation: blobMove3 13s ease-in-out infinite alternate;
+    }
+    @keyframes blobMove1 {
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(80px, 50px) scale(1.2); }
+    }
+    @keyframes blobMove2 {
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-60px, -40px) scale(1.15); }
+    }
+    @keyframes blobMove3 {
+      0%   { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, -60px) scale(1.1); }
+    }
+
+    /* ══════════════════════════════════════
+       LIQUID GLASS — from liquid-glass.pro/generator
+       CSS custom properties approach
+       ══════════════════════════════════════ */
+
+    .lg-glass {
+      --inner-shadow-color: rgba(255, 255, 255, 0.7);
+      --inner-shadow-blur: 20px;
+      --inner-shadow-spread: -5px;
+      --glass-tint-color: 255, 255, 255;
+      --glass-tint-opacity: 10;
+      --frost-blur-radius: 2px;
+      --glass-border-radius: 24px;
+
+      position: relative;
+      isolation: isolate;
+      border-radius: var(--glass-border-radius);
+      box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.2);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Layer 1 (z:0): glow — inset shadow + tint */
+    .lg-glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      border-radius: inherit;
+      box-shadow: inset 0 0 var(--inner-shadow-blur) var(--inner-shadow-spread)
+                  var(--inner-shadow-color);
+      background-color: rgba(var(--glass-tint-color), calc(var(--glass-tint-opacity) / 100));
+    }
+
+    /* Layer 2 (z:-1): distortion — backdrop blur + SVG displacement */
+    .lg-glass::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      backdrop-filter: blur(var(--frost-blur-radius));
+      -webkit-backdrop-filter: blur(var(--frost-blur-radius));
+      filter: url(#glass-distortion);
+      -webkit-filter: url(#glass-distortion);
+    }
+
+    /* Specular highlight — follows mouse */
+    .lg-glass > .lg-specular {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events: none;
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 0.35s;
+      background: radial-gradient(
+        circle 220px at var(--mx, 50%) var(--my, 50%),
+        rgba(255, 255, 255, 0.14) 0%,
+        transparent 60%
+      );
+    }
+    .lg-glass:hover > .lg-specular { opacity: 1; }
+
+    .lg-glass:hover {
+      box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    /* ── Color tint variants ── */
+    .lg-glass--neutral { --glass-tint-color: 255, 255, 255; --glass-tint-opacity: 6; }
+    .lg-glass--green   { --glass-tint-color: 46, 125, 50;   --glass-tint-opacity: 14; }
+    .lg-glass--blue    { --glass-tint-color: 60, 130, 255;   --glass-tint-opacity: 14; }
+    .lg-glass--rose    { --glass-tint-color: 255, 80, 120;   --glass-tint-opacity: 14; }
+    .lg-glass--red     { --glass-tint-color: 220, 40, 40;    --glass-tint-opacity: 14; }
+    .lg-glass--gold    { --glass-tint-color: 255, 190, 50;   --glass-tint-opacity: 14; }
+    .lg-glass--purple  { --glass-tint-color: 140, 60, 220;   --glass-tint-opacity: 14; }
+    .lg-glass--cyan    { --glass-tint-color: 0, 190, 210;    --glass-tint-opacity: 14; }
+    .lg-glass--orange  { --glass-tint-color: 245, 124, 0;    --glass-tint-opacity: 14; }
+
+    /* ══════════════════════════════════════
+       LAYOUT
+       ══════════════════════════════════════ */
+
+    .demo-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    /* ── Header ── */
+    .demo-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      --glass-border-radius: 16px;
+    }
+    .demo-header__brand {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      position: relative; z-index: 2;
+    }
+    .demo-header__nav {
+      display: flex; gap: 6px;
+      position: relative; z-index: 2;
+    }
+    .demo-nav-btn {
+      padding: 8px 18px;
+      --glass-border-radius: 12px;
+      font-size: 0.82rem; font-weight: 500;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .demo-nav-btn:hover { color: #fff; }
+
+    /* ── Sections ── */
+    .demo-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .demo-section__title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .demo-section__subtitle {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      margin-top: -8px;
+    }
+
+    /* ── Card grid ── */
+    .demo-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .demo-card {
+      padding: 24px 20px;
+      --glass-border-radius: 22px;
+      cursor: pointer;
+    }
+    .demo-card:hover { transform: translateY(-4px); }
+    .demo-card h3 {
+      font-size: 0.95rem; font-weight: 700;
+      margin-bottom: 6px;
+      position: relative; z-index: 2;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.25);
+    }
+    .demo-card p {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.55;
+      position: relative; z-index: 2;
+    }
+    .demo-card__icon {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+      position: relative; z-index: 2;
+    }
+
+    /* ── Buttons ── */
+    .demo-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .demo-btn {
+      padding: 12px 28px;
+      --glass-border-radius: 14px;
+      font-size: 0.85rem; font-weight: 600;
+      cursor: pointer;
+      color: #fff;
+      border: none; outline: none;
+      font-family: inherit;
+    }
+    .demo-btn:hover { transform: translateY(-2px); }
+    .demo-btn:active { transform: scale(0.96); }
+    .demo-btn__label { position: relative; z-index: 2; }
+
+    /* Small buttons */
+    .demo-btn--sm {
+      padding: 8px 18px;
+      --glass-border-radius: 10px;
+      font-size: 0.78rem;
+    }
+
+    /* ── Large showcase card ── */
+    .demo-showcase {
+      padding: 40px 32px;
+      --glass-border-radius: 28px;
+      text-align: center;
+    }
+    .demo-showcase:hover { transform: translateY(-3px); }
+    .demo-showcase h2 {
+      font-size: 1.6rem; font-weight: 800;
+      margin-bottom: 8px;
+      position: relative; z-index: 2;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+    .demo-showcase p {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.55);
+      max-width: 480px; margin: 0 auto;
+      line-height: 1.6;
+      position: relative; z-index: 2;
+    }
+
+    /* ── Pills row ── */
+    .demo-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .demo-pill {
+      padding: 6px 16px;
+      --glass-border-radius: 20px;
+      font-size: 0.75rem; font-weight: 600;
+      cursor: pointer;
+      border: none; outline: none;
+      color: #fff;
+      font-family: inherit;
+    }
+    .demo-pill:hover { transform: scale(1.06); }
+    .demo-pill__label { position: relative; z-index: 2; }
+
+    /* ── Input / form elements ── */
+    .demo-input-row {
+      display: flex; gap: 12px;
+    }
+    .demo-input {
+      flex: 1;
+      padding: 14px 20px;
+      --glass-border-radius: 14px;
+      font-size: 0.88rem;
+      color: #fff;
+      border: none; outline: none;
+      font-family: inherit;
+      background: none;
+      position: relative; z-index: 2;
+    }
+    .demo-input::placeholder {
+      color: rgba(255,255,255,0.35);
+    }
+    /* Wrapper to apply glass to an input */
+    .demo-input-wrap {
+      flex: 1;
+      --glass-border-radius: 14px;
+      display: flex;
+    }
+    .demo-input-wrap .demo-input {
+      width: 100%;
+    }
+
+    /* ── Badge / tag ── */
+    .demo-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      --glass-border-radius: 20px;
+      font-size: 0.72rem; font-weight: 600;
+      position: relative; z-index: 2;
+    }
+    .demo-badge__dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* ── Footer ── */
+    .demo-footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.3);
+      position: relative; z-index: 2;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+      .demo-cards { grid-template-columns: 1fr 1fr; }
+      .demo-header__nav { display: none; }
+      .demo-showcase { padding: 28px 20px; }
+    }
+    @media (max-width: 480px) {
+      .demo-cards { grid-template-columns: 1fr; }
+      .demo-wrap { padding: 14px; gap: 28px; }
+      .demo-input-row { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── SVG Displacement Filter (from liquid-glass.pro/generator) ── -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <defs>
+      <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.008 0.008"
+                      numOctaves="2" seed="92" result="noise"/>
+        <feGaussianBlur in="noise" stdDeviation="2" result="blurred"/>
+        <feDisplacementMap in="SourceGraphic" in2="blurred" scale="77"
+                          xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- ── Animated background ── -->
+  <div class="demo-bg">
+    <div class="demo-bg__blob demo-bg__blob--1"></div>
+    <div class="demo-bg__blob demo-bg__blob--2"></div>
+    <div class="demo-bg__blob demo-bg__blob--3"></div>
+  </div>
+
+  <div class="demo-wrap">
+
+    <!-- ══ HEADER ══ -->
+    <header class="demo-header lg-glass lg-glass--neutral">
+      <div class="lg-specular"></div>
+      <span class="demo-header__brand">Liquid Glass Demo</span>
+      <nav class="demo-header__nav">
+        <a class="demo-nav-btn lg-glass lg-glass--neutral" href="#">
+          <div class="lg-specular"></div>
+          <span style="position:relative;z-index:2">Карточки</span>
+        </a>
+        <a class="demo-nav-btn lg-glass lg-glass--neutral" href="#">
+          <div class="lg-specular"></div>
+          <span style="position:relative;z-index:2">Кнопки</span>
+        </a>
+        <a class="demo-nav-btn lg-glass lg-glass--neutral" href="#">
+          <div class="lg-specular"></div>
+          <span style="position:relative;z-index:2">Формы</span>
+        </a>
+      </nav>
+    </header>
+
+    <!-- ══ SHOWCASE CARD ══ -->
+    <div class="demo-showcase lg-glass lg-glass--purple">
+      <div class="lg-specular"></div>
+      <h2>Liquid Glass Effect</h2>
+      <p>Демонстрация эффекта жидкого стекла с цветными оттенками. Основано на подходе liquid-glass.pro</p>
+    </div>
+
+    <!-- ══ CARDS — 9 colors ══ -->
+    <div class="demo-section">
+      <h2 class="demo-section__title">Карточки</h2>
+      <p class="demo-section__subtitle">9 цветовых вариантов</p>
+      <div class="demo-cards">
+        <div class="demo-card lg-glass lg-glass--green">
+          <div class="lg-specular"></div>
+          <div class="demo-card__icon">&#9752;</div>
+          <h3>Green</h3>
+          <p>Зелёный оттенок стекла</p>
+        </div>
+        <div class="demo-card lg-glass lg-glass--blue">
+          <div class="lg-specular"></div>
+          <div class="demo-card__icon">&#9733;</div>
+          <h3>Blue</h3>
+          <p>Синий оттенок стекла</p>
+        </div>
+        <div class="demo-card lg-glass lg-glass--rose">
+          <div class="lg-specular"></div>
+          <div class="demo-card__icon">&#9829;</div>
+          <h3>Rose</h3>
+          <p>Розовый оттенок стекла</p>
+        </div>
+        <div class="demo-card lg-glass lg-glass--red">
+          <div class="lg-specular"></div>
+          <div class="demo-card__icon">&#9888;</div>
+          <h3>Red</h3>
+          <p>Красный оттенок стекла</p>
+        </div>
+        <div class="demo-card lg-glass lg-glass--gold">
+          <div class="lg-specular"></div>
+          <div class="demo-card__icon">&#9728;</div>
+          <h3>Gold</h3>
+          <p>Золотой оттенок стекла</p>
+        </div>
+        <div class="demo-card lg-glass lg-glass--purple">
+          <div class="lg-specular"></div>
+          <div class="demo-card__icon">&#10070;</div>
+          <h3>Purple</h3>
+          <p>Фиолетовый оттенок стекла</p>
+        </div>
+        <div class="demo-card lg-glass lg-glass--cyan">
+          <div class="lg-specular"></div>
+          <div class="demo-card__icon">&#10052;</div>
+          <h3>Cyan</h3>
+          <p>Бирюзовый оттенок стекла</p>
+        </div>
+        <div class="demo-card lg-glass lg-glass--orange">
+          <div class="lg-specular"></div>
+          <div class="demo-card__icon">&#9851;</div>
+          <h3>Orange</h3>
+          <p>Оранжевый оттенок стекла</p>
+        </div>
+        <div class="demo-card lg-glass lg-glass--neutral">
+          <div class="lg-specular"></div>
+          <div class="demo-card__icon">&#9680;</div>
+          <h3>Neutral</h3>
+          <p>Нейтральный оттенок стекла</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ BUTTONS ══ -->
+    <div class="demo-section">
+      <h2 class="demo-section__title">Кнопки</h2>
+      <p class="demo-section__subtitle">Разные размеры и цвета</p>
+
+      <div class="demo-buttons">
+        <button class="demo-btn lg-glass lg-glass--green">
+          <div class="lg-specular"></div>
+          <span class="demo-btn__label">Green</span>
+        </button>
+        <button class="demo-btn lg-glass lg-glass--blue">
+          <div class="lg-specular"></div>
+          <span class="demo-btn__label">Blue</span>
+        </button>
+        <button class="demo-btn lg-glass lg-glass--red">
+          <div class="lg-specular"></div>
+          <span class="demo-btn__label">Red</span>
+        </button>
+        <button class="demo-btn lg-glass lg-glass--rose">
+          <div class="lg-specular"></div>
+          <span class="demo-btn__label">Rose</span>
+        </button>
+        <button class="demo-btn lg-glass lg-glass--gold">
+          <div class="lg-specular"></div>
+          <span class="demo-btn__label">Gold</span>
+        </button>
+        <button class="demo-btn lg-glass lg-glass--purple">
+          <div class="lg-specular"></div>
+          <span class="demo-btn__label">Purple</span>
+        </button>
+        <button class="demo-btn lg-glass lg-glass--cyan">
+          <div class="lg-specular"></div>
+          <span class="demo-btn__label">Cyan</span>
+        </button>
+        <button class="demo-btn lg-glass lg-glass--orange">
+          <div class="lg-specular"></div>
+          <span class="demo-btn__label">Orange</span>
+        </button>
+        <button class="demo-btn lg-glass lg-glass--neutral">
+          <div class="lg-specular"></div>
+          <span class="demo-btn__label">Neutral</span>
+        </button>
+      </div>
+
+      <div class="demo-buttons">
+        <button class="demo-btn demo-btn--sm lg-glass lg-glass--green">
+          <div class="lg-specular"></div>
+          <span class="demo-btn__label">Small Green</span>
+        </button>
+        <button class="demo-btn demo-btn--sm lg-glass lg-glass--blue">
+          <div class="lg-specular"></div>
+          <span class="demo-btn__label">Small Blue</span>
+        </button>
+        <button class="demo-btn demo-btn--sm lg-glass lg-glass--red">
+          <div class="lg-specular"></div>
+          <span class="demo-btn__label">Small Red</span>
+        </button>
+        <button class="demo-btn demo-btn--sm lg-glass lg-glass--purple">
+          <div class="lg-specular"></div>
+          <span class="demo-btn__label">Small Purple</span>
+        </button>
+        <button class="demo-btn demo-btn--sm lg-glass lg-glass--cyan">
+          <div class="lg-specular"></div>
+          <span class="demo-btn__label">Small Cyan</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ PILLS / TAGS ══ -->
+    <div class="demo-section">
+      <h2 class="demo-section__title">Теги</h2>
+      <div class="demo-pills">
+        <button class="demo-pill lg-glass lg-glass--green">
+          <div class="lg-specular"></div>
+          <span class="demo-pill__label">&#9752; Экология</span>
+        </button>
+        <button class="demo-pill lg-glass lg-glass--blue">
+          <div class="lg-specular"></div>
+          <span class="demo-pill__label">&#9733; Технологии</span>
+        </button>
+        <button class="demo-pill lg-glass lg-glass--rose">
+          <div class="lg-specular"></div>
+          <span class="demo-pill__label">&#9829; Дизайн</span>
+        </button>
+        <button class="demo-pill lg-glass lg-glass--gold">
+          <div class="lg-specular"></div>
+          <span class="demo-pill__label">&#9728; Энергия</span>
+        </button>
+        <button class="demo-pill lg-glass lg-glass--purple">
+          <div class="lg-specular"></div>
+          <span class="demo-pill__label">&#10070; Premium</span>
+        </button>
+        <button class="demo-pill lg-glass lg-glass--cyan">
+          <div class="lg-specular"></div>
+          <span class="demo-pill__label">&#10052; Зима</span>
+        </button>
+        <button class="demo-pill lg-glass lg-glass--orange">
+          <div class="lg-specular"></div>
+          <span class="demo-pill__label">&#9851; Защита</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ INPUT + BUTTON ══ -->
+    <div class="demo-section">
+      <h2 class="demo-section__title">Поле ввода</h2>
+      <div class="demo-input-row">
+        <div class="demo-input-wrap lg-glass lg-glass--neutral">
+          <div class="lg-specular"></div>
+          <input class="demo-input" type="text" placeholder="Введите email...">
+        </div>
+        <button class="demo-btn lg-glass lg-glass--green">
+          <div class="lg-specular"></div>
+          <span class="demo-btn__label">Отправить</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ══ BADGES ══ -->
+    <div class="demo-section">
+      <h2 class="demo-section__title">Бейджи</h2>
+      <div class="demo-buttons">
+        <span class="demo-badge lg-glass lg-glass--green">
+          <div class="lg-specular"></div>
+          <span class="demo-badge__dot" style="color:#4caf50"></span>
+          <span style="position:relative;z-index:2">Online</span>
+        </span>
+        <span class="demo-badge lg-glass lg-glass--red">
+          <div class="lg-specular"></div>
+          <span class="demo-badge__dot" style="color:#ef5350"></span>
+          <span style="position:relative;z-index:2">Offline</span>
+        </span>
+        <span class="demo-badge lg-glass lg-glass--gold">
+          <div class="lg-specular"></div>
+          <span class="demo-badge__dot" style="color:#ffb300"></span>
+          <span style="position:relative;z-index:2">Pending</span>
+        </span>
+        <span class="demo-badge lg-glass lg-glass--blue">
+          <div class="lg-specular"></div>
+          <span class="demo-badge__dot" style="color:#42a5f5"></span>
+          <span style="position:relative;z-index:2">Info</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="demo-footer">
+      Liquid Glass Demo &mdash; based on liquid-glass.pro/generator approach
+    </div>
+
+  </div>
+
+  <script>
+    /* ── Specular highlight — follows mouse across all glass elements ── */
+    document.addEventListener('mousemove', function(e) {
+      var glasses = document.querySelectorAll('.lg-glass');
+      for (var i = 0; i < glasses.length; i++) {
+        var r = glasses[i].getBoundingClientRect();
+        glasses[i].style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100) + '%');
+        glasses[i].style.setProperty('--my', ((e.clientY - r.top)  / r.height * 100) + '%');
+      }
+    });
+  </script>
+</body>
+</html>

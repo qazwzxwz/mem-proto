@@ -1,0 +1,133 @@
+/* ============================================
+   Design Tokens — МЭМ Prototype
+   Palette: Industrial Blue + CTA Green
+   ============================================ */
+
+:root {
+  /* ── Palette ── */
+  --color-primary:       #627C8C;
+  --color-primary-light: #B9C7D2;
+  --color-primary-dark:  #2B3034;
+  --color-accent:        #E93C35;
+  --color-accent-hover:  #D32F2F;
+  --color-accent-dark:   #B71C1C;
+  --color-surface:       #FFFFFF;
+  --color-surface-alt:   #EEF1F3;
+  --color-bg:            #B9C7D2;
+  --color-bg-top:        #627C8C;
+  --color-text:          #2B3034;
+  --color-text-secondary:#627C8C;
+  --color-text-inverse:  #FFFFFF;
+  --color-border:        #B0BEC5;
+  --color-error:         #E93C35;
+  --color-error-bg:      #FDEDEC;
+  --color-success:       #43A047;
+  --color-success-bg:    #E8F5E9;
+  --color-warning:       #F39C12;
+  --color-warning-bg:    #FEF9E7;
+  --color-overlay:       rgba(43, 48, 52, 0.65);
+
+  /* ── Typography ── */
+  --font-family:         'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono:           'JetBrains Mono', 'Fira Code', monospace;
+  --fs-xs:   0.75rem;   /* 12px */
+  --fs-sm:   0.875rem;  /* 14px */
+  --fs-base: 1rem;      /* 16px */
+  --fs-md:   1.125rem;  /* 18px */
+  --fs-lg:   1.25rem;   /* 20px */
+  --fs-xl:   1.5rem;    /* 24px */
+  --fs-2xl:  2rem;      /* 32px */
+  --fs-3xl:  2.5rem;    /* 40px */
+  --fs-4xl:  3.25rem;   /* 52px */
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+  --lh-tight:    1.2;
+  --lh-base:     1.5;
+  --lh-relaxed:  1.75;
+
+  /* ── Spacing scale (4px base) ── */
+  --sp-1:  0.25rem;
+  --sp-2:  0.5rem;
+  --sp-3:  0.75rem;
+  --sp-4:  1rem;
+  --sp-5:  1.25rem;
+  --sp-6:  1.5rem;
+  --sp-8:  2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+  --sp-20: 5rem;
+  --sp-24: 6rem;
+
+  /* ── Border radius ── */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-full: 9999px;
+
+  /* ── Noise texture ── */
+  --noise-opacity: 0.04;         /* 0 = off, higher = more grain */
+
+  /* ── Vignette ── */
+  --vignette-color:   19, 32, 46;        /* RGB без alpha — меняй цвет тут */
+  --vignette-opacity: 0;           /* 0 = нет, 1 = чёрная стена */
+  --vignette-size:    100px;          /* глубина затемнения от края */
+  --vignette-blur:    80px;           /* размытие */
+
+  /* ── Shadows ── */
+  --shadow-sm:   0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md:   0 4px 12px rgba(0,0,0,0.1);
+  --shadow-lg:   0 8px 30px rgba(0,0,0,0.12);
+  --shadow-xl:   0 16px 48px rgba(0,0,0,0.16);
+  --shadow-card: 0 2px 8px rgba(43,48,52,0.08);
+  --shadow-lift: 0 8px 24px rgba(43,48,52,0.15);
+
+  /* ── Transitions ── */
+  --ease-out:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-in-out: cubic-bezier(0.42, 0, 0.58, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast:   150ms;
+  --duration-base:   300ms;
+  --duration-slow:   500ms;
+  --duration-slower: 800ms;
+
+  /* ── Z-index scale ── */
+  --z-base:     1;
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-overlay:  300;
+  --z-modal:    400;
+  --z-toast:    500;
+
+  /* ── Layout ── */
+  --container-max: 1200px;
+  --header-height: 72px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast:   0ms;
+    --duration-base:   0ms;
+    --duration-slow:   0ms;
+    --duration-slower: 0ms;
+  }
+}
+
+/* User toggle override */
+.reduce-motion {
+  --duration-fast:   0ms;
+  --duration-base:   0ms;
+  --duration-slow:   0ms;
+  --duration-slower: 0ms;
+}
+
+.reduce-motion *,
+.reduce-motion *::before,
+.reduce-motion *::after {
+  animation-duration: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+}

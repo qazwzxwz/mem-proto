@@ -1,0 +1,52 @@
+{
+  "palettes": [
+    {
+      "name": "МЭМ Gradient (default)",
+      "primary":       "#5D6474",
+      "primary_light": "#8CA9BD",
+      "primary_dark":  "#3E4452",
+      "accent":        "#2ECC71",
+      "accent_hover":  "#27AE60",
+      "accent_dark":   "#1E8449",
+      "surface":       "#FFFFFF",
+      "surface_alt":   "#F3F4F0",
+      "bg":            "#ECEDE6",
+      "bg_top":        "#8CA9BD",
+      "text":          "#3E4452",
+      "text_secondary":"#A7A6B0",
+      "border":        "#C8C9C2"
+    },
+    {
+      "name": "Graphite Steel",
+      "primary":       "#2C3E50",
+      "primary_light": "#3D566E",
+      "primary_dark":  "#1A252F",
+      "accent":        "#1ABC9C",
+      "accent_hover":  "#16A085",
+      "accent_dark":   "#0E6655",
+      "surface":       "#FFFFFF",
+      "surface_alt":   "#F0F3F5",
+      "bg":            "#ECEFF1",
+      "bg_top":        "#3D566E",
+      "text":          "#212121",
+      "text_secondary":"#607D8B",
+      "border":        "#CFD8DC"
+    },
+    {
+      "name": "Forest Energy",
+      "primary":       "#1B5E20",
+      "primary_light": "#2E7D32",
+      "primary_dark":  "#0D3B13",
+      "accent":        "#FF8F00",
+      "accent_hover":  "#FF6F00",
+      "accent_dark":   "#E65100",
+      "surface":       "#FFFFFF",
+      "surface_alt":   "#F1F8E9",
+      "bg":            "#E8F5E9",
+      "bg_top":        "#2E7D32",
+      "text":          "#1B1B1B",
+      "text_secondary":"#4E6E50",
+      "border":        "#C8E6C9"
+    }
+  ]
+}
