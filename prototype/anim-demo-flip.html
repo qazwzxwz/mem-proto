@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Анимация — 3D Card Flip (Two-Panel)</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+      background: #1a1d20;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      perspective: 1800px;
+    }
+
+    /* ── Main wrapper — flips in 3D ── */
+    .gs-wrapper {
+      display: flex;
+      width: 960px;
+      max-width: calc(100% - 32px);
+      height: 480px;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.9s cubic-bezier(0.4, 0.2, 0.2, 1);
+    }
+    .gs-wrapper.solved {
+      transform: rotateY(180deg);
+    }
+
+    /* ── Faces (front / back) ── */
+    .gs-face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      border-radius: 20px;
+      overflow: hidden;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    /* Front face — Problem */
+    .gs-front {
+      box-shadow:
+        0 0 40px rgba(233, 60, 53, 0.35),
+        0 0 80px rgba(233, 60, 53, 0.15),
+        0 8px 32px rgba(0, 0, 0, 0.25);
+    }
+
+    /* Back face — Solution */
+    .gs-back {
+      transform: rotateY(180deg);
+      box-shadow:
+        0 0 40px rgba(255, 255, 255, 0.25),
+        0 0 80px rgba(255, 255, 255, 0.08),
+        0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ── Left: Visual panel (50%) ── */
+    .gs-visual {
+      width: 50%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    /* Problem visual */
+    .gs-visual--problem {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      background: radial-gradient(ellipse at center, #0a0a0a 0%, #1a1d20 70%);
+    }
+    .gs-visual__icon {
+      font-size: 5rem;
+      filter: drop-shadow(0 0 40px rgba(233,60,53,0.5));
+      animation: iconPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes iconPulse {
+      0%,100% { transform: scale(1); filter: drop-shadow(0 0 40px rgba(233,60,53,0.5)); }
+      50%     { transform: scale(1.08); filter: drop-shadow(0 0 60px rgba(233,60,53,0.8)); }
+    }
+    .gs-visual__label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      color: rgba(255,255,255,0.35);
+    }
+
+    /* Solution visual */
+    .gs-visual--solution {
+      background: linear-gradient(135deg, #2E7D32 0%, #1b5e20 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .gs-visual--solution .gs-visual__solution-icon {
+      font-size: 4rem;
+    }
+    .gs-visual__sol-text {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 24px 20px;
+      background: linear-gradient(transparent, rgba(26,29,32,0.85));
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    /* ── Right: Content panel (50%) ── */
+    .gs-text {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px 36px;
+      box-sizing: border-box;
+    }
+
+    /* Problem text */
+    .gs-text--problem {
+      background: linear-gradient(135deg, #1a1d20, #2a1012);
+    }
+    .gs-problem__alert {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #E93C35;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 16px;
+    }
+    .gs-problem__title {
+      font-size: 1.5rem;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+    .gs-problem__title em {
+      font-style: normal;
+      color: #E93C35;
+    }
+    .gs-problem__desc {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    /* Solution text */
+    .gs-text--solution {
+      background: linear-gradient(160deg, #f0f4f2 0%, #e8efe9 40%, #f5f8f5 100%);
+      color: #1a1d20;
+    }
+    .gs-solution__badge {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #2E7D32;
+      margin-bottom: 16px;
+    }
+    .gs-solution__title {
+      font-size: 1.4rem;
+      color: #1a1d20;
+      margin-bottom: 12px;
+    }
+    .gs-solution__desc {
+      font-size: 0.88rem;
+      color: rgba(26,29,32,0.6);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .gs-specs {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .gs-spec {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .gs-spec__val {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #2E7D32;
+    }
+    .gs-spec__label {
+      font-size: 0.8rem;
+      color: rgba(26,29,32,0.5);
+    }
+
+    /* Buttons */
+    .btn {
+      align-self: flex-start;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: transform 0.2s;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn--solve {
+      background: rgba(233,60,53,0.15);
+      color: #fff;
+      border: 1px solid rgba(233,60,53,0.3);
+    }
+    .btn--back {
+      background: rgba(46,125,50,0.1);
+      color: #2E7D32;
+      border: 1px solid rgba(46,125,50,0.2);
+    }
+
+    /* Subtle shine during flip */
+    .gs-wrapper::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.06) 50%, transparent 60%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    .gs-wrapper.solved::after { opacity: 1; }
+
+    .label {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <div class="label">3D Card Flip — Two Panel</div>
+
+  <div class="gs-wrapper" id="wrapper">
+    <!-- FRONT: Problem -->
+    <div class="gs-face gs-front">
+      <div class="gs-visual gs-visual--problem">
+        <div class="gs-visual__icon">&#9889;</div>
+        <div class="gs-visual__label">Критическая ситуация</div>
+      </div>
+      <div class="gs-text gs-text--problem">
+        <div class="gs-problem__alert">&#9888; Проблема на объекте</div>
+        <h2 class="gs-problem__title"><em>Нет</em> электричества<br>Объект <em>парализован</em></h2>
+        <p class="gs-problem__desc">Удалённая площадка. Ноль розеток. Сварка, болгарка, освещение &mdash; всё мертво.</p>
+        <button class="btn btn--solve" id="solveBtn">Как МЭМ решает это &rarr;</button>
+      </div>
+    </div>
+
+    <!-- BACK: Solution -->
+    <div class="gs-face gs-back">
+      <div class="gs-visual gs-visual--solution">
+        <div class="gs-visual__solution-icon">&#9889;</div>
+        <div class="gs-visual__sol-text">Генератор МЭМ &mdash; до 15 кВт автономной мощности</div>
+      </div>
+      <div class="gs-text gs-text--solution">
+        <div class="gs-solution__badge">&#10003; Решено с МЭМ</div>
+        <h3 class="gs-solution__title">Встроенный генератор 15 кВт</h3>
+        <p class="gs-solution__desc">Дизельный или бензиновый генератор запускается за 30 секунд. Питает весь инструмент и сварку.</p>
+        <div class="gs-specs">
+          <div class="gs-spec"><span class="gs-spec__val">15 кВт</span><span class="gs-spec__label">выходная мощность</span></div>
+          <div class="gs-spec"><span class="gs-spec__val">12 ч</span><span class="gs-spec__label">непрерывная работа</span></div>
+          <div class="gs-spec"><span class="gs-spec__val">30 сек</span><span class="gs-spec__label">время запуска</span></div>
+        </div>
+        <button class="btn btn--back" id="backBtn">&larr; Вернуться к проблеме</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var wrapper = document.getElementById('wrapper');
+    document.getElementById('solveBtn').addEventListener('click', function() {
+      wrapper.classList.add('solved');
+    });
+    document.getElementById('backBtn').addEventListener('click', function() {
+      wrapper.classList.remove('solved');
+    });
+  </script>
+</body>
+</html>

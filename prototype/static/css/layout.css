@@ -325,8 +325,22 @@
 }
 
 @media (max-width: 768px) {
-  .fp-dots { right: var(--sp-3); }
-  .fp-dot { width: 10px; height: 10px; }
+  .fullpage {
+    height: auto;
+    overflow-y: visible;
+    scroll-snap-type: none;
+  }
+  .fp-section {
+    min-height: auto;
+    scroll-snap-align: none;
+    overflow: visible;
+    padding-top: var(--sp-16);
+    padding-bottom: var(--sp-16);
+  }
+  .fp-section:first-child {
+    min-height: 100svh;
+  }
+  .fp-dots { display: none; }
 }
 
 /* ── Footer ── */

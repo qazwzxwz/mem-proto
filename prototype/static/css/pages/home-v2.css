@@ -1,0 +1,58 @@
+/* ══════════════════════════════════════════════
+   V2 — Full-viewport section numbers (outline only)
+   Overrides the default small top-left numbers
+   ══════════════════════════════════════════════ */
+
+/* Hide the default ::before number */
+.v2 .fp-section::before {
+  display: none !important;
+}
+
+/* ── Number wrapper: centered, fills section ── */
+.v2-num-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+/* ── The number glyph ── */
+.v2-num {
+  font-size: 100px;             /* base size — JS scales from this */
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-family: 'SF Pro Display', 'Inter', 'Segoe UI', system-ui, sans-serif;
+  transform-origin: center center;
+
+  /* Outline only — no fill */
+  color: transparent;
+  -webkit-text-stroke: 0.8px rgba(43, 48, 52, 0.06);
+
+  /* Smooth scaling */
+  will-change: transform;
+}
+
+/* ── Dark sections (hero, gallery-showcase) — lighter stroke ── */
+.v2 .hero .v2-num,
+.v2 .gallery-showcase .v2-num {
+  -webkit-text-stroke-color: rgba(255, 255, 255, 0.07);
+}
+
+/* ── Keep content above the number ── */
+.v2 .fp-section > *:not(.v2-num-wrap) {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Mobile: slightly thinner stroke ── */
+@media (max-width: 768px) {
+  .v2-num {
+    -webkit-text-stroke-width: 0.6px;
+  }
+}

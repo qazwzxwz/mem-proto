@@ -1013,7 +1013,8 @@
   justify-content: center;
   gap: var(--sp-4);
   z-index: 2;
-  transition: transform 0.7s cubic-bezier(0.77,0,0.175,1), opacity 0.7s ease;
+  clip-path: circle(150% at 50% 50%);
+  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
 }
 .gs-visual__icon {
   font-size: 5rem;
@@ -1054,10 +1055,9 @@
   transition: opacity 0.5s 0.3s;
 }
 
-/* Solved state: problem swept away */
+/* Solved state: circular reveal — problem clips away */
 .gs-visual__scene.gs-solved .gs-visual__problem {
-  transform: translateX(-110%);
-  opacity: 0;
+  clip-path: circle(0% at 50% 50%);
 }
 .gs-visual__scene.gs-solved .gs-visual__sol-text {
   opacity: 1;
@@ -1090,19 +1090,17 @@
   pointer-events: auto;
 }
 
-/* Horizontal slider (problem <-> solution) */
+/* Stacked slides with circular reveal */
 .gs-slider {
-  display: flex;
-  width: 200%;
+  position: relative;
+  width: 100%;
   height: 100%;
-  transition: transform 0.7s cubic-bezier(0.77,0,0.175,1);
-}
-.gs-scene--solved .gs-slider {
-  transform: translateX(-50%);
 }
 
 .gs-slide {
-  width: 50%;
+  position: absolute;
+  inset: 0;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -1116,6 +1114,12 @@
 .gs-problem {
   background: linear-gradient(135deg, #1a1d20, #2a1012);
   padding: var(--sp-10) var(--sp-10);
+  z-index: 2;
+  clip-path: circle(150% at 50% 50%);
+  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.gs-scene--solved .gs-problem {
+  clip-path: circle(0% at 50% 85%);
 }
 .gs-problem__alert {
   display: inline-flex;
@@ -1189,7 +1193,21 @@
   padding: var(--sp-10) var(--sp-10);
   position: relative;
   overflow: hidden;
+  z-index: 1;
 }
+/* Staggered entrance for solution content after circular reveal */
+.gs-solution > * {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.gs-scene--solved .gs-solution > *:nth-child(1) { opacity: 1; transform: none; transition-delay: 0.3s; }
+.gs-scene--solved .gs-solution > *:nth-child(2) { opacity: 1; transform: none; transition-delay: 0.4s; }
+.gs-scene--solved .gs-solution > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 0.5s; }
+.gs-scene--solved .gs-solution > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 0.6s; }
+.gs-scene--solved .gs-solution > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 0.7s; }
+.gs-scene--solved .gs-solution > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 0.8s; }
+
 /* Subtle decorative glow */
 .gs-solution::before {
   content: '';
@@ -1416,6 +1434,9 @@
     height: calc(100vh - var(--header-height) - var(--sp-6) * 2);
     border-radius: var(--radius-lg);
   }
+  .gallery-showcase {
+    padding-bottom: 100px !important; /* место для тени gs-wrapper (80px blur) */
+  }
   .gs-visual {
     width: 100%;
     height: 35%;
@@ -1429,6 +1450,7 @@
   }
   .gs-problem, .gs-solution {
     padding: var(--sp-6) var(--sp-6);
+    padding-bottom: calc(var(--sp-6) + 60px); /* место для gs-nav */
   }
   .gs-problem__title {
     font-size: var(--fs-xl);

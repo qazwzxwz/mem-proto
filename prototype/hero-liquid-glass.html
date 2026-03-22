@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hero — Liquid Glass</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+      color: #fff;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* ── Background ── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(43, 48, 52, 0.95), transparent),
+        linear-gradient(135deg, #1a1e22 0%, #2b3034 40%, #1a1e22 100%);
+      overflow: hidden;
+    }
+
+    /* Ambient color blobs */
+    .hero__blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .hero__blob--1 {
+      width: 500px; height: 500px;
+      top: -10%; left: -5%;
+      background: rgba(233, 60, 53, 0.15);
+      animation: blobDrift1 12s ease-in-out infinite alternate;
+    }
+    .hero__blob--2 {
+      width: 400px; height: 400px;
+      bottom: -10%; right: -5%;
+      background: rgba(60, 140, 255, 0.12);
+      animation: blobDrift2 10s ease-in-out infinite alternate;
+    }
+    .hero__blob--3 {
+      width: 300px; height: 300px;
+      top: 50%; left: 60%;
+      background: rgba(46, 125, 50, 0.1);
+      animation: blobDrift3 14s ease-in-out infinite alternate;
+    }
+    @keyframes blobDrift1 { to { transform: translate(60px, 40px) scale(1.15); } }
+    @keyframes blobDrift2 { to { transform: translate(-50px, -30px) scale(1.2); } }
+    @keyframes blobDrift3 { to { transform: translate(30px, -50px) scale(1.1); } }
+
+    /* ── Big outline number ── */
+    .hero__num {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+    }
+    .hero__num span {
+      font-size: 80vw;
+      font-weight: 900;
+      line-height: 1;
+      color: transparent;
+      -webkit-text-stroke: 0.8px rgba(255, 255, 255, 0.05);
+    }
+
+    /* ── Content ── */
+    .hero__content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 800px;
+      padding: 0 24px;
+    }
+
+    .hero__title {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 16px;
+      text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+    }
+    .hero__title em {
+      font-style: normal;
+      color: #E93C35;
+    }
+
+    .hero__subtitle {
+      font-size: clamp(0.9rem, 2vw, 1.1rem);
+      color: rgba(255, 255, 255, 0.65);
+      max-width: 600px;
+      line-height: 1.6;
+      margin-bottom: 40px;
+    }
+
+    /* ── Liquid Glass Buttons ── */
+    .hero__actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .liquid-glass {
+      position: relative;
+      isolation: isolate;
+      box-shadow: 0px 6px 24px rgba(0, 0, 0, 0.2);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: none;
+      padding: 0;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .liquid-glass:focus { outline: none; }
+    .liquid-glass:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+    }
+    .liquid-glass:active { transform: scale(0.97); }
+
+    /* Glow layer */
+    .liquid-glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      border-radius: inherit;
+    }
+
+    /* Distortion layer */
+    .liquid-glass::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      filter: url(#glass-distortion);
+      -webkit-filter: url(#glass-distortion);
+    }
+
+    .glass-text {
+      position: relative;
+      z-index: 2;
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 600;
+      text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+      font-family: inherit;
+    }
+
+    /* ── Button variants ── */
+    .lg-btn--primary {
+      padding: 14px 36px;
+      border-radius: 14px;
+    }
+    .lg-btn--primary::before {
+      background-color: rgba(233, 60, 53, 0.18);
+      box-shadow: inset 0 0 20px -5px rgba(233, 60, 53, 0.4);
+    }
+
+    .lg-btn--secondary {
+      padding: 14px 36px;
+      border-radius: 14px;
+    }
+    .lg-btn--secondary::before {
+      background-color: rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 0 20px -5px rgba(255, 255, 255, 0.3);
+    }
+
+    /* ── Label ── */
+    .hero__label {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      padding: 8px 20px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    .hero__label::before {
+      background-color: rgba(255, 255, 255, 0.06);
+      box-shadow: inset 0 0 15px -5px rgba(255, 255, 255, 0.3);
+    }
+    .hero__label .glass-text {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 500px) {
+      .hero__actions { flex-direction: column; align-items: stretch; }
+      .lg-btn--primary, .lg-btn--secondary { padding: 14px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG Filter -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <defs>
+      <filter id="glass-distortion" x="0%" y="0%" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.01 0.01"
+                      numOctaves="2" seed="92" result="noise"/>
+        <feGaussianBlur in="noise" stdDeviation="2" result="blurred"/>
+        <feDisplacementMap in="SourceGraphic" in2="blurred" scale="128"
+                          xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <section class="hero">
+    <div class="hero__blob hero__blob--1"></div>
+    <div class="hero__blob hero__blob--2"></div>
+    <div class="hero__blob hero__blob--3"></div>
+
+    <div class="hero__num" aria-hidden="true"><span>1</span></div>
+
+    <!-- Label -->
+    <div class="hero__label liquid-glass">
+      <div class="glass-text">Liquid Glass</div>
+    </div>
+
+    <div class="hero__content">
+      <h1 class="hero__title">
+        <em>М</em>ногофункциональный<br>
+        <em>Э</em>нергетический<br>
+        <em>М</em>одуль
+      </h1>
+      <p class="hero__subtitle">Создаёт комфорт в любом месте и в любое время — за счёт автономности</p>
+
+      <div class="hero__actions">
+        <a href="#" class="liquid-glass lg-btn--secondary">
+          <div class="glass-text">Подробнее</div>
+        </a>
+        <a href="#" class="liquid-glass lg-btn--primary">
+          <div class="glass-text">Заказать звонок</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
