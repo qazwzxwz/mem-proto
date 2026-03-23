@@ -11,21 +11,19 @@
   width: auto;
   max-width: calc(100% - var(--sp-6) * 2);
   height: var(--header-height);
-  background: rgba(255,255,255,0.12);
+  background: rgba(1,1,1,0.4);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-radius: var(--radius-xl);
-  border: 1px solid rgba(255,255,255,0.3);
-  box-shadow: 0 4px 20px rgba(43,48,52,0.1),
-              inset 0 1px 0 rgba(255,255,255,0.25);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   z-index: var(--z-sticky);
   transition: background var(--duration-base), box-shadow var(--duration-base), border-color var(--duration-base);
 }
 .header--scrolled {
-  background: rgba(255,255,255,0.2);
-  border-color: rgba(255,255,255,0.4);
-  box-shadow: 0 8px 32px rgba(43,48,52,0.12),
-              inset 0 1px 0 rgba(255,255,255,0.3);
+  background: rgba(1,1,1,0.6);
+  border-color: rgba(255,255,255,0.12);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 }
 
 /* Light text when header is over dark hero section */
@@ -75,13 +73,13 @@
   gap: var(--sp-3);
   font-weight: var(--fw-bold);
   font-size: var(--fs-lg);
-  color: var(--color-primary-dark);
+  color: #fff;
   text-decoration: none;
 }
 .header__logo-icon {
   width: 40px; height: 40px;
-  background: var(--color-primary);
-  border-radius: var(--radius-md);
+  background: var(--color-accent);
+  border-radius: var(--radius-soft-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,13 +96,13 @@
 .header__nav a {
   font-size: var(--fs-sm);
   font-weight: var(--fw-medium);
-  color: var(--color-text-secondary);
+  color: rgba(255,255,255,0.6);
   transition: color var(--duration-fast);
   padding: var(--sp-2) 0;
 }
 .header__nav a:hover,
 .header__nav a.active {
-  color: var(--color-primary);
+  color: #fff;
 }
 
 /* Auth group hidden on desktop — only shown inside burger on mobile */
@@ -121,23 +119,23 @@
 /* Motion toggle */
 .motion-toggle {
   background: none;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(255,255,255,0.2);
   border-radius: var(--radius-full);
   padding: var(--sp-2) var(--sp-3);
   font-size: var(--fs-xs);
-  color: var(--color-text-secondary);
+  color: rgba(255,255,255,0.6);
   cursor: pointer;
   transition: all var(--duration-fast);
   white-space: nowrap;
 }
 .motion-toggle:hover {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  border-color: #fff;
+  color: #fff;
 }
 .motion-toggle--active {
-  background: var(--color-primary);
+  background: var(--color-accent);
   color: white;
-  border-color: var(--color-primary);
+  border-color: var(--color-accent);
 }
 
 /* Burger */
@@ -151,7 +149,7 @@
 .burger span {
   display: block;
   width: 24px; height: 2px;
-  background: var(--color-text);
+  background: #fff;
   margin: 5px 0;
   transition: all var(--duration-base);
   border-radius: 2px;
@@ -168,13 +166,13 @@
 
   .burger { display: block; }
 
-  /* Open dropdown always has dark text regardless of header--on-dark */
+  /* Open dropdown — light text on dark */
   .header__nav--open a {
-    color: var(--color-text) !important;
+    color: rgba(255,255,255,0.7) !important;
   }
   .header__nav--open a:hover,
   .header__nav--open a.active {
-    color: var(--color-primary) !important;
+    color: #fff !important;
   }
 
   /* Hide auth buttons & motion toggle from header row */
@@ -188,7 +186,8 @@
     right: var(--sp-3);
     left: auto;
     min-width: 220px;
-    background: #fff;
+    background: rgba(15,15,15,0.95);
+    border: 1px solid rgba(255,255,255,0.1);
     border-radius: var(--radius-lg);
     flex-direction: column;
     padding: var(--sp-5) var(--sp-6);
@@ -197,8 +196,8 @@
     opacity: 0;
     pointer-events: none;
     transition: all 0.25s ease;
-    box-shadow: 0 12px 48px rgba(43,48,52,0.2),
-                0 4px 16px rgba(43,48,52,0.1);
+    box-shadow: 0 12px 48px rgba(0,0,0,0.5),
+                0 4px 16px rgba(0,0,0,0.3);
   }
   .header__nav--open {
     transform: translateY(0);
@@ -218,7 +217,7 @@
     flex-direction: column;
     gap: var(--sp-3);
     padding-top: var(--sp-3);
-    border-top: 1px solid rgba(43,48,52,0.1);
+    border-top: 1px solid rgba(255,255,255,0.1);
     margin-top: var(--sp-1);
   }
   .header__nav .nav-auth-group .btn {
@@ -243,6 +242,7 @@
 
 /* ── Fullpage sections ── */
 .fullpage {
+  position: relative;
   height: 100vh;
   overflow-y: auto;
   scroll-snap-type: y mandatory;
@@ -258,7 +258,25 @@
   padding: var(--header-height) var(--sp-6) var(--sp-6);
   position: relative;
   overflow: hidden;
+  background: transparent;
 }
+.fp-section:first-child {
+  border-top: none;
+}
+
+/* ── ГОСТ grid background on every section ── */
+.fp-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--gost-grid-sm), var(--gost-grid-lg);
+  mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, black 30%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+/* hero already has its own blueprint SVG — skip duplicate grid */
+.hero::before { display: none; }
 
 /* ── Page dots (pagination) ── */
 .fp-dots {
@@ -274,20 +292,21 @@
 .fp-dot {
   width: 12px; height: 12px;
   border-radius: var(--radius-full);
-  border: 2px solid var(--color-primary);
+  border: 2px solid rgba(255,255,255,0.3);
   background: transparent;
   cursor: pointer;
   transition: all var(--duration-base) var(--ease-out);
   padding: 0;
 }
 .fp-dot:hover {
-  background: var(--color-primary-light);
+  background: rgba(255,255,255,0.2);
 }
 .fp-dot--active {
-  background: var(--color-primary);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
   transform: scale(1.2);
-  box-shadow: 0 0 8px 2px rgba(98,124,140,0.5),
-              0 0 16px 4px rgba(98,124,140,0.2);
+  box-shadow: 0 0 8px 2px rgba(233,60,53,0.5),
+              0 0 16px 4px rgba(233,60,53,0.2);
 }
 
 /* Dot labels on hover */
@@ -303,15 +322,15 @@
   white-space: nowrap;
   font-size: 11px;
   font-weight: 500;
-  color: var(--color-primary-dark);
-  background: rgba(255,255,255,0.85);
+  color: #fff;
+  background: rgba(1,1,1,0.75);
   backdrop-filter: blur(6px);
   padding: 3px 8px;
   border-radius: var(--radius-sm);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 .fp-dot:hover::after,
 .fp-dot--active::after {
@@ -350,7 +369,8 @@
 
 /* ── Footer ── */
 .footer {
-  background: var(--color-primary);
+  background: rgba(1,1,1,0.5);
+  border-top: 1px solid rgba(255,255,255,0.06);
   color: var(--color-text-inverse);
   padding: var(--sp-12) var(--sp-6);
 }

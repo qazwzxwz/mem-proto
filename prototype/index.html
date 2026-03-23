@@ -14,7 +14,7 @@
 <body>
 
   <!-- ═══════════ HEADER ═══════════ -->
-  <header class="header" role="banner">
+  <!-- <header class="header" role="banner">
     <div class="header__inner">
       <a href="index.html" class="header__logo" aria-label="МЭМ — на главную">
         <span>МЭМ</span>
@@ -43,13 +43,27 @@
       </button>
 
     </div>
-  </header>
+  </header> -->
 
   <!-- ═══════════ PAGINATION DOTS ═══════════ -->
   <nav class="fp-dots" aria-label="Навигация по секциям"></nav>
 
   <!-- ═══════════ FULLPAGE CONTAINER ═══════════ -->
   <main class="fullpage" id="fullpage">
+
+    <!-- ═══ Background МЭМ letterforms — outlined (hollow), rails to page bottom ═══ -->
+    <svg class="mem-bg-letters" viewBox="0 0 1000 6000" preserveAspectRatio="none" aria-hidden="true">
+      <!-- First М — outlined letter, legs extend as rails -->
+      <path d="M 20,150 L 20,6000 L 55,6000 L 55,150 L 200,496 L 345,150 L 345,6000 L 380,6000 L 380,150 L 200,580 Z" />
+
+      <!-- Э — outlined C-shape (hero only) -->
+      <path d="M 575,160 C 390,160 390,840 575,840 L 540,840 C 425,840 425,160 540,160 Z" />
+      <!-- Э — horizontal bar -->
+      <path d="M 400,480 L 580,480 L 580,520 L 400,520 Z" />
+
+      <!-- Second М — outlined letter, legs extend as rails -->
+      <path d="M 620,150 L 620,6000 L 655,6000 L 655,150 L 800,496 L 945,150 L 945,6000 L 980,6000 L 980,150 L 800,580 Z" />
+    </svg>
 
     <!-- ──── 1. HERO ──── -->
     <section class="fp-section hero" id="hero" data-section-num="01" aria-label="Главный экран">
@@ -61,127 +75,197 @@
         </h1>
         <p class="hero__subtitle" data-parallax data-parallax-speed="0.15">Создаёт <span class="hero__accent">комфорт</span> в любом месте и в любое время — за счёт <span class="hero__accent">автономности</span></p>
 
-        <!-- Product render (inline SVG placeholder) -->
+        <!-- Product render — Blueprint / ГОСТ style -->
         <div class="hero__product" data-parallax data-parallax-speed="0.35" aria-hidden="true">
-          <svg viewBox="0 0 640 310" xmlns="http://www.w3.org/2000/svg">
+          <svg viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <!-- Перламутровый градиент корпуса -->
-              <linearGradient id="pearl" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%"   stop-color="#F5F0EB"/>
-                <stop offset="35%"  stop-color="#EDE7E0"/>
-                <stop offset="70%"  stop-color="#E8E2DA"/>
-                <stop offset="100%" stop-color="#DDD6CD"/>
-              </linearGradient>
-              <!-- Лёгкий блик сверху -->
-              <linearGradient id="pearl-top" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%"   stop-color="#FDFBF9"/>
-                <stop offset="100%" stop-color="#F0EAE3"/>
-              </linearGradient>
-              <!-- Тень под корпусом -->
-              <filter id="shadow-body" x="-4%" y="-4%" width="108%" height="116%">
-                <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#2B3034" flood-opacity="0.18"/>
-              </filter>
-              <!-- Градиент для шин -->
-              <radialGradient id="tire" cx="50%" cy="50%" r="50%">
-                <stop offset="0%"  stop-color="#4A4A4A"/>
-                <stop offset="60%" stop-color="#333333"/>
-                <stop offset="100%" stop-color="#1A1A1A"/>
+              <!-- Мелкая сетка — ЦВЕТ СЕТКИ МЕНЯЕТСЯ ЗДЕСЬ ↓ -->
+              <pattern id="bp-grid-sm" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
+              </pattern>
+              <!-- Крупная сетка — ЦВЕТ СЕТКИ МЕНЯЕТСЯ ЗДЕСЬ ↓ -->
+              <pattern id="bp-grid-lg" width="100" height="100" patternUnits="userSpaceOnUse">
+                <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.8"/>
+              </pattern>
+              <!-- Радиальная маска — сетка затухает к краям -->
+              <radialGradient id="bp-fade" cx="50%" cy="45%" rx="55%" ry="55%">
+                <stop offset="0%" stop-color="white"/>
+                <stop offset="60%" stop-color="white" stop-opacity="0.7"/>
+                <stop offset="85%" stop-color="white" stop-opacity="0.15"/>
+                <stop offset="100%" stop-color="white" stop-opacity="0"/>
               </radialGradient>
-              <!-- Градиент для дисков (белый) -->
-              <radialGradient id="hubcap" cx="40%" cy="35%" r="55%">
-                <stop offset="0%"  stop-color="#FFFFFF"/>
-                <stop offset="60%" stop-color="#F0EDEA"/>
-                <stop offset="100%" stop-color="#DDD8D2"/>
-              </radialGradient>
-              <!-- Маска корпуса: прямоугольник с вырезами под колёсные арки -->
-              <clipPath id="body-clip">
-                <!-- Весь корпус -->
-                <rect x="50" y="60" width="540" height="180"/>
-              </clipPath>
-              <mask id="body-mask">
-                <rect x="50" y="60" width="540" height="180" fill="white"/>
+              <mask id="bp-mask">
+                <rect width="800" height="480" fill="url(#bp-fade)"/>
               </mask>
+              <!-- Стрелка размерной линии -->
+              <marker id="bp-arrow" viewBox="0 0 8 6" refX="8" refY="3" markerWidth="8" markerHeight="6" orient="auto-start-reverse">
+                <path d="M0,0 L8,3 L0,6 Z" fill="rgba(233,60,53,0.5)"/>
+              </marker>
             </defs>
-
-            <!-- ═══ КОЛЁСА (рисуются первыми — за корпусом) ═══ -->
-            <!-- <g class="wheel"><circle cx="120" cy="252" r="18" fill="url(#tire)" stroke="#1A1A1A" stroke-width="2.5"/><circle cx="120" cy="252" r="12" fill="url(#hubcap)" stroke="#666" stroke-width="1"/><circle cx="120" cy="252" r="4" fill="#999" stroke="#777" stroke-width="0.8"/></g>
-            <g class="wheel"><circle cx="180" cy="252" r="18" fill="url(#tire)" stroke="#1A1A1A" stroke-width="2.5"/><circle cx="180" cy="252" r="12" fill="url(#hubcap)" stroke="#666" stroke-width="1"/><circle cx="180" cy="252" r="4" fill="#999" stroke="#777" stroke-width="0.8"/></g>
-            <g class="wheel"><circle cx="410" cy="252" r="18" fill="url(#tire)" stroke="#1A1A1A" stroke-width="2.5"/><circle cx="410" cy="252" r="12" fill="url(#hubcap)" stroke="#666" stroke-width="1"/><circle cx="410" cy="252" r="4" fill="#999" stroke="#777" stroke-width="0.8"/></g>
-            <g class="wheel"><circle cx="470" cy="252" r="18" fill="url(#tire)" stroke="#1A1A1A" stroke-width="2.5"/><circle cx="470" cy="252" r="12" fill="url(#hubcap)" stroke="#666" stroke-width="1"/><circle cx="470" cy="252" r="4" fill="#999" stroke="#777" stroke-width="0.8"/></g>
-            <g class="wheel"><circle cx="530" cy="252" r="18" fill="url(#tire)" stroke="#1A1A1A" stroke-width="2.5"/><circle cx="530" cy="252" r="12" fill="url(#hubcap)" stroke="#666" stroke-width="1"/><circle cx="530" cy="252" r="4" fill="#999" stroke="#777" stroke-width="0.8"/></g> -->
-
-            <!-- ═══ КОРПУС ═══ -->
-            <!-- Основной блок (маскирован — вырезы под арки) -->
-            <g mask="url(#body-mask)" filter="url(#shadow-body)">
-              <rect x="50" y="60" width="540" height="180" rx="6" fill="url(#pearl)" stroke="#B8AFA5" stroke-width="1.5"/>
+            
+            <!-- ═══ СЕТКА С РАДИАЛЬНЫМ ЗАТУХАНИЕМ ═══ -->
+            <g mask="url(#bp-mask)">
+              <rect width="800" height="480" fill="url(#bp-grid-sm)"/>
+              <rect width="800" height="480" fill="url(#bp-grid-lg)"/>
             </g>
-            <!-- Крыша — чуть светлее -->
-            <rect x="50" y="60" width="540" height="24" rx="6" fill="url(#pearl-top)" stroke="#B8AFA5" stroke-width="1.5"/>
-            <line x1="50" y1="84" x2="590" y2="84" stroke="#C8C0B6" stroke-width="0.8"/>
 
-            <!-- Нижняя кромка / рама -->
-            <rect x="50" y="232" width="540" height="8" rx="2" fill="#C4BAB0" stroke="#B0A89E" stroke-width="0.5"/>
+            <!-- ═══ ОСЕВЫЕ ЛИНИИ (штрихпунктир) ═══ -->
+            <g stroke="rgba(233,60,53,0.18)" stroke-width="0.5" stroke-dasharray="12,4,2,4" fill="none">
+              <!-- Горизонтальная ось корпуса -->
+              <line x1="60" y1="195" x2="700" y2="195"/>
+              <!-- Вертикальные оси колёс -->
+              <line x1="185" y1="120" x2="185" y2="340"/>
+              <line x1="245" y1="120" x2="245" y2="340"/>
+              <line x1="510" y1="120" x2="510" y2="340"/>
+              <line x1="570" y1="120" x2="570" y2="340"/>
+              <line x1="630" y1="120" x2="630" y2="340"/>
+            </g>
 
-            <!-- ═══ КРАСНАЯ ПОЛОСА ═══ -->
-            <rect x="50" y="94" width="540" height="22" fill="#D72638"/>
-            <text x="80" y="111" text-anchor="start" font-family="'Arial Black', Arial, sans-serif" font-size="15" font-weight="900" fill="#FFFFFF" letter-spacing="3">М Э М</text>
+            <!-- ═══ КОЛЁСА (контуры) ═══ -->
+            <g fill="none" stroke="rgba(233,60,53,0.65)" stroke-width="1.2">
+              <!-- Переднее левое -->
+              <circle cx="185" cy="290" r="22"/>
+              <circle cx="185" cy="290" r="14"/>
+              <circle cx="185" cy="290" r="4"/>
+              <!-- Переднее правое -->
+              <circle cx="245" cy="290" r="22"/>
+              <circle cx="245" cy="290" r="14"/>
+              <circle cx="245" cy="290" r="4"/>
+              <!-- Заднее 1 -->
+              <circle cx="510" cy="290" r="22"/>
+              <circle cx="510" cy="290" r="14"/>
+              <circle cx="510" cy="290" r="4"/>
+              <!-- Заднее 2 -->
+              <circle cx="570" cy="290" r="22"/>
+              <circle cx="570" cy="290" r="14"/>
+              <circle cx="570" cy="290" r="4"/>
+              <!-- Заднее 3 -->
+              <circle cx="630" cy="290" r="22"/>
+              <circle cx="630" cy="290" r="14"/>
+              <circle cx="630" cy="290" r="4"/>
+            </g>
 
-            <!-- ═══ ДВЕРЬ (центр — между группами колёс) ═══ -->
-            <rect x="240" y="126" width="100" height="100" rx="3" fill="#E2DCD5" stroke="#A89E94" stroke-width="1.2"/>
-            <rect x="246" y="132" width="88" height="88" rx="2" fill="none" stroke="#B8AFA5" stroke-width="0.8"/>
-            <rect x="278" y="168" width="24" height="6" rx="2" fill="#A89E94" stroke="#8E857C" stroke-width="0.6"/>
-            <rect x="278" y="182" width="24" height="6" rx="2" fill="#A89E94" stroke="#8E857C" stroke-width="0.6"/>
-            <circle cx="266" cy="176" r="3" fill="#8E857C"/>
+            <!-- ═══ КОРПУС — основные контурные линии ═══ -->
+            <g fill="none" stroke="rgba(233,60,53,0.7)" stroke-width="1.5">
+              <!-- Основной прямоугольник корпуса -->
+              <rect x="110" y="100" width="580" height="170" rx="3"/>
+              <!-- Крыша (линия раздела) -->
+              <line x1="110" y1="125" x2="690" y2="125"/>
+              <!-- Рама / днище -->
+              <rect x="110" y="270" width="580" height="10" rx="1"/>
+            </g>
 
-            <!-- ═══ БОКОВЫЕ ПАНЕЛИ (левая часть, над передними колёсами) ═══ -->
-            <rect x="68" y="126" width="80" height="68" rx="3" fill="#E8E2DA" stroke="#A89E94" stroke-width="1"/>
-            <rect x="74" y="132" width="68" height="56" rx="2" fill="none" stroke="#C4BAB0" stroke-width="0.6"/>
-            <rect x="160" y="126" width="60" height="68" rx="3" fill="#E8E2DA" stroke="#A89E94" stroke-width="1"/>
-            <rect x="166" y="132" width="48" height="56" rx="2" fill="none" stroke="#C4BAB0" stroke-width="0.6"/>
+            <!-- ═══ КРАСНАЯ ПОЛОСА М Э М ═══ -->
+            <rect x="110" y="133" width="580" height="24" fill="none" stroke="rgba(233,60,53,0.8)" stroke-width="1"/>
+            <text x="145" y="151" font-family="'Arial Black', Arial, sans-serif" font-size="14" font-weight="900" fill="rgba(233,60,53,0.8)" letter-spacing="3">М Э М</text>
 
-            <!-- ═══ ВЕНТИЛЯЦИОННЫЕ ПРОРЕЗИ ═══ -->
-            <rect x="356" y="135" width="30" height="4" rx="2" fill="#C4BAB0"/>
-            <rect x="356" y="145" width="30" height="4" rx="2" fill="#C4BAB0"/>
-            <rect x="356" y="155" width="30" height="4" rx="2" fill="#C4BAB0"/>
-            <rect x="356" y="165" width="30" height="4" rx="2" fill="#C4BAB0"/>
+            <!-- ═══ ДВЕРЬ ═══ -->
+            <g fill="none" stroke="rgba(233,60,53,0.55)" stroke-width="1">
+              <rect x="320" y="165" width="100" height="100" rx="2"/>
+              <rect x="326" y="171" width="88" height="88" rx="1"/>
+              <!-- Ручка -->
+              <rect x="358" y="206" width="24" height="5" rx="1.5"/>
+              <rect x="358" y="218" width="24" height="5" rx="1.5"/>
+              <circle cx="348" cy="213" r="3"/>
+            </g>
 
-            <!-- ═══ ПОЖАРНЫЙ ЯЩИК СО ШЛАНГОМ (правая верхняя часть) ═══ -->
-            <rect x="400" y="126" width="70" height="65" rx="3" fill="#C0392B" stroke="#962D22" stroke-width="1.2"/>
-            <rect x="405" y="131" width="60" height="55" rx="2" fill="#A93226"/>
-            <!-- Шланг -->
-            <circle cx="429" cy="160" r="20" fill="none" stroke="#F0EDE8" stroke-width="2.4"/>
-            <circle cx="429" cy="160" r="17" fill="none" stroke="#E6E2DC" stroke-width="2.3"/>
-            <circle cx="429" cy="160" r="14" fill="none" stroke="#F0EDE8" stroke-width="2.2"/>
-            <circle cx="429" cy="160" r="11" fill="none" stroke="#E6E2DC" stroke-width="2.1"/>
-            <circle cx="429" cy="160" r="8"  fill="none" stroke="#F0EDE8" stroke-width="2"/>
-            <circle cx="429" cy="160" r="5"  fill="none" stroke="#E6E2DC" stroke-width="1.8"/>
-            <circle cx="429" cy="160" r="4" fill="#C0B8AE" stroke="#8E857C" stroke-width="0.8"/>
-            <circle cx="429" cy="160" r="2" fill="#A89E94"/>
-            <!-- Ствол -->
-            <rect x="457" y="172" width="6" height="7" rx="1" fill="#A8A096" stroke="#8E857C" stroke-width="0.6"/>
-            <rect x="456" y="177" width="8" height="3" rx="1" fill="#B0A89E" stroke="#7A7268" stroke-width="0.5"/>
-            <rect x="458" y="148" width="4" height="25" rx="1.5" fill="#D4592A" stroke="#B8431E" stroke-width="0.6"/>
-            <rect x="457" y="139" width="6" height="10" rx="1" fill="#A8A096" stroke="#8E857C" stroke-width="0.6"/>
-            <rect x="458.5" y="132" width="3" height="9" rx="1" fill="#8E857C" stroke="#6E6660" stroke-width="0.5"/>
-            <circle cx="459" cy="182" r="3" fill="#B0A89E" stroke="#8E857C" stroke-width="0.6"/>
-            <circle cx="459" cy="182" r="1.2" fill="#8E857C"/>
-            <!-- Стекло -->
-            <rect x="400" y="126" width="70" height="65" rx="3" fill="rgba(200,220,235,0.22)" stroke="#8E857C" stroke-width="0.8"/>
-            <path d="M408,129 L418,129 L408,151 Z" fill="rgba(255,255,255,0.4)"/>
-            <path d="M422,129 L440,129 L408,176 L408,156 Z" fill="rgba(255,255,255,0.18)"/>
-            <rect x="400" y="126" width="70" height="65" rx="3" fill="none" stroke="#7A7268" stroke-width="1.4"/>
-            <rect x="428" y="189" width="14" height="5" rx="1.5" fill="#8E857C" stroke="#6E6660" stroke-width="0.6"/>
-            <circle cx="435" cy="191.5" r="1.5" fill="#6E6660"/>
+            <!-- ═══ БОКОВЫЕ ПАНЕЛИ ═══ -->
+            <g fill="none" stroke="rgba(233,60,53,0.55)" stroke-width="1">
+              <rect x="130" y="165" width="80" height="68" rx="2"/>
+              <rect x="136" y="171" width="68" height="56" rx="1"/>
+              <rect x="222" y="165" width="80" height="68" rx="2"/>
+              <rect x="228" y="171" width="68" height="56" rx="1"/>
+            </g>
 
-            <!-- ═══ МЕЛКИЕ ДЕТАЛИ ═══ -->
-            <circle cx="60" cy="98" r="2.5" fill="#B0A89E"/>
-            <circle cx="580" cy="98" r="2.5" fill="#B0A89E"/>
-            <circle cx="60" cy="230" r="2" fill="#B8AFA5"/>
-            <circle cx="580" cy="230" r="2" fill="#B8AFA5"/>
-            <circle cx="320" cy="230" r="2" fill="#B8AFA5"/>
+            <!-- ═══ ВЕНТИЛЯЦИЯ ═══ -->
+            <g fill="none" stroke="rgba(233,60,53,0.45)" stroke-width="0.8">
+              <line x1="438" y1="173" x2="468" y2="173"/>
+              <line x1="438" y1="183" x2="468" y2="183"/>
+              <line x1="438" y1="193" x2="468" y2="193"/>
+              <line x1="438" y1="203" x2="468" y2="203"/>
+            </g>
 
-            <!-- ═══ ЗЕМЛЯ (убрана по решению заказчика) ═══ -->
-            <!-- <line x1="30" y1="270" x2="610" y2="270" stroke="#A89E94" stroke-width="1" opacity="0.3"/> -->
+            <!-- ═══ ПОЖАРНЫЙ ОТСЕК ═══ -->
+            <g fill="none" stroke="rgba(233,60,53,0.55)" stroke-width="1">
+              <rect x="490" y="165" width="75" height="68" rx="2"/>
+              <!-- Шланг (спираль) -->
+              <circle cx="522" cy="200" r="20" stroke-width="0.8"/>
+              <circle cx="522" cy="200" r="15" stroke-width="0.8"/>
+              <circle cx="522" cy="200" r="10" stroke-width="0.8"/>
+              <circle cx="522" cy="200" r="5" stroke-width="0.8"/>
+            </g>
+
+            <!-- ═══ СЦЕПНОЕ УСТРОЙСТВО (дышло) ═══ -->
+            <g fill="none" stroke="rgba(233,60,53,0.5)" stroke-width="1">
+              <line x1="110" y1="230" x2="70" y2="260"/>
+              <circle cx="65" cy="265" r="8"/>
+              <circle cx="65" cy="265" r="3"/>
+            </g>
+
+            <!-- ═══ РАЗМЕРНЫЕ ЛИНИИ ═══ -->
+            <g class="bp-dimensions" fill="none" stroke="rgba(233,60,53,0.4)" stroke-width="0.6">
+              <!-- Общая длина -->
+              <line x1="110" y1="95" x2="110" y2="70" stroke-dasharray="none"/>
+              <line x1="690" y1="95" x2="690" y2="70" stroke-dasharray="none"/>
+              <line x1="110" y1="76" x2="690" y2="76" marker-start="url(#bp-arrow)" marker-end="url(#bp-arrow)"/>
+
+              <!-- Высота корпуса -->
+              <line x1="700" y1="100" x2="730" y2="100"/>
+              <line x1="700" y1="270" x2="730" y2="270"/>
+              <line x1="724" y1="100" x2="724" y2="270" marker-start="url(#bp-arrow)" marker-end="url(#bp-arrow)"/>
+
+              <!-- Диаметр колеса (переднее) -->
+              <line x1="185" y1="268" x2="185" y2="312" marker-start="url(#bp-arrow)" marker-end="url(#bp-arrow)"/>
+            </g>
+
+            <!-- ═══ РАЗМЕРНЫЙ ТЕКСТ (ГОСТ курсив) ═══ -->
+            <g class="bp-dimensions" font-family="'Times New Roman', 'Georgia', serif" font-style="italic" font-size="12" fill="rgba(233,60,53,0.75)">
+              <text x="380" y="70" text-anchor="middle">5 400</text>
+              <text x="738" y="190" text-anchor="start">1 700</text>
+              <text x="185" y="325" text-anchor="middle" font-size="10">⌀440</text>
+            </g>
+
+            <!-- ═══ ВЫНОСКИ И ПОДПИСИ ═══ -->
+            <g class="bp-callouts" font-family="'Times New Roman', 'Georgia', serif" font-style="italic" font-size="11" fill="rgba(233,60,53,0.65)">
+              <!-- Корпус -->
+              <line x1="400" y1="107" x2="400" y2="55" stroke="rgba(233,60,53,0.4)" stroke-width="0.5"/>
+              <line x1="400" y1="55" x2="460" y2="55" stroke="rgba(233,60,53,0.4)" stroke-width="0.5"/>
+              <text x="463" y="58">Корпус</text>
+
+              <!-- Дверь -->
+              <line x1="370" y1="265" x2="370" y2="340" stroke="rgba(233,60,53,0.4)" stroke-width="0.5"/>
+              <line x1="370" y1="340" x2="410" y2="340" stroke="rgba(233,60,53,0.4)" stroke-width="0.5"/>
+              <text x="413" y="343">Дверь</text>
+
+              <!-- Пожарный отсек -->
+              <line x1="565" y1="165" x2="600" y2="150" stroke="rgba(233,60,53,0.4)" stroke-width="0.5"/>
+              <line x1="600" y1="150" x2="660" y2="150" stroke="rgba(233,60,53,0.4)" stroke-width="0.5"/>
+              <text x="602" y="146" font-size="9">Пожарный отсек</text>
+
+              <!-- Вентиляция -->
+              <line x1="453" y1="210" x2="480" y2="245" stroke="rgba(233,60,53,0.4)" stroke-width="0.5"/>
+              <line x1="480" y1="245" x2="520" y2="245" stroke="rgba(233,60,53,0.4)" stroke-width="0.5"/>
+              <text x="480" y="257" font-size="9">Вентиляция</text>
+
+              <!-- Сцепное устройство -->
+              <line x1="65" y1="257" x2="65" y2="230" stroke="rgba(233,60,53,0.4)" stroke-width="0.5"/>
+              <line x1="65" y1="230" x2="30" y2="230" stroke="rgba(233,60,53,0.4)" stroke-width="0.5"/>
+              <text x="15" y="225" font-size="9" text-anchor="end">Сцепное</text>
+              <text x="15" y="236" font-size="9" text-anchor="end">устройство</text>
+            </g>
+
+            <!-- ═══ ШТАМП (упрощённый, без рамки ГОСТ) ═══ -->
+            <g class="bp-stamp" font-family="'Times New Roman', 'Georgia', serif" font-style="italic" fill="rgba(233,60,53,0.55)">
+              <line x1="610" y1="400" x2="780" y2="400" stroke="rgba(233,60,53,0.3)" stroke-width="0.5"/>
+              <line x1="610" y1="418" x2="780" y2="418" stroke="rgba(233,60,53,0.2)" stroke-width="0.5"/>
+              <line x1="610" y1="436" x2="780" y2="436" stroke="rgba(233,60,53,0.3)" stroke-width="0.5"/>
+              <text x="615" y="414" font-size="14" font-weight="bold" fill="rgba(233,60,53,0.7)">МЭМ-01</text>
+              <text x="695" y="414" font-size="10">Вид сбоку</text>
+              <text x="615" y="432" font-size="10">М 1:25</text>
+              <text x="695" y="432" font-size="10">Лист 1</text>
+              <text x="615" y="456" font-size="9" fill="rgba(233,60,53,0.45)">Многофункциональный энергетический модуль</text>
+            </g>
+
           </svg>
         </div>
 
@@ -194,82 +278,379 @@
 
     </section>
 
-    <!-- ──── 2. CAPABILITIES ──── -->
-    <section class="fp-section capabilities" id="capabilities" data-section-num="02" aria-label="Возможности модуля">
-      <div class="container">
-        <div class="section-title">
-          <h2>Возможности МЭМ</h2>
-          <div class="divider"></div>
-          <p>Один модуль — шесть направлений применения</p>
-        </div>
+    
+    <!-- ──── 4. GALLERY SHOWCASE (Problem → Solution) ──── -->
+    <section class="fp-section gallery-showcase" id="gallery" data-section-num="02" aria-label="Возможности МЭМ — проблемы и решения">
 
-        <!-- Infinite carousel -->
-        <div class="cap-carousel" aria-label="Карусель возможностей">
-          <div class="cap-carousel__track">
-            <!-- Original 6 cards -->
-            <div class="cap-card" data-cap="0">
-              <div class="cap-card__icon" aria-hidden="true">&#9889;</div>
-              <h3>Генерация и сварка</h3>
+      <div class="gs-wrapper">
+        <!-- ── Left: Visual panel ── -->
+        <div class="gs-visual">
+          <!-- Scene 0: No electricity → Генерация и сварка -->
+          <div class="gs-visual__scene gs-visual__scene--active" data-scene="0">
+            <div class="gs-visual__problem gs-mood-dark">
+              <div class="gs-visual__icon">&#9889;</div>
+              <div class="gs-visual__label">Нет электричества</div>
             </div>
-            <div class="cap-card" data-cap="1">
-              <div class="cap-card__icon" aria-hidden="true">&#128293;</div>
-              <h3>Сварка в пожароопасных условиях</h3>
+            <div class="gs-visual__solution">
+              <img src="static/img/photo4.jpg" alt="Генератор МЭМ">
+              <div class="gs-visual__sol-text">Генерация и сварка &mdash; до 15 кВт, 48 ч автономно</div>
             </div>
-            <div class="cap-card" data-cap="2">
-              <div class="cap-card__icon" aria-hidden="true">&#128167;</div>
-              <h3>Пожаротушение и водоснабжение</h3>
+          </div>
+          <!-- Scene 1: Welding fire risk → Сварка в пожароопасных условиях -->
+          <div class="gs-visual__scene" data-scene="1">
+            <div class="gs-visual__problem gs-mood-fire">
+              <div class="gs-visual__icon">&#128293;</div>
+              <div class="gs-visual__label">Сварка рядом с ГСМ</div>
             </div>
-            <div class="cap-card" data-cap="3">
-              <div class="cap-card__icon" aria-hidden="true">&#9981;</div>
-              <h3>Автономная насосная станция</h3>
+            <div class="gs-visual__solution">
+              <img src="static/img/photo3.jpg" alt="Защита от пожара МЭМ">
+              <div class="gs-visual__sol-text">Искрогасящий экран + датчики + запас воды 2 000 л</div>
             </div>
-            <div class="cap-card" data-cap="4">
-              <div class="cap-card__icon" aria-hidden="true">&#127777;</div>
-              <h3>Отопление и теплоаккумулятор</h3>
+          </div>
+          <!-- Scene 2: No fire engine → Пожаротушение и водоснабжение -->
+          <div class="gs-visual__scene" data-scene="2">
+            <div class="gs-visual__problem gs-mood-fire">
+              <div class="gs-visual__icon">&#128658;</div>
+              <div class="gs-visual__label">Нет пожарной машины</div>
             </div>
-            <div class="cap-card" data-cap="5">
-              <div class="cap-card__icon" aria-hidden="true">&#127793;</div>
-              <h3>Ирригация и сервис</h3>
+            <div class="gs-visual__solution">
+              <img src="static/img/photo3.jpg" alt="Пожаротушение МЭМ">
+              <div class="gs-visual__sol-text">Итальянский насос 150 л/мин — дальность 30 м, высота 10 м</div>
+            </div>
+          </div>
+          <!-- Scene 3: Freezing → Отопление и теплоаккумулятор -->
+          <div class="gs-visual__scene" data-scene="3">
+            <div class="gs-visual__problem gs-mood-ice">
+              <div class="gs-visual__icon">&#10052;</div>
+              <div class="gs-visual__label">Экстремальный холод</div>
+            </div>
+            <div class="gs-visual__solution">
+              <img src="static/img/photo1.jpg" alt="Утеплённый МЭМ">
+              <div class="gs-visual__sol-text">Теплоаккумулятор 2 000 л + обогрев до 55&deg;C</div>
+            </div>
+          </div>
+          <!-- Scene 4: No water → Автономная насосная станция -->
+          <div class="gs-visual__scene" data-scene="4">
+            <div class="gs-visual__problem gs-mood-water">
+              <div class="gs-visual__icon">&#128167;</div>
+              <div class="gs-visual__label">Нет водопровода</div>
+            </div>
+            <div class="gs-visual__solution">
+              <img src="static/img/photo5.jpg" alt="Насосная станция МЭМ">
+              <div class="gs-visual__sol-text">Автономная насосная станция &mdash; 40 л/мин, &minus;40&deg;C</div>
+            </div>
+          </div>
+          <!-- Scene 5: Irrigation/service → Ирригация и сервис -->
+          <div class="gs-visual__scene" data-scene="5">
+            <div class="gs-visual__problem gs-mood-water">
+              <div class="gs-visual__icon">&#127793;</div>
+              <div class="gs-visual__label">Нет полива и уборки</div>
+            </div>
+            <div class="gs-visual__solution">
+              <img src="static/img/photo2.jpg" alt="Ирригация МЭМ">
+              <div class="gs-visual__sol-text">Орошение теплиц, мойка колёс, прочистка скважин</div>
             </div>
           </div>
         </div>
 
-        <!-- Detail panel (hidden by default) -->
-        <div class="cap-detail" aria-live="polite" hidden>
-          <button class="cap-detail__close" aria-label="Закрыть описание">&times;</button>
-          <div class="cap-detail__body"></div>
+        <!-- ── Right: Content panel ── -->
+        <div class="gs-content">
+          <!-- Scene 0: Генерация и сварка -->
+          <div class="gs-scene gs-scene--active" data-scene="0">
+            <div class="gs-slider">
+              <div class="gs-slide gs-problem">
+                <div class="gs-problem__alert">&#9888; Проблема на объекте</div>
+                <h2 class="gs-problem__title"><em>Нет</em> электричества<br>Объект <em>парализован</em></h2>
+                <p class="gs-problem__desc">Удалённая площадка. Ноль розеток. Сварка, болгарка, освещение &mdash; всё мертво. Люди стоят, деньги горят.</p>
+                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
+              </div>
+              <div class="gs-slide gs-solution">
+                <div class="gs-solution__badge">&#10003; Генерация и сварка</div>
+                <h3 class="gs-solution__title">Автономный генератор + сварочный пост</h3>
+                <p class="gs-solution__desc">Бензиновый двигатель корейского производства, 3 фазы. Запускается за 30 секунд, питает сварку, инструмент и освещение &mdash; до 48 часов автономно.</p>
+                <div class="gs-solution__specs">
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">15 кВт</span><span class="gs-spec-row__label">выходная мощность</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">48 ч</span><span class="gs-spec-row__label">автономная работа</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">30 сек</span><span class="gs-spec-row__label">время запуска</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">3 ф.</span><span class="gs-spec-row__label">3-фазное питание</span></div>
+                </div>
+                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
+              </div>
+            </div>
+          </div>
+          <!-- Scene 1: Сварка в пожароопасных условиях -->
+          <div class="gs-scene" data-scene="1">
+            <div class="gs-slider">
+              <div class="gs-slide gs-problem">
+                <div class="gs-problem__alert">&#128293; Угроза возгорания</div>
+                <h2 class="gs-problem__title">Сварка рядом с <em>ГСМ.</em><br>Искра &mdash; и <em>всё горит</em></h2>
+                <p class="gs-problem__desc">Огневые работы в пожароопасных условиях. Ни экрана, ни датчиков, ни воды рядом. Одна искра &mdash; и объект в огне.</p>
+                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
+              </div>
+              <div class="gs-slide gs-solution">
+                <div class="gs-solution__badge">&#10003; Безопасная сварка</div>
+                <h3 class="gs-solution__title">Встроенная система контроля пожара</h3>
+                <p class="gs-solution__desc">Искрогасящий экран, огнестойкие перегородки, датчики температуры и задымления. Запас воды 2 000 л для мгновенного тушения. Соответствие нормам ПБ.</p>
+                <div class="gs-solution__specs">
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">2 000 л</span><span class="gs-spec-row__label">запас воды для тушения</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">20 м</span><span class="gs-spec-row__label">рукав пожарного шкафа</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">ПБ</span><span class="gs-spec-row__label">соответствие нормам</span></div>
+                </div>
+                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
+              </div>
+            </div>
+          </div>
+          <!-- Scene 2: Пожаротушение и водоснабжение -->
+          <div class="gs-scene" data-scene="2">
+            <div class="gs-slider">
+              <div class="gs-slide gs-problem">
+                <div class="gs-problem__alert">&#128658; Нет техники тушения</div>
+                <h2 class="gs-problem__title">Пожар на объекте.<br><em>Машины нет.</em> Рукав <em>не достаёт.</em></h2>
+                <p class="gs-problem__desc">До пожарной части &mdash; 40 минут. Обычный рукав не добивает на высоту. Пенообразователя нет. Счёт идёт на секунды.</p>
+                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
+              </div>
+              <div class="gs-slide gs-solution">
+                <div class="gs-solution__badge">&#10003; Пожаротушение и водоснабжение</div>
+                <h3 class="gs-solution__title">Маленькая пожарная машина в модуле</h3>
+                <p class="gs-solution__desc">Итальянский насос бьёт на 30 м вдаль и 10 м в высоту. Основной бак 2 000 л + резервуар 100 л для пенообразователя. Химдобавки &mdash; прямо в струю.</p>
+                <div class="gs-solution__specs">
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">150 л/мин</span><span class="gs-spec-row__label">производительность насоса</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">30 м</span><span class="gs-spec-row__label">дальность струи</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">10 м</span><span class="gs-spec-row__label">высота подачи</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">2 100 л</span><span class="gs-spec-row__label">суммарный объём баков</span></div>
+                </div>
+                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
+              </div>
+            </div>
+          </div>
+          <!-- Scene 3: Отопление и теплоаккумулятор -->
+          <div class="gs-scene" data-scene="3">
+            <div class="gs-slider">
+              <div class="gs-slide gs-problem">
+                <div class="gs-problem__alert">&#10052; Экстремальный холод</div>
+                <h2 class="gs-problem__title"><em>&minus;40&deg;C.</em><br>Оборудование <em>замёрзло.</em></h2>
+                <p class="gs-problem__desc">Топливо густеет, аккумуляторы сдохли, руки не гнутся. Работать невозможно. Сроки горят, штрафы копятся.</p>
+                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
+              </div>
+              <div class="gs-slide gs-solution">
+                <div class="gs-solution__badge">&#10003; Отопление и теплоаккумулятор</div>
+                <h3 class="gs-solution__title">Автономное отопление до &minus;40&deg;C</h3>
+                <p class="gs-solution__desc">Теплоаккумулятор 2 000 л нагревается до 55&deg;C. Сэндвич-панели 50 мм не пускают мороз. Циклическая работа генератора экономит топливо.</p>
+                <div class="gs-solution__specs">
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">2 000 л</span><span class="gs-spec-row__label">теплоаккумулятор</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">55&deg;C</span><span class="gs-spec-row__label">температура нагрева</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">50 мм</span><span class="gs-spec-row__label">сэндвич-панели</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">&lt;1 кВт/сут</span><span class="gs-spec-row__label">расход на обогрев</span></div>
+                </div>
+                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
+              </div>
+            </div>
+          </div>
+          <!-- Scene 4: Автономная насосная станция -->
+          <div class="gs-scene" data-scene="4">
+            <div class="gs-slider">
+              <div class="gs-slide gs-problem">
+                <div class="gs-problem__alert">&#128167; Нет водопровода</div>
+                <h2 class="gs-problem__title">Вода нужна <em>сейчас.</em><br>Водопровода <em>нет.</em></h2>
+                <p class="gs-problem__desc">Промывка, охлаждение, хозяйственные нужды &mdash; всё требует воду. Привозить бочками &mdash; дорого и долго.</p>
+                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
+              </div>
+              <div class="gs-slide gs-solution">
+                <div class="gs-solution__badge">&#10003; Автономная насосная станция</div>
+                <h3 class="gs-solution__title">Подкачка из любого источника</h3>
+                <p class="gs-solution__desc">Расширительный бак 100 л, автоподкачка по мере убывания. Подключается к ёмкости, скважине, открытому водоёму. Работает круглогодично, включая &minus;40&deg;C.</p>
+                <div class="gs-solution__specs">
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">100 л</span><span class="gs-spec-row__label">расширительный бак</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">40 л/мин</span><span class="gs-spec-row__label">производительность</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">4 бар</span><span class="gs-spec-row__label">рабочее давление</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">&minus;40&deg;C</span><span class="gs-spec-row__label">рабочий диапазон</span></div>
+                </div>
+                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
+              </div>
+            </div>
+          </div>
+          <!-- Scene 5: Ирригация и сервис -->
+          <div class="gs-scene" data-scene="5">
+            <div class="gs-slider">
+              <div class="gs-slide gs-problem">
+                <div class="gs-problem__alert">&#127793; Нет технического сервиса</div>
+                <h2 class="gs-problem__title">Теплицы <em>без полива.</em><br>Техника <em>в грязи.</em></h2>
+                <p class="gs-problem__desc">Орошение вручную &mdash; трудоёмко. Колёса техники не отмыть. Скважина засорена. Борщевик захватывает территорию.</p>
+                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
+              </div>
+              <div class="gs-slide gs-solution">
+                <div class="gs-solution__badge">&#10003; Ирригация и сервис</div>
+                <h3 class="gs-solution__title">Полив, мойка и прочистка из одного модуля</h3>
+                <p class="gs-solution__desc">Орошение теплиц и автополив с вводом удобрений в струю. Станция мойки колёс на объекте. Прочистка скважин и труб высоким давлением.</p>
+                <div class="gs-solution__specs">
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">авто</span><span class="gs-spec-row__label">орошение теплиц</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">хим.</span><span class="gs-spec-row__label">ввод удобрений в струю</span></div>
+                  <div class="gs-spec-row"><span class="gs-spec-row__val">высок.</span><span class="gs-spec-row__label">прочистка скважин давлением</span></div>
+                </div>
+                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="section-divider" aria-hidden="true">
-        <svg viewBox="0 0 1440 60" preserveAspectRatio="none"><path d="M0,40 C240,10 480,50 720,30 C960,10 1200,50 1440,25 L1440,60 L0,60 Z" fill="var(--color-bg)"/></svg>
-      </div>
+
+        <!-- Navigation (inside wrapper) -->
+        <nav class="gs-nav" aria-label="Навигация по возможностям">
+          <button class="gs-nav__arrow" data-dir="prev" aria-label="Предыдущая">&larr;</button>
+          <div class="gs-nav__dots">
+            <button class="gs-nav__dot gs-nav__dot--active" data-goto="0" aria-label="Генерация и сварка"></button>
+            <button class="gs-nav__dot" data-goto="1" aria-label="Сварка в пожароопасных условиях"></button>
+            <button class="gs-nav__dot" data-goto="2" aria-label="Пожаротушение и водоснабжение"></button>
+            <button class="gs-nav__dot" data-goto="3" aria-label="Отопление и теплоаккумулятор"></button>
+            <button class="gs-nav__dot" data-goto="4" aria-label="Автономная насосная станция"></button>
+            <button class="gs-nav__dot" data-goto="5" aria-label="Ирригация и сервис"></button>
+          </div>
+          <button class="gs-nav__arrow" data-dir="next" aria-label="Следующая">&rarr;</button>
+          <span class="gs-nav__counter">1 / 6</span>
+        </nav>
+
+      </div><!-- /gs-wrapper -->
+
     </section>
 
-    <!-- ──── 2.5. 3D MODEL (embedded) — временно скрыт ────
-    <section class="fp-section model3d-section" id="model3d" data-section-num="03" aria-label="3D-модель">
-      <div class="container" style="position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;">
-        <div class="section-title" style="position:relative;z-index:10;">
-          <h2>Интерактивная 3D-модель</h2>
+    <!-- ──── 5. COMPARISON ──── -->
+    <section class="fp-section comparison-section" id="comparison" data-section-num="03" aria-label="Сравнение">
+      <div class="container">
+        <div class="section-title">
+          <h2>Почему МЭМ?</h2>
           <div class="divider"></div>
-          <p>Нажимайте на элементы модуля, чтобы узнать о них подробнее</p>
+          <p>Сравните: один модуль против покупки оборудования по отдельности</p>
         </div>
 
-        <div class="model3d-embed" style="position:relative;flex:1;min-height:400px;max-height:70vh;">
-          <div class="model3d-embed__canvas" id="model3d-canvas"></div>
+        <div class="f1-table-wrap" id="f1-wrap">
+          <!-- Fixed header -->
+          <table class="f1-table f1-table--head">
+            <colgroup>
+              <col class="f1-col-w1"><col class="f1-col-w2"><col class="f1-col-w3">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>Характеристика</th>
+                <th class="f1-col-mem">МЭМ<br><small style="font-weight:400;opacity:0.85;">Всё в одном модуле</small></th>
+                <th class="f1-col-separate">По отдельности<br><small style="font-weight:400;">Генератор + Оборудование</small></th>
+              </tr>
+            </thead>
+          </table>
 
-          <aside class="model-info model-info--embedded" aria-label="Информация о модуле" role="dialog">
-            <button class="model-info__close" data-action="close-3d-info" aria-label="Закрыть">&times;</button>
-            <div class="model-info__icon" aria-hidden="true"></div>
-            <h2 class="model-info__title"></h2>
-            <div class="model-info__body"></div>
-          </aside>
+          <!-- Scrollable body -->
+          <div class="f1-scroll-area" id="f1-scroll">
+            <table class="f1-table f1-table--body">
+              <colgroup>
+                <col class="f1-col-w1"><col class="f1-col-w2"><col class="f1-col-w3">
+              </colgroup>
+              <tbody>
+                <tr class="f1-category"><td colspan="3">Электроснабжение</td></tr>
+                <tr>
+                  <td>Автономная генерация<span class="f1-feat-desc">Дизельный / бензиновый генератор</span></td>
+                  <td><span class="f1-check">&#10003;</span> до 15 кВт</td>
+                  <td><span class="f1-check">&#10003;</span> нужен отдельный</td>
+                </tr>
+                <tr>
+                  <td>Время запуска<span class="f1-feat-desc">От нажатия до готовности</span></td>
+                  <td><strong>30 сек</strong></td>
+                  <td>3—10 мин</td>
+                </tr>
+                <tr>
+                  <td>Непрерывная работа<span class="f1-feat-desc">Без дозаправки</span></td>
+                  <td><strong>12 часов</strong></td>
+                  <td>5—8 часов</td>
+                </tr>
+
+                <tr class="f1-category"><td colspan="3">Пожарная безопасность</td></tr>
+                <tr>
+                  <td>Пожарный шкаф<span class="f1-feat-desc">Рукав, огнетушитель, комплект</span></td>
+                  <td><span class="f1-check">&#10003;</span> Встроен, класс K</td>
+                  <td><span class="f1-partial">&#9679;</span> Искать по объекту</td>
+                </tr>
+                <tr>
+                  <td>Длина пожарного рукава</td>
+                  <td><strong>20 м</strong></td>
+                  <td>5—10 м (ручной)</td>
+                </tr>
+                <tr>
+                  <td>Сертификация<span class="f1-feat-desc">Соответствие нормам ПБ</span></td>
+                  <td><span class="f1-check">&#10003;</span></td>
+                  <td><span class="f1-partial">&#9679;</span> По каждому элементу</td>
+                </tr>
+
+                <tr class="f1-category"><td colspan="3">Водоснабжение</td></tr>
+                <tr>
+                  <td>Насосная станция<span class="f1-feat-desc">Автономная подача воды</span></td>
+                  <td><span class="f1-check">&#10003;</span> 40 л/мин, 4 бар</td>
+                  <td><span class="f1-partial">&#9679;</span> Отдельный насос</td>
+                </tr>
+
+                <tr class="f1-category"><td colspan="3">Климатическая защита</td></tr>
+                <tr>
+                  <td>Утепление корпуса<span class="f1-feat-desc">Сэндвич-панели</span></td>
+                  <td><span class="f1-check">&#10003;</span> 50 мм</td>
+                  <td><span class="f1-cross">&#10007;</span> Нет корпуса</td>
+                </tr>
+                <tr>
+                  <td>Рабочая температура</td>
+                  <td><strong>&minus;40°C</strong></td>
+                  <td>Зависит от оборудования</td>
+                </tr>
+                <tr>
+                  <td>Встроенный обогрев</td>
+                  <td><span class="f1-check">&#10003;</span> 700 Вт</td>
+                  <td><span class="f1-cross">&#10007;</span></td>
+                </tr>
+
+                <tr class="f1-category"><td colspan="3">Логистика и хранение</td></tr>
+                <tr>
+                  <td>Мобильность<span class="f1-feat-desc">Перемещение между объектами</span></td>
+                  <td><span class="f1-check">&#10003;</span> На прицепе</td>
+                  <td><span class="f1-cross">&#10007;</span> Перевозить каждый отдельно</td>
+                </tr>
+                <tr>
+                  <td>Организованное хранение<span class="f1-feat-desc">Инструмент, ЗИП, расходники</span></td>
+                  <td><span class="f1-check">&#10003;</span> Всё в модуле</td>
+                  <td><span class="f1-cross">&#10007;</span> Раскидано по площадке</td>
+                </tr>
+                <tr>
+                  <td>Защита от краж и непогоды</td>
+                  <td><span class="f1-check">&#10003;</span> Запирающийся модуль</td>
+                  <td><span class="f1-cross">&#10007;</span></td>
+                </tr>
+                <tr>
+                  <td>Время развёртывания</td>
+                  <td><strong>15 минут</strong></td>
+                  <td>1—3 часа</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Fixed footer -->
+          <table class="f1-table f1-table--foot">
+            <colgroup>
+              <col class="f1-col-w1"><col class="f1-col-w2"><col class="f1-col-w3">
+            </colgroup>
+            <tfoot>
+              <tr>
+                <td>Ориентировочная стоимость</td>
+                <td>
+                  <span class="f1-price-mem">от 450 000 ₽</span>
+                  <span class="f1-price-sub">МЭМ-S (базовый)</span>
+                </td>
+                <td>
+                  <span class="f1-price-sep">от 680 000 ₽</span>
+                  <span class="f1-price-sub">Генератор + насос + сварка + хранение</span>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
         </div>
       </div>
     </section>
-    ──── /3D MODEL ──── -->
 
-    <!-- ──── 3. CONSTRUCTOR ──── -->
-    <section class="fp-section constructor" id="constructor" data-section-num="03" aria-label="Конструктор цены">
+        <!-- ──── 3. CONSTRUCTOR ──── -->
+    <section class="fp-section constructor" id="constructor" data-section-num="04" aria-label="Конструктор цены">
       <div class="container">
         <div class="section-title">
           <h2>Конструктор цены</h2>
@@ -425,361 +806,8 @@
       </div>
     </section>
 
-    <!-- ──── 4. GALLERY SHOWCASE (Problem → Solution) ──── -->
-    <section class="fp-section gallery-showcase" id="gallery" data-section-num="04" aria-label="Галерея и характеристики">
-
-      <div class="gs-wrapper">
-        <!-- ── Left: Visual panel ── -->
-        <div class="gs-visual">
-          <!-- Scene 0: No electricity -->
-          <div class="gs-visual__scene gs-visual__scene--active" data-scene="0">
-            <div class="gs-visual__problem gs-mood-dark">
-              <div class="gs-visual__icon">&#9889;</div>
-              <div class="gs-visual__label">Критическая ситуация</div>
-            </div>
-            <div class="gs-visual__solution">
-              <img src="static/img/photo4.jpg" alt="Генератор МЭМ">
-              <div class="gs-visual__sol-text">Генератор МЭМ &mdash; до 15 кВт автономной мощности</div>
-            </div>
-          </div>
-          <!-- Scene 1: Fire -->
-          <div class="gs-visual__scene" data-scene="1">
-            <div class="gs-visual__problem gs-mood-fire">
-              <div class="gs-visual__icon">&#128293;</div>
-              <div class="gs-visual__label">Угроза безопасности</div>
-            </div>
-            <div class="gs-visual__solution">
-              <img src="static/img/photo3.jpg" alt="Пожарный шкаф МЭМ">
-              <div class="gs-visual__sol-text">Пожарный шкаф с рукавом 20 м</div>
-            </div>
-          </div>
-          <!-- Scene 2: Freezing -->
-          <div class="gs-visual__scene" data-scene="2">
-            <div class="gs-visual__problem gs-mood-ice">
-              <div class="gs-visual__icon">&#10052;</div>
-              <div class="gs-visual__label">Экстремальные условия</div>
-            </div>
-            <div class="gs-visual__solution">
-              <img src="static/img/photo1.jpg" alt="Утеплённый МЭМ">
-              <div class="gs-visual__sol-text">Утеплённый корпус 50 мм + обогрев 700 Вт</div>
-            </div>
-          </div>
-          <!-- Scene 3: No water -->
-          <div class="gs-visual__scene" data-scene="3">
-            <div class="gs-visual__problem gs-mood-water">
-              <div class="gs-visual__icon">&#128167;</div>
-              <div class="gs-visual__label">Нет ресурсов</div>
-            </div>
-            <div class="gs-visual__solution">
-              <img src="static/img/photo5.jpg" alt="Насосная станция МЭМ">
-              <div class="gs-visual__sol-text">Насосная станция &mdash; 40 л/мин</div>
-            </div>
-          </div>
-          <!-- Scene 4: Chaos -->
-          <div class="gs-visual__scene" data-scene="4">
-            <div class="gs-visual__problem gs-mood-chaos">
-              <div class="gs-visual__icon">&#128230;</div>
-              <div class="gs-visual__label">Хаос на площадке</div>
-            </div>
-            <div class="gs-visual__solution">
-              <img src="static/img/photo2.jpg" alt="Организованное хранение МЭМ">
-              <div class="gs-visual__sol-text">Всё оборудование &mdash; в одном модуле</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ── Right: Content panel ── -->
-        <div class="gs-content">
-          <!-- Scene 0 -->
-          <div class="gs-scene gs-scene--active" data-scene="0">
-            <div class="gs-slider">
-              <div class="gs-slide gs-problem">
-                <div class="gs-problem__alert">&#9888; Проблема на объекте</div>
-                <h2 class="gs-problem__title"><em>Нет</em> электричества<br>Объект <em>парализован</em></h2>
-                <p class="gs-problem__desc">Удалённая площадка. Ноль розеток. Сварка, болгарка, освещение &mdash; всё мертво. Люди стоят, деньги горят.</p>
-                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
-              </div>
-              <div class="gs-slide gs-solution">
-                <div class="gs-solution__badge">&#10003; Решено с МЭМ</div>
-                <h3 class="gs-solution__title">Встроенный генератор 15 кВт</h3>
-                <p class="gs-solution__desc">Дизельный или бензиновый генератор запускается за 30 секунд. Питает весь инструмент, сварку и освещение без перерыва &mdash; до 12 часов.</p>
-                <div class="gs-solution__specs">
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">15 кВт</span><span class="gs-spec-row__label">выходная мощность</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">12 ч</span><span class="gs-spec-row__label">непрерывная работа</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">30 сек</span><span class="gs-spec-row__label">время запуска</span></div>
-                </div>
-                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
-              </div>
-            </div>
-          </div>
-          <!-- Scene 1 -->
-          <div class="gs-scene" data-scene="1">
-            <div class="gs-slider">
-              <div class="gs-slide gs-problem">
-                <div class="gs-problem__alert">&#128293; Угроза возгорания</div>
-                <h2 class="gs-problem__title">Сварка идёт. <em>Огнетушителя</em> <em>нет</em></h2>
-                <p class="gs-problem__desc">Огневые работы в пожароопасных условиях. Средства тушения разбросаны по объекту. Пока найдёшь &mdash; поздно.</p>
-                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
-              </div>
-              <div class="gs-slide gs-solution">
-                <div class="gs-solution__badge">&#10003; Решено с МЭМ</div>
-                <h3 class="gs-solution__title">Пожарный шкаф прямо в корпусе</h3>
-                <p class="gs-solution__desc">Рукав 20 метров, огнетушители, всё под рукой. Стеклянная дверца &mdash; видно, доступно, мгновенно.</p>
-                <div class="gs-solution__specs">
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">20 м</span><span class="gs-spec-row__label">длина пожарного рукава</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">Класс K</span><span class="gs-spec-row__label">пожарный шкаф</span></div>
-                </div>
-                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
-              </div>
-            </div>
-          </div>
-          <!-- Scene 2 -->
-          <div class="gs-scene" data-scene="2">
-            <div class="gs-slider">
-              <div class="gs-slide gs-problem">
-                <div class="gs-problem__alert">&#10052; Экстремальный холод</div>
-                <h2 class="gs-problem__title"><em>&minus;40&deg;C.</em><br>Оборудование <em>замёрзло.</em></h2>
-                <p class="gs-problem__desc">Топливо густеет, аккумуляторы сдохли, руки не гнутся. Работать невозможно. Сроки горят, штрафы копятся.</p>
-                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
-              </div>
-              <div class="gs-slide gs-solution">
-                <div class="gs-solution__badge">&#10003; Решено с МЭМ</div>
-                <h3 class="gs-solution__title">Утеплённый корпус + обогрев</h3>
-                <p class="gs-solution__desc">Сэндвич-панели 50 мм не пропускают мороз. Автономный обогреватель 700 Вт держит рабочую температуру внутри.</p>
-                <div class="gs-solution__specs">
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">50 мм</span><span class="gs-spec-row__label">сэндвич-панели</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">700 Вт</span><span class="gs-spec-row__label">мощность обогревателя</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">&minus;40&deg;C</span><span class="gs-spec-row__label">рабочий диапазон</span></div>
-                </div>
-                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
-              </div>
-            </div>
-          </div>
-          <!-- Scene 3 -->
-          <div class="gs-scene" data-scene="3">
-            <div class="gs-slider">
-              <div class="gs-slide gs-problem">
-                <div class="gs-problem__alert">&#128167; Дефицит воды</div>
-                <h2 class="gs-problem__title">Вода нужна <em>сейчас.</em><br>Водопровода <em>нет.</em></h2>
-                <p class="gs-problem__desc">Промывка, охлаждение, тушение &mdash; всё требует воду. А её нет на объекте.</p>
-                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
-              </div>
-              <div class="gs-slide gs-solution">
-                <div class="gs-solution__badge">&#10003; Решено с МЭМ</div>
-                <h3 class="gs-solution__title">Насосная станция в модуле</h3>
-                <p class="gs-solution__desc">Подключается к любому источнику: ёмкость, скважина, открытый водоём. Подаёт воду под давлением для любых нужд.</p>
-                <div class="gs-solution__specs">
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">40 л/мин</span><span class="gs-spec-row__label">производительность</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">4 бар</span><span class="gs-spec-row__label">давление</span></div>
-                </div>
-                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
-              </div>
-            </div>
-          </div>
-          <!-- Scene 4 -->
-          <div class="gs-scene" data-scene="4">
-            <div class="gs-slider">
-              <div class="gs-slide gs-problem">
-                <div class="gs-problem__alert">&#128230; Потери и хаос</div>
-                <h2 class="gs-problem__title">Инструменты <em>разбросаны.</em><br>ЗИП <em>потерян.</em></h2>
-                <p class="gs-problem__desc">Рукава в одном углу, ключи в другом, аккумуляторы &mdash; неизвестно где. Кражи, порча от дождя, потеря времени.</p>
-                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
-              </div>
-              <div class="gs-slide gs-solution">
-                <div class="gs-solution__badge">&#10003; Решено с МЭМ</div>
-                <h3 class="gs-solution__title">Организованное хранение</h3>
-                <p class="gs-solution__desc">Каждый инструмент, каждый комплект ЗИП, рукава и аккумуляторы &mdash; на своём месте, защищены от непогоды и краж.</p>
-                <div class="gs-solution__specs">
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">4.5 м</span><span class="gs-spec-row__label">длина модуля</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">3 000 кг</span><span class="gs-spec-row__label">полная масса</span></div>
-                </div>
-                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Navigation (inside wrapper) -->
-        <nav class="gs-nav" aria-label="Навигация по ситуациям">
-          <button class="gs-nav__arrow" data-dir="prev" aria-label="Предыдущая">&larr;</button>
-          <div class="gs-nav__dots">
-            <button class="gs-nav__dot gs-nav__dot--active" data-goto="0" aria-label="Ситуация 1"></button>
-            <button class="gs-nav__dot" data-goto="1" aria-label="Ситуация 2"></button>
-            <button class="gs-nav__dot" data-goto="2" aria-label="Ситуация 3"></button>
-            <button class="gs-nav__dot" data-goto="3" aria-label="Ситуация 4"></button>
-            <button class="gs-nav__dot" data-goto="4" aria-label="Ситуация 5"></button>
-          </div>
-          <button class="gs-nav__arrow" data-dir="next" aria-label="Следующая">&rarr;</button>
-          <span class="gs-nav__counter">1 / 5</span>
-        </nav>
-
-      </div><!-- /gs-wrapper -->
-
-    </section>
-
-    <!-- ──── 5. COMPARISON ──── -->
-    <section class="fp-section comparison-section" id="comparison" data-section-num="05" aria-label="Сравнение">
-      <div class="container">
-        <div class="section-title">
-          <h2>Почему МЭМ?</h2>
-          <div class="divider"></div>
-          <p>Сравните: один модуль против покупки оборудования по отдельности</p>
-        </div>
-
-        <div class="f1-table-wrap" id="f1-wrap">
-          <!-- Fixed header -->
-          <table class="f1-table f1-table--head">
-            <colgroup>
-              <col class="f1-col-w1"><col class="f1-col-w2"><col class="f1-col-w3"><col class="f1-col-w4">
-            </colgroup>
-            <thead>
-              <tr>
-                <th>Характеристика</th>
-                <th class="f1-col-mem">МЭМ<br><small style="font-weight:400;opacity:0.85;">Всё в одном модуле</small></th>
-                <th class="f1-col-separate">По отдельности<br><small style="font-weight:400;">Генератор + Оборудование</small></th>
-                <th class="f1-col-none">Без решения<br><small style="font-weight:400;">«И так сойдёт»</small></th>
-              </tr>
-            </thead>
-          </table>
-
-          <!-- Scrollable body -->
-          <div class="f1-scroll-area" id="f1-scroll">
-            <table class="f1-table f1-table--body">
-              <colgroup>
-                <col class="f1-col-w1"><col class="f1-col-w2"><col class="f1-col-w3"><col class="f1-col-w4">
-              </colgroup>
-              <tbody>
-                <tr class="f1-category"><td colspan="4">Электроснабжение</td></tr>
-                <tr>
-                  <td>Автономная генерация<span class="f1-feat-desc">Дизельный / бензиновый генератор</span></td>
-                  <td><span class="f1-check">&#10003;</span> до 15 кВт</td>
-                  <td><span class="f1-check">&#10003;</span> нужен отдельный</td>
-                  <td><span class="f1-cross">&#10007;</span></td>
-                </tr>
-                <tr>
-                  <td>Время запуска<span class="f1-feat-desc">От нажатия до готовности</span></td>
-                  <td><strong>30 сек</strong></td>
-                  <td>3—10 мин</td>
-                  <td>—</td>
-                </tr>
-                <tr>
-                  <td>Непрерывная работа<span class="f1-feat-desc">Без дозаправки</span></td>
-                  <td><strong>12 часов</strong></td>
-                  <td>5—8 часов</td>
-                  <td>—</td>
-                </tr>
-
-                <tr class="f1-category"><td colspan="4">Пожарная безопасность</td></tr>
-                <tr>
-                  <td>Пожарный шкаф<span class="f1-feat-desc">Рукав, огнетушитель, комплект</span></td>
-                  <td><span class="f1-check">&#10003;</span> Встроен, класс K</td>
-                  <td><span class="f1-partial">&#9679;</span> Искать по объекту</td>
-                  <td><span class="f1-cross">&#10007;</span> Нет</td>
-                </tr>
-                <tr>
-                  <td>Длина пожарного рукава</td>
-                  <td><strong>20 м</strong></td>
-                  <td>5—10 м (ручной)</td>
-                  <td>—</td>
-                </tr>
-                <tr>
-                  <td>Сертификация<span class="f1-feat-desc">Соответствие нормам ПБ</span></td>
-                  <td><span class="f1-check">&#10003;</span></td>
-                  <td><span class="f1-partial">&#9679;</span> По каждому элементу</td>
-                  <td><span class="f1-cross">&#10007;</span></td>
-                </tr>
-
-                <tr class="f1-category"><td colspan="4">Водоснабжение</td></tr>
-                <tr>
-                  <td>Насосная станция<span class="f1-feat-desc">Автономная подача воды</span></td>
-                  <td><span class="f1-check">&#10003;</span> 40 л/мин, 4 бар</td>
-                  <td><span class="f1-partial">&#9679;</span> Отдельный насос</td>
-                  <td><span class="f1-cross">&#10007;</span></td>
-                </tr>
-
-                <tr class="f1-category"><td colspan="4">Климатическая защита</td></tr>
-                <tr>
-                  <td>Утепление корпуса<span class="f1-feat-desc">Сэндвич-панели</span></td>
-                  <td><span class="f1-check">&#10003;</span> 50 мм</td>
-                  <td><span class="f1-cross">&#10007;</span> Нет корпуса</td>
-                  <td><span class="f1-cross">&#10007;</span></td>
-                </tr>
-                <tr>
-                  <td>Рабочая температура</td>
-                  <td><strong>&minus;40°C</strong></td>
-                  <td>Зависит от оборудования</td>
-                  <td>—</td>
-                </tr>
-                <tr>
-                  <td>Встроенный обогрев</td>
-                  <td><span class="f1-check">&#10003;</span> 700 Вт</td>
-                  <td><span class="f1-cross">&#10007;</span></td>
-                  <td><span class="f1-cross">&#10007;</span></td>
-                </tr>
-
-                <tr class="f1-category"><td colspan="4">Логистика и хранение</td></tr>
-                <tr>
-                  <td>Мобильность<span class="f1-feat-desc">Перемещение между объектами</span></td>
-                  <td><span class="f1-check">&#10003;</span> На прицепе</td>
-                  <td><span class="f1-cross">&#10007;</span> Перевозить каждый отдельно</td>
-                  <td>—</td>
-                </tr>
-                <tr>
-                  <td>Организованное хранение<span class="f1-feat-desc">Инструмент, ЗИП, расходники</span></td>
-                  <td><span class="f1-check">&#10003;</span> Всё в модуле</td>
-                  <td><span class="f1-cross">&#10007;</span> Раскидано по площадке</td>
-                  <td><span class="f1-cross">&#10007;</span></td>
-                </tr>
-                <tr>
-                  <td>Защита от краж и непогоды</td>
-                  <td><span class="f1-check">&#10003;</span> Запирающийся модуль</td>
-                  <td><span class="f1-cross">&#10007;</span></td>
-                  <td><span class="f1-cross">&#10007;</span></td>
-                </tr>
-                <tr>
-                  <td>Время развёртывания</td>
-                  <td><strong>15 минут</strong></td>
-                  <td>1—3 часа</td>
-                  <td>—</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Scroll hint -->
-          <div class="f1-scroll-hint" id="f1-hint">
-            <span class="f1-scroll-hint__arrow">&darr;</span> Прокрутите для просмотра
-          </div>
-
-          <!-- Fixed footer -->
-          <table class="f1-table f1-table--foot">
-            <colgroup>
-              <col class="f1-col-w1"><col class="f1-col-w2"><col class="f1-col-w3"><col class="f1-col-w4">
-            </colgroup>
-            <tfoot>
-              <tr>
-                <td>Ориентировочная стоимость</td>
-                <td>
-                  <span class="f1-price-mem">от 450 000 ₽</span>
-                  <span class="f1-price-sub">МЭМ-S (базовый)</span>
-                </td>
-                <td>
-                  <span class="f1-price-sep">от 680 000 ₽</span>
-                  <span class="f1-price-sub">Генератор + насос + сварка + хранение</span>
-                </td>
-                <td>
-                  <span style="color:var(--color-text-secondary)">—</span>
-                  <span class="f1-price-sub">Убытки от простоев</span>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
-      </div>
-    </section>
-
     <!-- ──── 6. VIDEO ──── -->
-    <section class="fp-section video-section" id="video" data-section-num="06" aria-label="Видеообзор">
+    <section class="fp-section video-section" id="video" data-section-num="05" aria-label="Видеообзор">
       <div class="container">
         <div class="section-title">
           <h2>Видеообзор МЭМ</h2>
@@ -820,7 +848,6 @@
     import { initHeader } from './static/js/app.js';
     import { init as initFullpage } from './static/js/fullpage.js';
     import { init as initHero } from './static/js/animations/hero-assemble.js';
-    import { init as initCarousel } from './static/js/animations/carousel.js';
     import { init as initConstructor } from './static/js/constructor.js';
     import { init as initGalleryShowcase } from './static/js/gallery-showcase.js';
     import { init as initParallax } from './static/js/animations/parallax.js';
@@ -832,8 +859,6 @@
 
     /* Animations */
     initHero(document.getElementById('hero'), { immediate: true });
-    initCarousel(document.getElementById('capabilities'));
-
     /* Parallax on hero */
     initParallax(document.getElementById('hero'));
 
@@ -882,6 +907,34 @@
       });
     }
     */
+
+        document.addEventListener("DOMContentLoaded", () => {
+      const accents = document.querySelectorAll(".hero__accent");
+
+      function animateWord(wordElement, delayBefore = 0) {
+        const text = wordElement.textContent;
+        wordElement.textContent = '';
+        [...text].forEach(letter => {
+          const span = document.createElement('span');
+          span.textContent = letter;
+          wordElement.appendChild(span);
+        });
+
+        const letters = wordElement.querySelectorAll('span');
+        setTimeout(() => {
+          letters.forEach((letter, i) => {
+            setTimeout(() => {
+              letter.classList.add('accented');
+            }, i * 100);
+          });
+        }, delayBefore);
+      }
+
+      if (accents.length >= 2) {
+        animateWord(accents[0], 800); // сначала комфорт
+        animateWord(accents[1], 800 + accents[0].textContent.length * 100 + 100); // затем автономности с небольшой задержкой
+      }
+    });
   </script>
 
 </body>

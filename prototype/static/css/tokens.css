@@ -4,28 +4,28 @@
    ============================================ */
 
 :root {
-  /* ── Palette ── */
-  --color-primary:       #627C8C;
-  --color-primary-light: #B9C7D2;
+  /* ── Palette — 4-color: Black, White, Red, Green ── */
+  --color-primary:       #E8E8E8;
+  --color-primary-light: #FFFFFF;
   --color-primary-dark:  #2B3034;
   --color-accent:        #E93C35;
-  --color-accent-hover:  #D32F2F;
+  --color-accent-hover:  #FF5147;
   --color-accent-dark:   #B71C1C;
   --color-surface:       #FFFFFF;
-  --color-surface-alt:   #EEF1F3;
-  --color-bg:            #B9C7D2;
-  --color-bg-top:        #627C8C;
-  --color-text:          #2B3034;
-  --color-text-secondary:#627C8C;
+  --color-surface-alt:   rgba(255,255,255,0.06);
+  --color-bg:            #2B3034;
+  --color-bg-top:        #010101;
+  --color-text:          #E8E8E8;
+  --color-text-secondary:#9BA3AB;
   --color-text-inverse:  #FFFFFF;
-  --color-border:        #B0BEC5;
+  --color-border:        rgba(255,255,255,0.12);
   --color-error:         #E93C35;
-  --color-error-bg:      #FDEDEC;
+  --color-error-bg:      rgba(233,60,53,0.12);
   --color-success:       #43A047;
-  --color-success-bg:    #E8F5E9;
+  --color-success-bg:    rgba(67,160,71,0.12);
   --color-warning:       #F39C12;
-  --color-warning-bg:    #FEF9E7;
-  --color-overlay:       rgba(43, 48, 52, 0.65);
+  --color-warning-bg:    rgba(243,156,18,0.12);
+  --color-overlay:       rgba(1, 1, 1, 0.75);
 
   /* ── Typography ── */
   --font-family:         'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -61,18 +61,23 @@
   --sp-20: 5rem;
   --sp-24: 6rem;
 
-  /* ── Border radius ── */
-  --radius-sm:   4px;
-  --radius-md:   8px;
-  --radius-lg:   12px;
-  --radius-xl:   16px;
+  /* ── Border radius — sharp by default ── */
+  --radius-sm:   2px;
+  --radius-md:   2px;
+  --radius-lg:   4px;
+  --radius-xl:   4px;
   --radius-full: 9999px;
+  /* Soft radius for hover/active transitions and safety islands */
+  --radius-soft-sm:  8px;
+  --radius-soft-md:  12px;
+  --radius-soft-lg:  16px;
+  --radius-soft-xl:  20px;
 
   /* ── Noise texture ── */
   --noise-opacity: 0.04;         /* 0 = off, higher = more grain */
 
   /* ── Vignette ── */
-  --vignette-color:   19, 32, 46;        /* RGB без alpha — меняй цвет тут */
+  --vignette-color:   1, 1, 1;            /* RGB без alpha — меняй цвет тут */
   --vignette-opacity: 0;           /* 0 = нет, 1 = чёрная стена */
   --vignette-size:    100px;          /* глубина затемнения от края */
   --vignette-blur:    80px;           /* размытие */
@@ -82,8 +87,8 @@
   --shadow-md:   0 4px 12px rgba(0,0,0,0.1);
   --shadow-lg:   0 8px 30px rgba(0,0,0,0.12);
   --shadow-xl:   0 16px 48px rgba(0,0,0,0.16);
-  --shadow-card: 0 2px 8px rgba(43,48,52,0.08);
-  --shadow-lift: 0 8px 24px rgba(43,48,52,0.15);
+  --shadow-card: 0 2px 8px rgba(0,0,0,0.25);
+  --shadow-lift: 0 8px 24px rgba(0,0,0,0.35);
 
   /* ── Transitions ── */
   --ease-out:    cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -105,6 +110,11 @@
   /* ── Layout ── */
   --container-max: 1200px;
   --header-height: 72px;
+
+  /* ── ГОСТ grid background (data-URI SVG pattern) ── */
+  --gost-grid-sm: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M40 0H0V40' fill='none' stroke='rgba(255,255,255,0.035)' stroke-width='0.5'/%3E%3C/svg%3E");
+  --gost-grid-lg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath d='M200 0H0V200' fill='none' stroke='rgba(255,255,255,0.065)' stroke-width='0.75'/%3E%3C/svg%3E");
+  --gost-font: 'GostFont', italic;
 }
 
 /* Reduced motion */

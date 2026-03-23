@@ -24,7 +24,7 @@ export function init(containerSelector = '.fullpage', dotSelector = '.fp-dots') 
   }
 
   /* ── Section labels for dots ── */
-  const sectionLabels = ['Главная', 'Возможности', 'Конструктор', 'Проблемы и решения', 'Сравнение', 'Видео'];
+  const sectionLabels = ['Главная', 'Проблемы и решения', 'Возможности', 'Сравнение', 'Конструктор', 'Видео'];
 
   /* ── Create dots ── */
   if (dotsWrap) {
@@ -36,6 +36,62 @@ export function init(containerSelector = '.fullpage', dotSelector = '.fp-dots') 
       dot.addEventListener('click', () => goTo(i));
       dotsWrap.appendChild(dot);
     });
+  }
+
+  /* ── Counter element (desktop only) — odometer style ── */
+  let counterEl = null;
+  let digitEl = null;
+  const ROLL_MS = 350;
+
+  function createCounter() {
+    if (isMobile()) return;
+    counterEl = document.createElement('div');
+    counterEl.className = 'fp-counter';
+
+    const tens = document.createElement('span');
+    tens.className = 'fp-counter__tens';
+    tens.textContent = '0';
+
+    const drum = document.createElement('span');
+    drum.className = 'fp-counter__drum';
+    digitEl = document.createElement('span');
+    digitEl.className = 'fp-counter__digit';
+    digitEl.textContent = '1';
+    drum.appendChild(digitEl);
+
+    counterEl.appendChild(tens);
+    counterEl.appendChild(drum);
+    document.body.appendChild(counterEl);
+  }
+  createCounter();
+
+  function animateCounter(num) {
+    if (!counterEl || !digitEl) return;
+    const newDigit = String(num).slice(-1);
+    if (digitEl.textContent === newDigit) return;
+
+    const drum = digitEl.parentElement;
+
+    /* Kill any in-flight animations: remove all extra digits, keep only current */
+    drum.querySelectorAll('.fp-counter__digit--exiting, .fp-counter__digit--entering').forEach(el => el.remove());
+
+    /* Create incoming digit */
+    const incoming = document.createElement('span');
+    incoming.className = 'fp-counter__digit fp-counter__digit--entering';
+    incoming.textContent = newDigit;
+    drum.appendChild(incoming);
+
+    /* Force reflow */
+    void incoming.offsetHeight;
+
+    /* Roll out current, roll in new */
+    const outgoing = digitEl;
+    outgoing.classList.add('fp-counter__digit--exiting');
+    incoming.classList.remove('fp-counter__digit--entering');
+    digitEl = incoming;
+
+    /* Clean up old element after animation */
+    setTimeout(() => { outgoing.remove(); }, ROLL_MS);
   }
 
   /* ── Intersection Observer for dot updates + section:enter ──
@@ -72,6 +128,10 @@ export function init(containerSelector = '.fullpage', dotSelector = '.fp-dots') 
       observer.disconnect();
       observer = createObserver();
       sections.forEach(s => observer.observe(s));
+      if (nowMobile && counterEl) counterEl.style.display = 'none';
+      if (!nowMobile) {
+        if (!counterEl) createCounter(); else counterEl.style.display = '';
+      }
     }
   });
 
@@ -79,9 +139,15 @@ export function init(containerSelector = '.fullpage', dotSelector = '.fp-dots') 
   function goTo(index) {
     if (index < 0 || index >= sections.length || isTransitioning) return;
     isTransitioning = true;
+    const prev = currentIndex;
     currentIndex = index;
     sections[index].scrollIntoView({ behavior: 'smooth', block: 'start' });
     updateDots(index);
+    /* Animate counter */
+    if (prev !== index) {
+      const num = sections[index].getAttribute('data-section-num') || String(index + 1).padStart(2, '0');
+      animateCounter(num);
+    }
     clearTimeout(lockTimeout);
     lockTimeout = setTimeout(() => { isTransitioning = false; }, 900);
   }
