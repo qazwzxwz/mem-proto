@@ -1632,7 +1632,7 @@
     font-family: var(--gost-font);
     font-style: italic;
     margin-bottom: var(--sp-4);
-    margin-bottom: var(--sp-5);
+    margin-left: var(--sp-5);
   }
   .tp-node__specs {
     display: flex;
