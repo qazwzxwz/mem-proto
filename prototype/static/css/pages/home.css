@@ -138,7 +138,7 @@
   .hero__product .bp-dimensions,
   .hero__product .bp-callouts,
   .hero__product .bp-stamp {
-    display: none;
+    /* display: none; */
   }
 }
 
@@ -2375,4 +2375,8 @@
   .contacts-grid {
     gap: var(--sp-4);
   }
+}
+
+.i-class {
+  font-size: 2rem;
 }
