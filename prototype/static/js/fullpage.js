@@ -171,7 +171,7 @@ export function init(containerSelector = '.fullpage', dotSelector = '.fp-dots') 
   });
 
   /* ── Ignore scroll inside interactive panels ── */
-  const scrollBlockSelectors = '.wizard-sidebar, .sidebar__items, .gs-content, .gs-nav, .f1-scroll-area'; /* .model-info, .model3d-embed__canvas — временно убраны (3D скрыт) */
+  const scrollBlockSelectors = '.wizard-sidebar, .sidebar__items, .tp-nodes, .f1-scroll-area'; /* .model-info, .model3d-embed__canvas — временно убраны (3D скрыт) */
   function isInsideScrollBlock(target) {
     return target && target.closest && target.closest(scrollBlockSelectors);
   }

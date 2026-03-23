@@ -270,7 +270,7 @@
         </div>
 
         <div class="hero__actions">
-          <a href="#capabilities" class="btn btn--secondary btn--lg">Подробнее</a>
+          <a href="#gallery" class="btn btn--secondary btn--lg">Подробнее</a>
           <a href="#constructor" class="btn btn--primary btn--lg">Заказать звонок</a>
         </div>
 
@@ -279,236 +279,379 @@
     </section>
 
     
-    <!-- ──── 4. GALLERY SHOWCASE (Problem → Solution) ──── -->
-    <section class="fp-section gallery-showcase" id="gallery" data-section-num="02" aria-label="Возможности МЭМ — проблемы и решения">
+    <!-- ──── 4. ПРОБЛЕМЫ И РЕШЕНИЯ (Technical Passport) ──── -->
+    <section class="fp-section tp-section" id="gallery" data-section-num="02" aria-label="Проблемы и решения МЭМ">
 
-      <div class="gs-wrapper">
-        <!-- ── Left: Visual panel ── -->
-        <div class="gs-visual">
-          <!-- Scene 0: No electricity → Генерация и сварка -->
-          <div class="gs-visual__scene gs-visual__scene--active" data-scene="0">
-            <div class="gs-visual__problem gs-mood-dark">
-              <div class="gs-visual__icon">&#9889;</div>
-              <div class="gs-visual__label">Нет электричества</div>
-            </div>
-            <div class="gs-visual__solution">
-              <img src="static/img/photo4.jpg" alt="Генератор МЭМ">
-              <div class="gs-visual__sol-text">Генерация и сварка &mdash; до 15 кВт, 48 ч автономно</div>
-            </div>
-          </div>
-          <!-- Scene 1: Welding fire risk → Сварка в пожароопасных условиях -->
-          <div class="gs-visual__scene" data-scene="1">
-            <div class="gs-visual__problem gs-mood-fire">
-              <div class="gs-visual__icon">&#128293;</div>
-              <div class="gs-visual__label">Сварка рядом с ГСМ</div>
-            </div>
-            <div class="gs-visual__solution">
-              <img src="static/img/photo3.jpg" alt="Защита от пожара МЭМ">
-              <div class="gs-visual__sol-text">Искрогасящий экран + датчики + запас воды 2 000 л</div>
-            </div>
-          </div>
-          <!-- Scene 2: No fire engine → Пожаротушение и водоснабжение -->
-          <div class="gs-visual__scene" data-scene="2">
-            <div class="gs-visual__problem gs-mood-fire">
-              <div class="gs-visual__icon">&#128658;</div>
-              <div class="gs-visual__label">Нет пожарной машины</div>
-            </div>
-            <div class="gs-visual__solution">
-              <img src="static/img/photo3.jpg" alt="Пожаротушение МЭМ">
-              <div class="gs-visual__sol-text">Итальянский насос 150 л/мин — дальность 30 м, высота 10 м</div>
-            </div>
-          </div>
-          <!-- Scene 3: Freezing → Отопление и теплоаккумулятор -->
-          <div class="gs-visual__scene" data-scene="3">
-            <div class="gs-visual__problem gs-mood-ice">
-              <div class="gs-visual__icon">&#10052;</div>
-              <div class="gs-visual__label">Экстремальный холод</div>
-            </div>
-            <div class="gs-visual__solution">
-              <img src="static/img/photo1.jpg" alt="Утеплённый МЭМ">
-              <div class="gs-visual__sol-text">Теплоаккумулятор 2 000 л + обогрев до 55&deg;C</div>
-            </div>
-          </div>
-          <!-- Scene 4: No water → Автономная насосная станция -->
-          <div class="gs-visual__scene" data-scene="4">
-            <div class="gs-visual__problem gs-mood-water">
-              <div class="gs-visual__icon">&#128167;</div>
-              <div class="gs-visual__label">Нет водопровода</div>
-            </div>
-            <div class="gs-visual__solution">
-              <img src="static/img/photo5.jpg" alt="Насосная станция МЭМ">
-              <div class="gs-visual__sol-text">Автономная насосная станция &mdash; 40 л/мин, &minus;40&deg;C</div>
-            </div>
-          </div>
-          <!-- Scene 5: Irrigation/service → Ирригация и сервис -->
-          <div class="gs-visual__scene" data-scene="5">
-            <div class="gs-visual__problem gs-mood-water">
-              <div class="gs-visual__icon">&#127793;</div>
-              <div class="gs-visual__label">Нет полива и уборки</div>
-            </div>
-            <div class="gs-visual__solution">
-              <img src="static/img/photo2.jpg" alt="Ирригация МЭМ">
-              <div class="gs-visual__sol-text">Орошение теплиц, мойка колёс, прочистка скважин</div>
-            </div>
-          </div>
-        </div>
+      <div class="tp-wrap">
 
-        <!-- ── Right: Content panel ── -->
-        <div class="gs-content">
-          <!-- Scene 0: Генерация и сварка -->
-          <div class="gs-scene gs-scene--active" data-scene="0">
-            <div class="gs-slider">
-              <div class="gs-slide gs-problem">
-                <div class="gs-problem__alert">&#9888; Проблема на объекте</div>
-                <h2 class="gs-problem__title"><em>Нет</em> электричества<br>Объект <em>парализован</em></h2>
-                <p class="gs-problem__desc">Удалённая площадка. Ноль розеток. Сварка, болгарка, освещение &mdash; всё мертво. Люди стоят, деньги горят.</p>
-                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
-              </div>
-              <div class="gs-slide gs-solution">
-                <div class="gs-solution__badge">&#10003; Генерация и сварка</div>
-                <h3 class="gs-solution__title">Автономный генератор + сварочный пост</h3>
-                <p class="gs-solution__desc">Бензиновый двигатель корейского производства, 3 фазы. Запускается за 30 секунд, питает сварку, инструмент и освещение &mdash; до 48 часов автономно.</p>
-                <div class="gs-solution__specs">
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">15 кВт</span><span class="gs-spec-row__label">выходная мощность</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">48 ч</span><span class="gs-spec-row__label">автономная работа</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">30 сек</span><span class="gs-spec-row__label">время запуска</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">3 ф.</span><span class="gs-spec-row__label">3-фазное питание</span></div>
-                </div>
-                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
-              </div>
-            </div>
+        <!-- Section header -->
+        <header class="tp-header">
+          <div class="tp-header__meta">
+            <span class="tp-meta-tag">МЭМ&thinsp;/&thinsp;01</span>
+            <span class="tp-meta-sep">—</span>
+            <span class="tp-meta-sub">6 задач — одно решение</span>
           </div>
-          <!-- Scene 1: Сварка в пожароопасных условиях -->
-          <div class="gs-scene" data-scene="1">
-            <div class="gs-slider">
-              <div class="gs-slide gs-problem">
-                <div class="gs-problem__alert">&#128293; Угроза возгорания</div>
-                <h2 class="gs-problem__title">Сварка рядом с <em>ГСМ.</em><br>Искра &mdash; и <em>всё горит</em></h2>
-                <p class="gs-problem__desc">Огневые работы в пожароопасных условиях. Ни экрана, ни датчиков, ни воды рядом. Одна искра &mdash; и объект в огне.</p>
-                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
-              </div>
-              <div class="gs-slide gs-solution">
-                <div class="gs-solution__badge">&#10003; Безопасная сварка</div>
-                <h3 class="gs-solution__title">Встроенная система контроля пожара</h3>
-                <p class="gs-solution__desc">Искрогасящий экран, огнестойкие перегородки, датчики температуры и задымления. Запас воды 2 000 л для мгновенного тушения. Соответствие нормам ПБ.</p>
-                <div class="gs-solution__specs">
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">2 000 л</span><span class="gs-spec-row__label">запас воды для тушения</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">20 м</span><span class="gs-spec-row__label">рукав пожарного шкафа</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">ПБ</span><span class="gs-spec-row__label">соответствие нормам</span></div>
-                </div>
-                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
-              </div>
-            </div>
-          </div>
-          <!-- Scene 2: Пожаротушение и водоснабжение -->
-          <div class="gs-scene" data-scene="2">
-            <div class="gs-slider">
-              <div class="gs-slide gs-problem">
-                <div class="gs-problem__alert">&#128658; Нет техники тушения</div>
-                <h2 class="gs-problem__title">Пожар на объекте.<br><em>Машины нет.</em> Рукав <em>не достаёт.</em></h2>
-                <p class="gs-problem__desc">До пожарной части &mdash; 40 минут. Обычный рукав не добивает на высоту. Пенообразователя нет. Счёт идёт на секунды.</p>
-                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
-              </div>
-              <div class="gs-slide gs-solution">
-                <div class="gs-solution__badge">&#10003; Пожаротушение и водоснабжение</div>
-                <h3 class="gs-solution__title">Маленькая пожарная машина в модуле</h3>
-                <p class="gs-solution__desc">Итальянский насос бьёт на 30 м вдаль и 10 м в высоту. Основной бак 2 000 л + резервуар 100 л для пенообразователя. Химдобавки &mdash; прямо в струю.</p>
-                <div class="gs-solution__specs">
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">150 л/мин</span><span class="gs-spec-row__label">производительность насоса</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">30 м</span><span class="gs-spec-row__label">дальность струи</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">10 м</span><span class="gs-spec-row__label">высота подачи</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">2 100 л</span><span class="gs-spec-row__label">суммарный объём баков</span></div>
-                </div>
-                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
-              </div>
-            </div>
-          </div>
-          <!-- Scene 3: Отопление и теплоаккумулятор -->
-          <div class="gs-scene" data-scene="3">
-            <div class="gs-slider">
-              <div class="gs-slide gs-problem">
-                <div class="gs-problem__alert">&#10052; Экстремальный холод</div>
-                <h2 class="gs-problem__title"><em>&minus;40&deg;C.</em><br>Оборудование <em>замёрзло.</em></h2>
-                <p class="gs-problem__desc">Топливо густеет, аккумуляторы сдохли, руки не гнутся. Работать невозможно. Сроки горят, штрафы копятся.</p>
-                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
-              </div>
-              <div class="gs-slide gs-solution">
-                <div class="gs-solution__badge">&#10003; Отопление и теплоаккумулятор</div>
-                <h3 class="gs-solution__title">Автономное отопление до &minus;40&deg;C</h3>
-                <p class="gs-solution__desc">Теплоаккумулятор 2 000 л нагревается до 55&deg;C. Сэндвич-панели 50 мм не пускают мороз. Циклическая работа генератора экономит топливо.</p>
-                <div class="gs-solution__specs">
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">2 000 л</span><span class="gs-spec-row__label">теплоаккумулятор</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">55&deg;C</span><span class="gs-spec-row__label">температура нагрева</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">50 мм</span><span class="gs-spec-row__label">сэндвич-панели</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">&lt;1 кВт/сут</span><span class="gs-spec-row__label">расход на обогрев</span></div>
-                </div>
-                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
-              </div>
-            </div>
-          </div>
-          <!-- Scene 4: Автономная насосная станция -->
-          <div class="gs-scene" data-scene="4">
-            <div class="gs-slider">
-              <div class="gs-slide gs-problem">
-                <div class="gs-problem__alert">&#128167; Нет водопровода</div>
-                <h2 class="gs-problem__title">Вода нужна <em>сейчас.</em><br>Водопровода <em>нет.</em></h2>
-                <p class="gs-problem__desc">Промывка, охлаждение, хозяйственные нужды &mdash; всё требует воду. Привозить бочками &mdash; дорого и долго.</p>
-                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
-              </div>
-              <div class="gs-slide gs-solution">
-                <div class="gs-solution__badge">&#10003; Автономная насосная станция</div>
-                <h3 class="gs-solution__title">Подкачка из любого источника</h3>
-                <p class="gs-solution__desc">Расширительный бак 100 л, автоподкачка по мере убывания. Подключается к ёмкости, скважине, открытому водоёму. Работает круглогодично, включая &minus;40&deg;C.</p>
-                <div class="gs-solution__specs">
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">100 л</span><span class="gs-spec-row__label">расширительный бак</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">40 л/мин</span><span class="gs-spec-row__label">производительность</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">4 бар</span><span class="gs-spec-row__label">рабочее давление</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">&minus;40&deg;C</span><span class="gs-spec-row__label">рабочий диапазон</span></div>
-                </div>
-                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
-              </div>
-            </div>
-          </div>
-          <!-- Scene 5: Ирригация и сервис -->
-          <div class="gs-scene" data-scene="5">
-            <div class="gs-slider">
-              <div class="gs-slide gs-problem">
-                <div class="gs-problem__alert">&#127793; Нет технического сервиса</div>
-                <h2 class="gs-problem__title">Теплицы <em>без полива.</em><br>Техника <em>в грязи.</em></h2>
-                <p class="gs-problem__desc">Орошение вручную &mdash; трудоёмко. Колёса техники не отмыть. Скважина засорена. Борщевик захватывает территорию.</p>
-                <button class="gs-problem__cta" data-action="solve">Как МЭМ решает это <span>&rarr;</span></button>
-              </div>
-              <div class="gs-slide gs-solution">
-                <div class="gs-solution__badge">&#10003; Ирригация и сервис</div>
-                <h3 class="gs-solution__title">Полив, мойка и прочистка из одного модуля</h3>
-                <p class="gs-solution__desc">Орошение теплиц и автополив с вводом удобрений в струю. Станция мойки колёс на объекте. Прочистка скважин и труб высоким давлением.</p>
-                <div class="gs-solution__specs">
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">авто</span><span class="gs-spec-row__label">орошение теплиц</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">хим.</span><span class="gs-spec-row__label">ввод удобрений в струю</span></div>
-                  <div class="gs-spec-row"><span class="gs-spec-row__val">высок.</span><span class="gs-spec-row__label">прочистка скважин давлением</span></div>
-                </div>
-                <button class="gs-solution__back" data-action="back">&larr; Вернуться к проблеме</button>
-              </div>
-            </div>
-          </div>
-        </div>
+          <h2 class="tp-title">Проблемы и <span class="hero__accent">решения</span></h2>
+        </header>
 
-        <!-- Navigation (inside wrapper) -->
-        <nav class="gs-nav" aria-label="Навигация по возможностям">
-          <button class="gs-nav__arrow" data-dir="prev" aria-label="Предыдущая">&larr;</button>
-          <div class="gs-nav__dots">
-            <button class="gs-nav__dot gs-nav__dot--active" data-goto="0" aria-label="Генерация и сварка"></button>
-            <button class="gs-nav__dot" data-goto="1" aria-label="Сварка в пожароопасных условиях"></button>
-            <button class="gs-nav__dot" data-goto="2" aria-label="Пожаротушение и водоснабжение"></button>
-            <button class="gs-nav__dot" data-goto="3" aria-label="Отопление и теплоаккумулятор"></button>
-            <button class="gs-nav__dot" data-goto="4" aria-label="Автономная насосная станция"></button>
-            <button class="gs-nav__dot" data-goto="5" aria-label="Ирригация и сервис"></button>
-          </div>
-          <button class="gs-nav__arrow" data-dir="next" aria-label="Следующая">&rarr;</button>
-          <span class="gs-nav__counter">1 / 6</span>
+        <!-- Desktop: tab switcher -->
+        <nav class="tp-tab-nav" role="tablist" aria-label="Проблемы">
+          <button class="tp-tab tp-tab--active" role="tab" aria-selected="true" data-idx="0">
+            <span class="tp-tab__num">01</span>
+            <span class="tp-tab__label">Нет электричества</span>
+            <span class="tp-tab__line" aria-hidden="true"></span>
+          </button>
+          <button class="tp-tab" role="tab" aria-selected="false" data-idx="1">
+            <span class="tp-tab__num">02</span>
+            <span class="tp-tab__label">Сварка у ГСМ</span>
+            <span class="tp-tab__line" aria-hidden="true"></span>
+          </button>
+          <button class="tp-tab" role="tab" aria-selected="false" data-idx="2">
+            <span class="tp-tab__num">03</span>
+            <span class="tp-tab__label">Нет пожарной машины</span>
+            <span class="tp-tab__line" aria-hidden="true"></span>
+          </button>
+          <button class="tp-tab" role="tab" aria-selected="false" data-idx="3">
+            <span class="tp-tab__num">04</span>
+            <span class="tp-tab__label">Мороз &minus;40&deg;C</span>
+            <span class="tp-tab__line" aria-hidden="true"></span>
+          </button>
+          <button class="tp-tab" role="tab" aria-selected="false" data-idx="4">
+            <span class="tp-tab__num">05</span>
+            <span class="tp-tab__label">Нет водопровода</span>
+            <span class="tp-tab__line" aria-hidden="true"></span>
+          </button>
+          <button class="tp-tab" role="tab" aria-selected="false" data-idx="5">
+            <span class="tp-tab__num">06</span>
+            <span class="tp-tab__label">Нет полива и мойки</span>
+            <span class="tp-tab__line" aria-hidden="true"></span>
+          </button>
         </nav>
 
-      </div><!-- /gs-wrapper -->
+        <!-- Desktop: content panels -->
+        <div class="tp-panel-area" aria-live="polite">
+
+          <!-- Panel 0 -->
+          <div class="tp-panel tp-panel--active" data-idx="0" role="tabpanel">
+            <div class="tp-panel__inner">
+              <div class="tp-panel__col--problem">
+                <div class="tp-panel__alarm"><span>&#9888;</span> Проблема на объекте</div>
+                <h3 class="tp-panel__ptitle"><em>Нет</em> электричества — объект <em>парализован</em></h3>
+                <p class="tp-panel__pdesc">Удалённая площадка. Ноль розеток. Сварка, болгарка, освещение — всё мертво. Люди стоят, деньги горят. До ближайшей подстанции — несколько часов пути.</p>
+              </div>
+              <div class="tp-panel__arrow" aria-hidden="true">&#8594;</div>
+              <div class="tp-panel__col--solution">
+                <div class="tp-panel__sol-text">
+                  <div class="tp-panel__badge"><span>&#10003;</span> Генерация и сварка</div>
+                  <h3 class="tp-panel__stitle">Автономный генератор + сварочный пост</h3>
+                  <p class="tp-panel__sdesc">Бензиновый двигатель корейского производства, 3 фазы. Запускается за 30 секунд, питает сварку, инструмент и освещение — до 48 часов автономно без дозаправки.</p>
+                  <div class="tp-specs">
+                    <div class="tp-spec"><span class="tp-spec__val">15&thinsp;кВт</span><span class="tp-spec__key">мощность</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">48&thinsp;ч</span><span class="tp-spec__key">автономно</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">30&thinsp;сек</span><span class="tp-spec__key">запуск</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">3&thinsp;ф.</span><span class="tp-spec__key">питание</span></div>
+                  </div>
+                </div>
+                <div class="tp-panel__img" data-label="МЭМ // ГЕНЕРАЦИЯ">
+                  <img src="static/img/photo4.jpg" alt="МЭМ — генерация и сварка" loading="lazy">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 1 -->
+          <div class="tp-panel" data-idx="1" role="tabpanel">
+            <div class="tp-panel__inner">
+              <div class="tp-panel__col--problem">
+                <div class="tp-panel__alarm">Угроза возгорания</div>
+                <h3 class="tp-panel__ptitle">Сварка рядом с <em>ГСМ</em> — искра и <em>всё горит</em></h3>
+                <p class="tp-panel__pdesc">Огневые работы в пожароопасных условиях. Ни экрана, ни датчиков, ни воды рядом. Одна искра — и объект в огне. Ответственность за жизни людей.</p>
+              </div>
+              <div class="tp-panel__arrow" aria-hidden="true">&#8594;</div>
+              <div class="tp-panel__col--solution">
+                <div class="tp-panel__sol-text">
+                  <div class="tp-panel__badge"><span>&#10003;</span> Безопасная сварка</div>
+                  <h3 class="tp-panel__stitle">Встроенная система контроля пожара</h3>
+                  <p class="tp-panel__sdesc">Искрогасящий экран, огнестойкие перегородки, датчики температуры и задымления. Запас воды 2&thinsp;000&thinsp;л для мгновенного тушения. Соответствие нормам ПБ.</p>
+                  <div class="tp-specs">
+                    <div class="tp-spec"><span class="tp-spec__val">2&thinsp;000&thinsp;л</span><span class="tp-spec__key">запас воды</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">20&thinsp;м</span><span class="tp-spec__key">рукав</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">ПБ</span><span class="tp-spec__key">соответствие</span></div>
+                  </div>
+                </div>
+                <div class="tp-panel__img" data-label="МЭМ // ПОЖАРНАЯ ЗАЩИТА">
+                  <img src="static/img/photo3.jpg" alt="МЭМ — пожарная безопасность" loading="lazy">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 2 -->
+          <div class="tp-panel" data-idx="2" role="tabpanel">
+            <div class="tp-panel__inner">
+              <div class="tp-panel__col--problem">
+                <div class="tp-panel__alarm">Нет техники тушения</div>
+                <h3 class="tp-panel__ptitle">Пожар на объекте — <em>машины нет</em>, рукав <em>не достаёт</em></h3>
+                <p class="tp-panel__pdesc">До пожарной части — 40 минут. Обычный рукав не добивает на высоту. Пенообразователя нет. Счёт идёт на секунды, а потери — в миллионах.</p>
+              </div>
+              <div class="tp-panel__arrow" aria-hidden="true">&#8594;</div>
+              <div class="tp-panel__col--solution">
+                <div class="tp-panel__sol-text">
+                  <div class="tp-panel__badge"><span>&#10003;</span> Пожаротушение и водоснабжение</div>
+                  <h3 class="tp-panel__stitle">Маленькая пожарная машина в модуле</h3>
+                  <p class="tp-panel__sdesc">Итальянский насос бьёт на 30&thinsp;м вдаль и 10&thinsp;м в высоту. Основной бак 2&thinsp;000&thinsp;л + резервуар 100&thinsp;л для пенообразователя. Химдобавки — прямо в струю.</p>
+                  <div class="tp-specs">
+                    <div class="tp-spec"><span class="tp-spec__val">150&thinsp;л/мин</span><span class="tp-spec__key">насос</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">30&thinsp;м</span><span class="tp-spec__key">дальность</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">10&thinsp;м</span><span class="tp-spec__key">высота</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">2&thinsp;100&thinsp;л</span><span class="tp-spec__key">объём</span></div>
+                  </div>
+                </div>
+                <div class="tp-panel__img" data-label="МЭМ // ПОЖАРОТУШЕНИЕ">
+                  <img src="static/img/photo3.jpg" alt="МЭМ — пожаротушение" loading="lazy">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 3 -->
+          <div class="tp-panel" data-idx="3" role="tabpanel">
+            <div class="tp-panel__inner">
+              <div class="tp-panel__col--problem">
+                <div class="tp-panel__alarm"><span>&#10052;</span> Экстремальный холод</div>
+                <h3 class="tp-panel__ptitle"><em>&minus;40&deg;C</em> — оборудование <em>замёрзло</em></h3>
+                <p class="tp-panel__pdesc">Топливо густеет, аккумуляторы сдохли, руки не гнутся. Работать невозможно. Сроки горят, штрафы копятся. Простой одного часа — потери бригады за день.</p>
+              </div>
+              <div class="tp-panel__arrow" aria-hidden="true">&#8594;</div>
+              <div class="tp-panel__col--solution">
+                <div class="tp-panel__sol-text">
+                  <div class="tp-panel__badge"><span>&#10003;</span> Отопление и теплоаккумулятор</div>
+                  <h3 class="tp-panel__stitle">Автономное отопление до &minus;40&deg;C</h3>
+                  <p class="tp-panel__sdesc">Теплоаккумулятор 2&thinsp;000&thinsp;л нагревается до 55&deg;C. Сэндвич-панели 50&thinsp;мм не пускают мороз. Циклическая работа генератора экономит топливо — обогрев менее 1&thinsp;кВт/сут.</p>
+                  <div class="tp-specs">
+                    <div class="tp-spec"><span class="tp-spec__val">2&thinsp;000&thinsp;л</span><span class="tp-spec__key">аккумулятор</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">55&deg;C</span><span class="tp-spec__key">нагрев</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">50&thinsp;мм</span><span class="tp-spec__key">панели</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">&lt;1&thinsp;кВт</span><span class="tp-spec__key">расход/сут</span></div>
+                  </div>
+                </div>
+                <div class="tp-panel__img" data-label="МЭМ // ОБОГРЕВ">
+                  <img src="static/img/photo1.jpg" alt="МЭМ — отопление в мороз" loading="lazy">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 4 -->
+          <div class="tp-panel" data-idx="4" role="tabpanel">
+            <div class="tp-panel__inner">
+              <div class="tp-panel__col--problem">
+                <div class="tp-panel__alarm">Нет водопровода</div>
+                <h3 class="tp-panel__ptitle">Вода нужна <em>сейчас</em> — водопровода <em>нет</em></h3>
+                <p class="tp-panel__pdesc">Промывка, охлаждение оборудования, хозяйственные нужды — всё требует воду. Привозить бочками — дорого и долго. Простой техники без промывки — поломки.</p>
+              </div>
+              <div class="tp-panel__arrow" aria-hidden="true">&#8594;</div>
+              <div class="tp-panel__col--solution">
+                <div class="tp-panel__sol-text">
+                  <div class="tp-panel__badge"><span>&#10003;</span> Автономная насосная станция</div>
+                  <h3 class="tp-panel__stitle">Подкачка из любого источника</h3>
+                  <p class="tp-panel__sdesc">Расширительный бак 100&thinsp;л, автоподкачка по мере убывания. Подключается к ёмкости, скважине, открытому водоёму. Работает круглогодично, включая &minus;40&deg;C.</p>
+                  <div class="tp-specs">
+                    <div class="tp-spec"><span class="tp-spec__val">100&thinsp;л</span><span class="tp-spec__key">расш. бак</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">40&thinsp;л/мин</span><span class="tp-spec__key">производит.</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">4&thinsp;бар</span><span class="tp-spec__key">давление</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">&minus;40&deg;C</span><span class="tp-spec__key">диапазон</span></div>
+                  </div>
+                </div>
+                <div class="tp-panel__img" data-label="МЭМ // ВОДОСНАБЖЕНИЕ">
+                  <img src="static/img/photo5.jpg" alt="МЭМ — насосная станция" loading="lazy">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 5 -->
+          <div class="tp-panel" data-idx="5" role="tabpanel">
+            <div class="tp-panel__inner">
+              <div class="tp-panel__col--problem">
+                <div class="tp-panel__alarm">Нет сервиса</div>
+                <h3 class="tp-panel__ptitle">Теплицы <em>без полива</em> — техника <em>в грязи</em></h3>
+                <p class="tp-panel__pdesc">Орошение вручную — трудоёмко и неравномерно. Колёса техники не отмыть. Скважина засорена. Борщевик захватывает территорию. Потери урожая — до 30%.</p>
+              </div>
+              <div class="tp-panel__arrow" aria-hidden="true">&#8594;</div>
+              <div class="tp-panel__col--solution">
+                <div class="tp-panel__sol-text">
+                  <div class="tp-panel__badge"><span>&#10003;</span> Ирригация и сервис</div>
+                  <h3 class="tp-panel__stitle">Полив, мойка и прочистка из одного модуля</h3>
+                  <p class="tp-panel__sdesc">Орошение теплиц и автополив с вводом удобрений прямо в струю. Станция мойки колёс на объекте. Прочистка скважин и труб высоким давлением.</p>
+                  <div class="tp-specs">
+                    <div class="tp-spec"><span class="tp-spec__val">авто</span><span class="tp-spec__key">орошение</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">хим.</span><span class="tp-spec__key">удобрения</span></div>
+                    <div class="tp-spec"><span class="tp-spec__val">выс.дав.</span><span class="tp-spec__key">прочистка</span></div>
+                  </div>
+                </div>
+                <div class="tp-panel__img" data-label="МЭМ // ИРРИГАЦИЯ">
+                  <img src="static/img/photo2.jpg" alt="МЭМ — ирригация и сервис" loading="lazy">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /tp-panel-area -->
+
+        <!-- Mobile: node scheme (accordion) -->
+        <div class="tp-nodes" aria-label="Схема узлов">
+
+          <!-- Node 0 -->
+          <div class="tp-node" data-idx="0">
+            <button class="tp-node__trigger" aria-expanded="false">
+              <span class="tp-node__num">01</span>
+              <div class="tp-node__head">
+                <span class="tp-node__name">Нет электричества</span>
+                <span class="tp-node__brief">Объект парализован — ноль розеток</span>
+              </div>
+              <span class="tp-node__icon" aria-hidden="true"></span>
+            </button>
+            <div class="tp-node__body" aria-hidden="true">
+              <div class="tp-node__content">
+                <div class="tp-node__badge"><span>&#10003;</span> Генерация и сварка</div>
+                <p class="tp-node__sdesc">Бензиновый генератор 15&thinsp;кВт, 3 фазы — запускается за 30 секунд. Питает сварку, болгарку, освещение. Работает до 48 часов без дозаправки.</p>
+                <div class="tp-node__specs">
+                  <div class="tp-nspec"><span class="tp-nspec__val">15&thinsp;кВт</span><span class="tp-nspec__key">мощность</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">48&thinsp;ч</span><span class="tp-nspec__key">автономно</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">30&thinsp;сек</span><span class="tp-nspec__key">запуск</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">3&thinsp;ф.</span><span class="tp-nspec__key">питание</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="tp-node__connector" aria-hidden="true"></div>
+          </div>
+
+          <!-- Node 1 -->
+          <div class="tp-node" data-idx="1">
+            <button class="tp-node__trigger" aria-expanded="false">
+              <span class="tp-node__num">02</span>
+              <div class="tp-node__head">
+                <span class="tp-node__name">Сварка у ГСМ</span>
+                <span class="tp-node__brief">Одна искра — объект в огне</span>
+              </div>
+              <span class="tp-node__icon" aria-hidden="true"></span>
+            </button>
+            <div class="tp-node__body" aria-hidden="true">
+              <div class="tp-node__content">
+                <div class="tp-node__badge"><span>&#10003;</span> Безопасная сварка</div>
+                <p class="tp-node__sdesc">Искрогасящий экран, огнестойкие перегородки, датчики температуры и задымления. Запас воды 2&thinsp;000&thinsp;л для мгновенного тушения. Соответствие нормам ПБ.</p>
+                <div class="tp-node__specs">
+                  <div class="tp-nspec"><span class="tp-nspec__val">2&thinsp;000&thinsp;л</span><span class="tp-nspec__key">запас воды</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">20&thinsp;м</span><span class="tp-nspec__key">рукав</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">ПБ</span><span class="tp-nspec__key">нормы</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="tp-node__connector" aria-hidden="true"></div>
+          </div>
+
+          <!-- Node 2 -->
+          <div class="tp-node" data-idx="2">
+            <button class="tp-node__trigger" aria-expanded="false">
+              <span class="tp-node__num">03</span>
+              <div class="tp-node__head">
+                <span class="tp-node__name">Нет пожарной машины</span>
+                <span class="tp-node__brief">До части — 40 минут. Счёт на секунды</span>
+              </div>
+              <span class="tp-node__icon" aria-hidden="true"></span>
+            </button>
+            <div class="tp-node__body" aria-hidden="true">
+              <div class="tp-node__content">
+                <div class="tp-node__badge"><span>&#10003;</span> Пожаротушение и водоснабжение</div>
+                <p class="tp-node__sdesc">Итальянский насос бьёт на 30&thinsp;м вдаль и 10&thinsp;м в высоту. Бак 2&thinsp;000&thinsp;л + 100&thinsp;л пенообразователя. Химдобавки — прямо в струю.</p>
+                <div class="tp-node__specs">
+                  <div class="tp-nspec"><span class="tp-nspec__val">150&thinsp;л/мин</span><span class="tp-nspec__key">насос</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">30&thinsp;м</span><span class="tp-nspec__key">дальность</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">10&thinsp;м</span><span class="tp-nspec__key">высота</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">2&thinsp;100&thinsp;л</span><span class="tp-nspec__key">объём</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="tp-node__connector" aria-hidden="true"></div>
+          </div>
+
+          <!-- Node 3 -->
+          <div class="tp-node" data-idx="3">
+            <button class="tp-node__trigger" aria-expanded="false">
+              <span class="tp-node__num">04</span>
+              <div class="tp-node__head">
+                <span class="tp-node__name">Мороз &minus;40&deg;C</span>
+                <span class="tp-node__brief">Топливо густеет, руки не гнутся</span>
+              </div>
+              <span class="tp-node__icon" aria-hidden="true"></span>
+            </button>
+            <div class="tp-node__body" aria-hidden="true">
+              <div class="tp-node__content">
+                <div class="tp-node__badge"><span>&#10003;</span> Отопление и теплоаккумулятор</div>
+                <p class="tp-node__sdesc">Теплоаккумулятор 2&thinsp;000&thinsp;л нагревается до 55&deg;C. Сэндвич-панели 50&thinsp;мм не пускают мороз. Расход на обогрев — менее 1&thinsp;кВт/сут.</p>
+                <div class="tp-node__specs">
+                  <div class="tp-nspec"><span class="tp-nspec__val">2&thinsp;000&thinsp;л</span><span class="tp-nspec__key">аккумулятор</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">55&deg;C</span><span class="tp-nspec__key">нагрев</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">50&thinsp;мм</span><span class="tp-nspec__key">панели</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">&lt;1&thinsp;кВт</span><span class="tp-nspec__key">расход/сут</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="tp-node__connector" aria-hidden="true"></div>
+          </div>
+
+          <!-- Node 4 -->
+          <div class="tp-node" data-idx="4">
+            <button class="tp-node__trigger" aria-expanded="false">
+              <span class="tp-node__num">05</span>
+              <div class="tp-node__head">
+                <span class="tp-node__name">Нет водопровода</span>
+                <span class="tp-node__brief">Привозить бочками — дорого и долго</span>
+              </div>
+              <span class="tp-node__icon" aria-hidden="true"></span>
+            </button>
+            <div class="tp-node__body" aria-hidden="true">
+              <div class="tp-node__content">
+                <div class="tp-node__badge"><span>&#10003;</span> Автономная насосная станция</div>
+                <p class="tp-node__sdesc">Расширительный бак 100&thinsp;л, автоподкачка по мере убывания. Подключается к ёмкости, скважине, водоёму. Работает круглогодично, включая &minus;40&deg;C.</p>
+                <div class="tp-node__specs">
+                  <div class="tp-nspec"><span class="tp-nspec__val">100&thinsp;л</span><span class="tp-nspec__key">расш. бак</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">40&thinsp;л/мин</span><span class="tp-nspec__key">производит.</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">4&thinsp;бар</span><span class="tp-nspec__key">давление</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">&minus;40&deg;C</span><span class="tp-nspec__key">диапазон</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="tp-node__connector" aria-hidden="true"></div>
+          </div>
+
+          <!-- Node 5 (last — no connector below) -->
+          <div class="tp-node tp-node--last" data-idx="5">
+            <button class="tp-node__trigger" aria-expanded="false">
+              <span class="tp-node__num">06</span>
+              <div class="tp-node__head">
+                <span class="tp-node__name">Нет полива и мойки</span>
+                <span class="tp-node__brief">Теплицы сохнут, техника в грязи</span>
+              </div>
+              <span class="tp-node__icon" aria-hidden="true"></span>
+            </button>
+            <div class="tp-node__body" aria-hidden="true">
+              <div class="tp-node__content">
+                <div class="tp-node__badge"><span>&#10003;</span> Ирригация и сервис</div>
+                <p class="tp-node__sdesc">Орошение теплиц и автополив с вводом удобрений прямо в струю. Станция мойки колёс. Прочистка скважин и труб высоким давлением.</p>
+                <div class="tp-node__specs">
+                  <div class="tp-nspec"><span class="tp-nspec__val">авто</span><span class="tp-nspec__key">орошение</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">хим.</span><span class="tp-nspec__key">удобрения</span></div>
+                  <div class="tp-nspec"><span class="tp-nspec__val">выс.дав.</span><span class="tp-nspec__key">прочистка</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /tp-nodes -->
+
+      </div><!-- /tp-wrap -->
 
     </section>
 
@@ -635,11 +778,11 @@
               <tr>
                 <td>Ориентировочная стоимость</td>
                 <td>
-                  <span class="f1-price-mem">от 450 000 ₽</span>
+                  <span class="f1-price-mem">от ??? ??? ₽</span>
                   <span class="f1-price-sub">МЭМ-S (базовый)</span>
                 </td>
                 <td>
-                  <span class="f1-price-sep">от 680 000 ₽</span>
+                  <span class="f1-price-sep">от ??? ??? ₽</span>
                   <span class="f1-price-sub">Генератор + насос + сварка + хранение</span>
                 </td>
               </tr>
