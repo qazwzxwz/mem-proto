@@ -1690,7 +1690,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  max-height: 80vh;
+  max-height: 60vh;
   position: relative;
 }
 
@@ -1926,7 +1926,6 @@
     text-align: end;
   }
 
-  .f1-table-wrap { max-height: 55vh; }
   .f1-table--head th { font-size: var(--fs-xs); padding: var(--sp-3) var(--sp-3); }
   .f1-table tbody td { padding: var(--sp-3) var(--sp-3); font-size: var(--fs-xs); }
   .f1-table--foot td { padding: var(--sp-4) var(--sp-3); }
@@ -1952,7 +1951,7 @@
   .f1-table .f1-col-w3 { width: 32%; }
 
   /* Slightly larger table area */
-  .f1-table-wrap { max-height: 60vh; }
+  .f1-table-wrap { max-height: 80vh; }
   .comparison-section .section-title p { padding: 0 var(--sp-4); color: #9BA3AB; }
   #hero {
     padding-bottom: 120px;
