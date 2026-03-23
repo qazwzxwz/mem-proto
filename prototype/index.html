@@ -13,38 +13,6 @@
 </head>
 <body>
 
-  <!-- ═══════════ HEADER ═══════════ -->
-  <!-- <header class="header" role="banner">
-    <div class="header__inner">
-      <a href="index.html" class="header__logo" aria-label="МЭМ — на главную">
-        <span>МЭМ</span>
-      </a>
-
-      <nav class="header__nav" aria-label="Основная навигация">
-        <a href="index.html" class="active">Главная</a>
-        <a href="index.html#capabilities">Возможности</a>
-        <a href="index.html#constructor">Конструктор</a>
-        
-        <a href="profile.html">Профиль</a>
-        <a href="admin.html">Админ</a>
-        <div class="nav-auth-group">
-          <a href="login.html" class="btn btn--secondary btn--sm">Войти</a>
-          <a href="register.html" class="btn btn--primary btn--sm">Регистрация</a>
-        </div>
-      </nav>
-      <div class="header__actions">
-        
-        <a href="login.html" class="btn btn--secondary btn--sm header__auth-btn">Войти</a>
-        <a href="register.html" class="btn btn--primary btn--sm header__auth-btn">Регистрация</a>
-      </div>
-
-      <button class="burger" aria-label="Открыть меню" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-
-    </div>
-  </header> -->
-
   <!-- ═══════════ PAGINATION DOTS ═══════════ -->
   <nav class="fp-dots" aria-label="Навигация по секциям"></nav>
 
@@ -220,8 +188,8 @@
 
             <!-- ═══ РАЗМЕРНЫЙ ТЕКСТ (ГОСТ курсив) ═══ -->
             <g class="bp-dimensions" font-family="'Times New Roman', 'Georgia', serif" font-style="italic" font-size="12" fill="rgba(233,60,53,0.75)">
-              <text x="380" y="70" text-anchor="middle">5 400</text>
-              <text x="738" y="190" text-anchor="start">1 700</text>
+              <text x="380" y="70" text-anchor="middle">4 500</text>
+              <text x="738" y="190" text-anchor="start">1 800</text>
               <text x="185" y="325" text-anchor="middle" font-size="10">⌀440</text>
             </g>
 
@@ -271,7 +239,7 @@
 
         <div class="hero__actions">
           <a href="#gallery" class="btn btn--secondary btn--lg">Подробнее</a>
-          <a href="#constructor" class="btn btn--primary btn--lg">Заказать звонок</a>
+          <a href="#contacts" class="btn btn--primary btn--lg">Наши контакты</a>
         </div>
 
       </div>
@@ -793,16 +761,15 @@
     </section>
 
         <!-- ──── 3. CONSTRUCTOR ──── -->
-    <section class="fp-section constructor" id="constructor" data-section-num="04" aria-label="Конструктор цены">
+    <!-- <section class="fp-section constructor" id="constructor" data-section-num="04" aria-label="Конструктор цены">
       <div class="container">
         <div class="section-title">
-          <h2>Конструктор цены</h2>
+          <h2>Наши контакты</h2>
           <div class="divider"></div>
-          <p>Соберите свою конфигурацию и рассчитайте стоимость</p>
+          <p>В любое время — в любое место</p>
         </div>
 
         <div class="constructor__wrapper">
-          <!-- LEFT: Wizard steps -->
           <div class="wizard" role="group" aria-label="Конструктор конфигурации">
             <div class="wizard__progress" role="tablist">
               <button class="wizard__step-btn wizard__step-btn--active" role="tab" aria-selected="true" data-step="0">1. Модель</button>
@@ -812,7 +779,6 @@
             </div>
 
             <div class="wizard__body">
-              <!-- Model -->
               <div class="wizard__panel wizard__panel--active" data-panel="model" role="tabpanel">
                 <h4>Выберите модель</h4>
                 <div class="wizard__choices"></div>
@@ -825,7 +791,6 @@
                 </div>
               </div>
 
-              <!-- Specs -->
               <div class="wizard__panel" data-panel="specs" role="tabpanel">
                 <h4>Дополнительные опции</h4>
                 <div class="wizard__choices">
@@ -846,7 +811,6 @@
             
               </div>
 
-              <!-- Services -->
               <div class="wizard__panel" data-panel="services" role="tabpanel">
                 <h4>Услуги</h4>
                 <div class="wizard__choices">
@@ -869,7 +833,6 @@
 
               </div>
 
-              <!-- Contacts -->
               <div class="wizard__panel" data-panel="contacts" role="tabpanel">
                 <h4>Контактные данные</h4>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4)">
@@ -900,22 +863,17 @@
             </div>
           </div>
 
-          <!-- Overlay for mobile sidebar modal -->
           <div class="sidebar-overlay" data-sidebar-overlay></div>
 
-          <!-- RIGHT: Sidebar summary (becomes modal on mobile) -->
           <aside class="wizard-sidebar" aria-label="Итог заказа">
             <button class="sidebar__close" data-action="close-sidebar" aria-label="Закрыть">&times;</button>
             <h3 class="sidebar__title">Ваш заказ</h3>
 
-            <!-- Line items (rendered by JS) -->
             <div class="sidebar__items">
               <div class="sidebar__empty">Выберите модель и опции</div>
             </div>
 
-            <!-- Bottom group: pushed to bottom via margin-top:auto -->
             <div class="sidebar__bottom">
-              <!-- Promo code -->
               <div class="sidebar__promo">
                 <div class="sidebar__promo-label">Промокод (в будущем уберу)</div>
                 <div class="promo-field">
@@ -925,7 +883,6 @@
                 <div class="promo-result" aria-live="polite"></div>
               </div>
 
-              <!-- Totals -->
               <div class="sidebar__totals">
                 <div class="sidebar__subtotal">
                   <span>Подитог</span>
@@ -938,7 +895,6 @@
                 </div>
               </div>
 
-              <!-- Actions -->
               <div class="sidebar__actions">
                 <button class="btn btn--primary" data-action="submit">Заказать звонок</button>
                 <button class="btn btn--secondary btn--sm" data-action="save-draft">Сохранить черновик</button>
@@ -947,7 +903,56 @@
           </aside>
         </div>
       </div>
-    </section>
+    </section> -->
+
+    <!-- ──── 7. КОНТАКТЫ ──── -->
+<section class="fp-section contacts-section" id="contacts" data-section-num="06" aria-label="Контакты">
+  <div class="container">
+    <div class="section-title">
+      <h2>Наши контакты</h2>
+      <div class="divider"></div>
+      <p>Свяжитесь с нами любым удобным способом</p>
+    </div>
+
+    <div class="contacts-grid">
+      <!-- Почта -->
+      <div class="contact-card" data-reveal>
+        <div class="contact-card__icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <h3 class="contact-card__title">Электронная почта</h3>
+        <a href="mailto:info@mem-energy.ru" class="contact-card__value">support@mem.ru</a>
+      </div>
+
+      <!-- Telegram -->
+      <div class="contact-card" data-reveal>
+        <div class="contact-card__icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M11 13L16 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <h3 class="contact-card__title">Telegram</h3>
+        <a href="https://t.me/mem_energy_bot" class="contact-card__value" target="_blank" rel="noopener noreferrer">@DmitriyFateev</a>
+      </div>
+
+      <!-- Телефон -->
+      <div class="contact-card" data-reveal>
+        <div class="contact-card__icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22 16.92V19C22 19.5304 21.7893 20.0391 21.4142 20.4142C21.0391 20.7893 20.5304 21 20 21C10.6 21 3 13.4 3 4C3 3.46957 3.21071 2.96086 3.58579 2.58579C3.96086 2.21071 4.46957 2 5 2H8C8.53043 2 9.03914 2.21071 9.41421 2.58579C9.78929 2.96086 10 3.46957 10 4C10 5.1 10.19 6.16 10.53 7.13C10.62 7.38 10.64 7.64 10.58 7.88C10.52 8.12 10.4 8.34 10.23 8.52L7.9 10.85C9.24 13.53 11.47 15.76 14.15 17.1L16.48 14.77C16.66 14.6 16.88 14.48 17.12 14.42C17.36 14.36 17.62 14.38 17.87 14.47C18.84 14.81 19.9 15 21 15C21.5304 15 22.0391 15.2107 22.4142 15.5858C22.7893 15.9609 23 16.4696 23 17V20H22Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <h3 class="contact-card__title">Телефон</h3>
+        <a href="tel:+74951234567" class="contact-card__value">+7 911 900 4477</a>
+        <div class="contact-card__note">Бесплатный звонок по России</div>
+      </div>
+    </div>
+  </div>
+</section>
 
     <!-- ──── 6. VIDEO ──── -->
     <section class="fp-section video-section" id="video" data-section-num="05" aria-label="Видеообзор">

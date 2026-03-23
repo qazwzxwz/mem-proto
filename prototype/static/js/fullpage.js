@@ -24,7 +24,7 @@ export function init(containerSelector = '.fullpage', dotSelector = '.fp-dots') 
   }
 
   /* ── Section labels for dots ── */
-  const sectionLabels = ['Главная', 'Проблемы и решения', 'Возможности', 'Сравнение', 'Конструктор', 'Видео'];
+  const sectionLabels = ['Главная', 'Проблемы и решения', 'Сравнение', 'Наши контакты', 'Видео'];
 
   /* ── Create dots ── */
   if (dotsWrap) {
