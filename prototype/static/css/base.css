@@ -3,7 +3,7 @@
    ============================================ */
 @font-face {
   font-family: 'GostFont';
-  src: url('/static/fonts/GOST_A.TTF') format('truetype');
+  src: url('../fonts/GOST_A.TTF') format('truetype');
 }
 
 *, *::before, *::after {
