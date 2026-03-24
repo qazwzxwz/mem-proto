@@ -10,6 +10,9 @@
   <link rel="stylesheet" href="static/css/layout.css">
   <link rel="stylesheet" href="static/css/pages/home.css">
   <link rel="stylesheet" href="static/css/pages/model.css">
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 
@@ -952,6 +955,21 @@
         <div class="contact-card__note">Бесплатный звонок по России</div>
       </div>
     </div>
+
+    <!-- Coverage Zone Map -->
+    <div class="coverage-wrap" id="coverage-wrap">
+      <div class="coverage-head">
+        <span class="coverage-head__tag">Зона охвата</span>
+        <span class="coverage-head__sep">//</span>
+        <span class="coverage-head__title">СПб и Ленинградская область</span>
+      </div>
+      <div id="coverage-map" role="img" aria-label="Карта зоны охвата МЭМ — Санкт-Петербург и Ленинградская область"></div>
+      <!-- <div class="coverage-foot">
+        <span class="coverage-foot__dot"></span>
+        Работаем по всей Лен. области
+      </div> -->
+    </div>
+
   </div>
 </section>
 
@@ -1000,6 +1018,7 @@
     import { init as initConstructor } from './static/js/constructor.js';
     import { init as initGalleryShowcase } from './static/js/gallery-showcase.js';
     import { init as initParallax } from './static/js/animations/parallax.js';
+    import { init as initCoverageMap } from './static/js/coverage-map.js';
 
     initHeader();
 
@@ -1016,6 +1035,9 @@
 
     /* Gallery showcase (problem → solution) */
     initGalleryShowcase(document.getElementById('gallery'));
+
+    /* Coverage zone map */
+    initCoverageMap();
 
     /* Comparison table — scroll hint hide */
     const f1Scroll = document.getElementById('f1-scroll');
