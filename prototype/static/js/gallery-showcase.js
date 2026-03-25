@@ -145,6 +145,23 @@ export function init(section) {
     animateAccent(section.querySelector('.tp-header'));
   });
 
+  /* ── Mobile: scroll-reveal nodes via IntersectionObserver ── */
+  if (nodes.length > 0 && 'IntersectionObserver' in window) {
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('tp-node--visible');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    nodes.forEach(node => revealObs.observe(node));
+  }
+
   /* ── Init state ── */
   if (tabs[0])   tabs[0].setAttribute('aria-selected', 'true');
   if (panels[0]) panels[0].classList.add('tp-panel--active');

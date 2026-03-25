@@ -648,8 +648,8 @@
             <thead>
               <tr>
                 <th>Характеристика</th>
-                <th class="f1-col-mem">МЭМ<br><small style="font-weight:400;opacity:0.85;">Всё в одном модуле</small></th>
-                <th class="f1-col-separate">По отдельности<br><small style="font-weight:400;">Генератор + Оборудование</small></th>
+                <th class="f1-col-mem">МЭМ<br><small style="font-weight:400;opacity:0.85;">Всё в одном модуле</small> <span class="f1-toggle-circle f1-toggle-circle--active" aria-hidden="true"></span></th>
+                <th class="f1-col-separate">По отдельности<br><small style="font-weight:400;">Генератор + Оборудование</small> <span class="f1-toggle-circle" aria-hidden="true"></span></th>
               </tr>
             </thead>
           </table>
@@ -1019,6 +1019,7 @@
     import { init as initGalleryShowcase } from './static/js/gallery-showcase.js';
     import { init as initParallax } from './static/js/animations/parallax.js';
     import { init as initCoverageMap } from './static/js/coverage-map.js';
+    import { init as initTableToggle } from './static/js/table-toggle.js';
 
     initHeader();
 
@@ -1038,6 +1039,9 @@
 
     /* Coverage zone map */
     initCoverageMap();
+
+    /* Mobile table toggle (typewriter animation) */
+    initTableToggle();
 
     /* Comparison table — scroll hint hide */
     const f1Scroll = document.getElementById('f1-scroll');
