@@ -192,6 +192,50 @@
   animation: fadeUp var(--duration-slower) var(--ease-out) 0.5s forwards;
 }
 
+/* ── Hero price tag ── */
+.hero__price {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.3em;
+  margin-top: var(--sp-5);
+  opacity: 0;
+  transform: translateY(16px);
+  font-family: var(--gost-font);
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+.hero__actions.animated ~ .hero__price {
+  animation: fadeUp var(--duration-slower) var(--ease-out) 0.75s forwards;
+}
+.hero__price-label {
+  font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+  color: rgba(255,255,255,0.4);
+  text-transform: lowercase;
+}
+.hero__price-value {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 800;
+  font-style: normal;
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+.hero__price-currency {
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-weight: 600;
+  font-style: normal;
+  color: var(--color-accent);
+}
+
+@media (max-width: 768px) {
+  .hero__price {
+    margin-top: var(--sp-4);
+  }
+  .hero__price-value {
+    font-size: 1.3rem;
+  }
+}
+
 .hero .btn--secondary {
   border-color: rgba(255,255,255,0.35);
   color: white;
@@ -2262,6 +2306,7 @@
 }
 .f1-table .f1-col-mem {
   border-left: 2px solid rgba(233,60,53,0.3);
+  border-right: 2px solid rgba(233,60,53,0.3);
   /* color: var(--color-accent); */
 }
 .f1-table tbody td {
@@ -2270,12 +2315,14 @@
 }
 .f1-table tbody td:nth-child(2) {
   border-left: 2px solid rgba(233,60,53,0.3);
+  border-right: 2px solid rgba(233,60,53,0.3);
   background: rgba(233,60,53,0.04);
 }
 .f1-table tbody tr:hover td { background: rgba(255,255,255,0.03); }
 .f1-table tbody tr:hover td:nth-child(2) { background: rgba(233,60,53,0.08); }
 .f1-table--foot td:nth-child(2) {
   border-left: 2px solid rgba(233,60,53,0.3);
+  border-right: 2px solid rgba(233,60,53,0.3);
   background: rgba(233,60,53,0.06);
 }
 .f1-category td {
@@ -2401,6 +2448,12 @@
 
 
 @media (max-width: 768px) {
+  .f1-table tbody td:nth-child(2),
+  .f1-table--foot td:nth-child(2),
+  .f1-table .f1-col-mem {
+    border-right: none;
+  } 
+ 
   .f1-table--head th,
   .f1-table--foot td {
     padding: 6px 8px;    
