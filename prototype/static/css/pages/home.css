@@ -1166,13 +1166,20 @@
 .tp-header__meta {
   display: flex;
   align-items: center;
-  gap: var(--sp-3);
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-3);
   font-family: var(--gost-font);
   font-size: var(--fs-lg);
   color: rgba(255,255,255,0.35);
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  white-space: nowrap;
+}
+@media (max-width: 768px) {
+  .tp-header__meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-1);
+  }
 }
 .tp-meta-tag {
   color: var(--color-accent);
