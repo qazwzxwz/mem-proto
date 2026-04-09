@@ -46,6 +46,37 @@ export function init() {
     const circleMem = thMem ? thMem.querySelector('.f1-toggle-circle') : null;
     const circleSep = thSep ? thSep.querySelector('.f1-toggle-circle') : null;
 
+    // Header title + sub description — circle indicator stays static
+    const titleMemEl = thMem ? thMem.querySelector('.f1-head-title') : null;
+    const titleSepEl = thSep ? thSep.querySelector('.f1-head-title') : null;
+    const titleMemData = snapshot(titleMemEl);
+    const titleSepData = snapshot(titleSepEl);
+
+    const subMemEl = thMem ? thMem.querySelector('.f1-head-sub') : null;
+    const subSepEl = thSep ? thSep.querySelector('.f1-head-sub') : null;
+    const subMemData = snapshot(subMemEl);
+    const subSepData = snapshot(subSepEl);
+
+    // Footer price spans — main price AND sub description animate
+    const footTable = wrap.querySelector('.f1-table--foot');
+    const footRow = footTable ? footTable.querySelector('tr') : null;
+    const priceMemEl = footRow ? footRow.cells[1] && footRow.cells[1].querySelector('.f1-price-mem') : null;
+    const priceSepEl = footRow ? footRow.cells[2] && footRow.cells[2].querySelector('.f1-price-sep') : null;
+    const priceMemData = snapshot(priceMemEl);
+    const priceSepData = snapshot(priceSepEl);
+
+    const priceSubMemEl = footRow ? footRow.cells[1] && footRow.cells[1].querySelector('.f1-price-sub') : null;
+    const priceSubSepEl = footRow ? footRow.cells[2] && footRow.cells[2].querySelector('.f1-price-sub') : null;
+    const priceSubMemData = snapshot(priceSubMemEl);
+    const priceSubSepData = snapshot(priceSubSepEl);
+
+    function snapshot(el) {
+      return {
+        html: el ? el.innerHTML : '',
+        text: el ? el.textContent.trim() : ''
+      };
+    }
+
     // Click handlers on both headers
     if (thSep) thSep.addEventListener('click', () => toggle());
     if (thMem) thMem.addEventListener('click', () => toggle());
@@ -56,11 +87,12 @@ export function init() {
       const toMem = !showingMem;
       showingMem = toMem;
 
-      // Going back to Sep: снимаем --active у circleMem СРАЗУ, пока .f1-col-mem
-      // ещё видима. Иначе transition не сработает — к моменту снятия класса
-      // колонка МЭМ уже будет display:none.
-      if (!toMem && circleMem) {
-        circleMem.classList.remove('f1-toggle-circle--active');
+      // Going back to Sep: снимаем --active у circleMem и убираем МЭМ-стиль
+      // (красная заливка + линия) СРАЗУ, пока .f1-col-mem ещё видима.
+      // Fade-out красного проигрывается параллельно со стиранием текста.
+      if (!toMem) {
+        if (circleMem) circleMem.classList.remove('f1-toggle-circle--active');
+        wrap.classList.remove('f1-table-wrap--mem-styled');
       }
 
       // Get the visible cells (col 3 = "По отдельности" when showing sep, col 2 when showing МЭМ)
@@ -68,21 +100,52 @@ export function init() {
       const oldData = toMem ? sepData : memData;
       const newData = toMem ? memData : sepData;
 
+      // Extra elements that animate alongside body rows:
+      // - header title + sub (.f1-head-title / .f1-head-sub)
+      // - footer main price + sub (.f1-price-mem|sep / .f1-price-sub)
+      // Pack old/new pairs into a single list to keep erase/type flow compact
+      const extras = [
+        {
+          oldEl: toMem ? titleSepEl : titleMemEl,
+          newEl: toMem ? titleMemEl : titleSepEl,
+          oldData: toMem ? titleSepData : titleMemData,
+          newData: toMem ? titleMemData : titleSepData,
+        },
+        {
+          oldEl: toMem ? subSepEl : subMemEl,
+          newEl: toMem ? subMemEl : subSepEl,
+          oldData: toMem ? subSepData : subMemData,
+          newData: toMem ? subMemData : subSepData,
+        },
+        {
+          oldEl: toMem ? priceSepEl : priceMemEl,
+          newEl: toMem ? priceMemEl : priceSepEl,
+          oldData: toMem ? priceSepData : priceMemData,
+          newData: toMem ? priceMemData : priceSepData,
+        },
+        {
+          oldEl: toMem ? priceSubSepEl : priceSubMemEl,
+          newEl: toMem ? priceSubMemEl : priceSubSepEl,
+          oldData: toMem ? priceSubSepData : priceSubMemData,
+          newData: toMem ? priceSubMemData : priceSubSepData,
+        },
+      ];
+
       // Start erasing each cell simultaneously
       const cells = rows.map(r => r.cells[visibleColIdx]);
       const CHAR_DELAY = 18; // ms per character
       const PAUSE = 80; // pause between erase and type
 
-      let maxEraseTime = 0;
       const erasePromises = cells.map((td, i) => {
         if (!td) return Promise.resolve();
-        const oldText = oldData[i].text;
-        const eraseTime = oldText.length * CHAR_DELAY;
-        if (eraseTime > maxEraseTime) maxEraseTime = eraseTime;
-        return animateErase(td, oldText, CHAR_DELAY);
+        return animateErase(td, oldData[i].text, CHAR_DELAY);
       });
+      // Header + footer extras erase in parallel with body
+      const eraseExtras = extras.map(x =>
+        x.oldEl ? animateErase(x.oldEl, x.oldData.text, CHAR_DELAY) : Promise.resolve()
+      );
 
-      Promise.all(erasePromises).then(() => {
+      Promise.all([...erasePromises, ...eraseExtras]).then(() => {
         // Switch columns in DOM
         if (toMem) {
           wrap.classList.add('f1-table-wrap--mem');
@@ -95,32 +158,42 @@ export function init() {
           const newColIdx = toMem ? 1 : 2;
           const newCells = rows.map(r => r.cells[newColIdx]);
 
-          // Clear new cells, then type in
-          newCells.forEach((td, i) => {
-            if (td) {
-              td.textContent = '';
-              td.classList.remove('f1-cell-mem');
-            }
-          });
+          // Clear new cells (body + all extras) so the original text
+          // doesn't flash during PAUSE before typing starts
+          newCells.forEach(td => { if (td) td.textContent = ''; });
+          extras.forEach(x => { if (x.newEl) x.newEl.textContent = ''; });
 
           setTimeout(() => {
             const typePromises = newCells.map((td, i) => {
               if (!td) return Promise.resolve();
               return animateType(td, newData[i].text, newData[i].html, CHAR_DELAY);
             });
+            const typeExtras = extras.map(x =>
+              x.newEl
+                ? animateType(x.newEl, x.newData.text, x.newData.html, CHAR_DELAY)
+                : Promise.resolve()
+            );
 
-            Promise.all(typePromises).then(() => {
-              // AFTER all typing is done — apply style.
-              // circleSep остаётся в состоянии по умолчанию (state 1) всегда.
-              // circleMem --active снимается в самом начале toggle() для обратного
-              // перехода (чтобы транзишн проиграл, пока колонка ещё видима).
+            Promise.all([...typePromises, ...typeExtras]).then(() => {
+              // AFTER all typing is done — trigger the red fade-in on
+              // the forward transition. Backward direction clears the
+              // styled class at the very start of toggle() so the fade-out
+              // runs while МЭМ column is still visible.
               if (toMem) {
-                newCells.forEach(td => { if (td) td.classList.add('f1-cell-mem'); });
-                if (circleMem) circleMem.classList.add('f1-toggle-circle--active');
+                // Force reflow + rAF: МЭМ column only just unhid
+                // (display:none → table-cell), and browsers can skip the
+                // very first transition on freshly appeared elements.
+                // Reading offsetHeight + waiting a frame guarantees the
+                // initial state is committed before we flip the class.
+                void wrap.offsetHeight;
+                requestAnimationFrame(() => {
+                  wrap.classList.add('f1-table-wrap--mem-styled');
+                  if (circleMem) circleMem.classList.add('f1-toggle-circle--active');
+                  animating = false;
+                });
               } else {
-                newCells.forEach(td => { if (td) td.classList.remove('f1-cell-mem'); });
+                animating = false;
               }
-              animating = false;
             });
           }, PAUSE);
         });

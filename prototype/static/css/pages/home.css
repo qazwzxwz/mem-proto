@@ -2065,7 +2065,6 @@
   .f1-table--head th:first-child { padding-left: var(--sp-4); font-size: var(--fs-lg);}
   .f1-table tfoot td:first-child { padding-left: var(--sp-4); }
   .f1-category td { padding: var(--sp-2) var(--sp-4) !important; }
-  .f1-col-mem::after { display: none; }
 
   /* Hide "Без решения" column on mobile */
   .f1-table .f1-col-w4 { width: 0; padding: 0; visibility: collapse; }
@@ -2157,13 +2156,21 @@
     50%      { transform: scale(1.1); }
   }
 
-  /* Active state: circle fills, halo grows outward, inner pulse fades */
+  /* Active state: кружок заливается, внутренний пульс скрывается,
+     внешнее red halo пульсирует ripple-анимацией (box-shadow spread
+     растёт из 0 → 7px с затуханием и обратно в 0). 0% и 100%
+     keyframe совпадают с базовым состоянием .f1-toggle-circle, поэтому
+     вход/выход из active плавные, без скачков. */
   .f1-toggle-circle--active {
     background: var(--color-accent);
-    box-shadow: 0 0 0 4px rgba(233,60,53,0.3);
+    animation: f1-halo-pulse 1.8s ease-in-out infinite;
   }
   .f1-toggle-circle--active::before {
     opacity: 0;
+  }
+  @keyframes f1-halo-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(233,60,53,0); }
+    50%      { box-shadow: 0 0 0 7px rgba(233,60,53,0.15); }
   }
 
   /* ── Typewriter cell animation ── */
@@ -2174,20 +2181,38 @@
     overflow: hidden;
   }
 
-  /* МЭМ style applied AFTER typewriter finishes */
-  .f1-cell-mem {
-    background: rgba(233,60,53,0.07) !important;
-    color: #fff !important;
-    border-left: 2px solid rgba(233,60,53,0.4) !important;
-    transition: background 0.25s, border-color 0.25s;
-  }
-  .f1-cell-mem .f1-check  { color: var(--color-accent); }
-  .f1-cell-mem strong     { color: #FFF; }
+  /* ── МЭМ fill + line — smooth fade-in AFTER typewriter finishes ──
+     Триггер: .f1-table-wrap--mem-styled на враппере (JS добавляет после
+     окончания typewriter'а на forward-переходе, снимает в начале backward).
 
-  /* Footer МЭМ accent */
-  .f1-table-wrap--mem .f1-table tfoot td:nth-child(2) {
-    background: rgba(233,60,53,0.07);
-    border-left: 2px solid rgba(233,60,53,0.4);
+     Ниже в файле (вне media query) у .f1-col-mem и td:nth-child(2) уже
+     стоит постоянный border-left/right: 2px solid rgba(233,60,53,0.3).
+     На мобильном этот border появлялся резко в момент display:none →
+     table-cell. Поэтому тут переопределяем border-color на transparent
+     в исходном состоянии и плавно перекрашиваем его в красный при
+     добавлении .f1-table-wrap--mem-styled. Структура 2px остаётся,
+     layout не прыгает, transition срабатывает надёжно. */
+  .f1-col-mem,
+  .f1-table--body tbody tr:not(.f1-category) td:nth-child(2),
+  .f1-table--foot tfoot td:nth-child(2) {
+    background: transparent !important;
+    border-left-color: transparent !important;
+    border-right-color: transparent !important;
+    transition: background 0.5s ease, color 0.5s ease, border-color 0.5s ease;
+  }
+  .f1-table-wrap--mem-styled .f1-col-mem,
+  .f1-table-wrap--mem-styled .f1-table--body tbody tr:not(.f1-category) td:nth-child(2),
+  .f1-table-wrap--mem-styled .f1-table--foot tfoot td:nth-child(2) {
+    background: rgba(233,60,53,0.1) !important;
+    color: #fff !important;
+    border-left-color: rgba(233,60,53,0.6) !important;
+    border-right-color: rgba(233,60,53,0.6) !important;
+  }
+  .f1-table-wrap--mem-styled .f1-table--body tbody tr:not(.f1-category) td:nth-child(2) .f1-check {
+    color: var(--color-accent);
+  }
+  .f1-table-wrap--mem-styled .f1-table--body tbody tr:not(.f1-category) td:nth-child(2) strong {
+    color: #fff;
   }
 }
 
