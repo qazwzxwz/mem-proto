@@ -56,6 +56,13 @@ export function init() {
       const toMem = !showingMem;
       showingMem = toMem;
 
+      // Going back to Sep: снимаем --active у circleMem СРАЗУ, пока .f1-col-mem
+      // ещё видима. Иначе transition не сработает — к моменту снятия класса
+      // колонка МЭМ уже будет display:none.
+      if (!toMem && circleMem) {
+        circleMem.classList.remove('f1-toggle-circle--active');
+      }
+
       // Get the visible cells (col 3 = "По отдельности" when showing sep, col 2 when showing МЭМ)
       const visibleColIdx = toMem ? 2 : 1; // currently visible column (0-indexed)
       const oldData = toMem ? sepData : memData;
@@ -103,15 +110,15 @@ export function init() {
             });
 
             Promise.all(typePromises).then(() => {
-              // AFTER all typing is done — apply style
+              // AFTER all typing is done — apply style.
+              // circleSep остаётся в состоянии по умолчанию (state 1) всегда.
+              // circleMem --active снимается в самом начале toggle() для обратного
+              // перехода (чтобы транзишн проиграл, пока колонка ещё видима).
               if (toMem) {
                 newCells.forEach(td => { if (td) td.classList.add('f1-cell-mem'); });
                 if (circleMem) circleMem.classList.add('f1-toggle-circle--active');
-                if (circleSep) circleSep.classList.remove('f1-toggle-circle--active');
               } else {
                 newCells.forEach(td => { if (td) td.classList.remove('f1-cell-mem'); });
-                if (circleSep) circleSep.classList.add('f1-toggle-circle--active');
-                if (circleMem) circleMem.classList.remove('f1-toggle-circle--active');
               }
               animating = false;
             });
