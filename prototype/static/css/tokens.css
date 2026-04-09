@@ -114,6 +114,9 @@
   /* ── ГОСТ grid background (data-URI SVG pattern) ── */
   --gost-grid-sm: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M40 0H0V40' fill='none' stroke='rgba(255,255,255,0.035)' stroke-width='0.5'/%3E%3C/svg%3E");
   --gost-grid-lg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath d='M200 0H0V200' fill='none' stroke='rgba(255,255,255,0.065)' stroke-width='0.75'/%3E%3C/svg%3E");
+  /* Красные варианты для hover-подсветки под курсором */
+  --gost-grid-sm-red: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M40 0H0V40' fill='none' stroke='rgba(233,60,53,0.45)' stroke-width='0.5'/%3E%3C/svg%3E");
+  --gost-grid-lg-red: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath d='M200 0H0V200' fill='none' stroke='rgba(233,60,53,0.75)' stroke-width='0.75'/%3E%3C/svg%3E");
   --gost-font: 'GostFont', italic;
 }
 

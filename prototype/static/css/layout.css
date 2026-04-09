@@ -265,6 +265,13 @@
 }
 
 /* ── ГОСТ grid background on every section ── */
+.fp-section {
+  /* Позиция курсора в локальных координатах секции — JS обновляет на
+     pointermove; по умолчанию далеко за кадром, чтобы подсветка была
+     скрыта. */
+  --mouse-x: -9999px;
+  --mouse-y: -9999px;
+}
 .fp-section::before {
   content: '';
   position: absolute;
@@ -275,8 +282,34 @@
   pointer-events: none;
   z-index: 0;
 }
+/* Красная сетка-подсветка под курсором. Тот же pattern, но красный,
+   маскирован radial-gradient'ом в позиции мыши — видно только круг
+   диаметром ~500px с плавным затуханием. */
+.fp-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--gost-grid-sm-red), var(--gost-grid-lg-red);
+  -webkit-mask-image: radial-gradient(circle 260px at var(--mouse-x) var(--mouse-y), black 0%, transparent 75%);
+  mask-image: radial-gradient(circle 260px at var(--mouse-x) var(--mouse-y), black 0%, transparent 75%);
+  pointer-events: none;
+  z-index: 0;
+}
 /* hero already has its own blueprint SVG — skip duplicate grid */
-.hero::before { display: none; }
+.hero::before,
+.hero::after { display: none; }
+
+/* Красная hover-подсветка — только для устройств с мышью.
+   На тач-устройствах pointermove генерируется от тапов, эффект
+   выглядит странно и не нужен. */
+@media (hover: none), (pointer: coarse), (max-width: 768px) {
+  .fp-section::after,
+  .f1-table-wrap::before,
+  .tp-wrap::before,
+  .contact-card::before {
+    display: none;
+  }
+}
 
 /* ── Page dots (pagination) ── */
 .fp-dots {

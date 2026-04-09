@@ -1152,6 +1152,7 @@
   height: calc(100vh - var(--header-height) - var(--sp-4) - var(--sp-4));
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 /* ── Header ── */
@@ -2607,6 +2608,52 @@
   font-size: 0.8rem;
   color: var(--color-text-secondary);
   font-style: italic;
+}
+
+/* ── Blurred red grid overlay под "акцентными" элементами ──
+   На .fp-section::after красная hover-сетка чёткая. Под крупными
+   контентными блоками (таблица, tp-wrap, карточка контактов) добавляем
+   собственный ::before с такой же красной сеткой, но размытой через
+   filter: blur(). JS пишет локальные --mouse-x/--mouse-y в эти элементы
+   отдельно (чтобы radial-центр был в координатах самого элемента), а
+   вне элемента переменные = -9999px → blurred-версия скрыта radial-mask'ом.
+   Чёткая сетка секции под этими элементами остаётся, но на неё
+   накладывается мягкий blurred overlay — визуально именно в этих
+   зонах красная сетка "расплывается". */
+.f1-table-wrap,
+.tp-wrap,
+.contact-card {
+  --mouse-x: -9999px;
+  --mouse-y: -9999px;
+}
+.contact-card {
+  position: relative;
+}
+.f1-table-wrap::before,
+.tp-wrap::before,
+.contact-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--gost-grid-sm-red), var(--gost-grid-lg-red);
+  /* Tile origin элемента = (0,0) элемента, а у секции = (0,0) секции.
+     Чтобы паттерны не "прыгали" при переходе курсора на акцентный
+     элемент, сдвигаем background-position на минус смещение элемента
+     внутри секции (JS считает и пишет --bg-off-x / --bg-off-y). */
+  background-position: var(--bg-off-x, 0px) var(--bg-off-y, 0px);
+  -webkit-mask-image: radial-gradient(circle 260px at var(--mouse-x) var(--mouse-y), black 0%, transparent 75%);
+  mask-image: radial-gradient(circle 260px at var(--mouse-x) var(--mouse-y), black 0%, transparent 75%);
+  filter: blur(3.5px);
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 0;
+}
+/* Контент этих элементов должен быть выше blurred overlay */
+.f1-table-wrap > *,
+.tp-wrap > *,
+.contact-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* Адаптивность */
