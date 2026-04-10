@@ -1378,6 +1378,23 @@
     will-change: flex-basis;
     cursor: zoom-in;
   }
+  /* Soft pulsing red glow on idle (affordance hint) */
+  .tp-panel--active .tp-panel__img::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 3;
+    box-shadow: inset 0 0 40px 4px rgba(233, 60, 53, 0.45);
+    animation: tp-img-pulse 2.6s ease-in-out infinite;
+    transition: box-shadow 0.45s ease, animation 0.1s ease;
+  }
+  /* Expanded/hover: pulse stops, glow becomes quiet and steady */
+  .tp-panel--active .tp-panel__inner:has(.tp-panel__img:hover) .tp-panel__img::before,
+  .tp-panel--active.tp-panel--expanded .tp-panel__img::before {
+    animation: none;
+    box-shadow: inset 0 0 60px 2px rgba(233, 60, 53, 0.18);
+  }
 
   /* Hover preview OR latched click */
   .tp-panel--active .tp-panel__inner:has(.tp-panel__img:hover) .tp-panel__col--problem,
