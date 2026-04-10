@@ -1439,6 +1439,13 @@
   margin-bottom: var(--sp-4);
   opacity: 0.75;
 }
+.tp-panel__alarm > span {
+  color: var(--color-accent);
+  font-family: var(--gost-font);
+  font-style: normal;
+  font-variant-emoji: text;
+  -webkit-text-fill-color: var(--color-accent);
+}
 
 .tp-panel__ptitle {
   font-size: clamp(var(--fs-xl), 2.2vw, var(--fs-3xl));
@@ -1752,6 +1759,70 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-family: var(--gost-font);
+  }
+
+  /* Image placeholder — blueprint frame (matches .video-placeholder ГОСТ override) */
+  .tp-node__img-placeholder {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: transparent;
+    border: 1px solid rgba(233,60,53,0.3);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-top: var(--sp-5);
+    margin-left: var(--sp-5);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  .tp-node__img-placeholder::before {
+    content: attr(data-label);
+    position: absolute;
+    top: var(--sp-3);
+    left: var(--sp-4);
+    font-family: var(--gost-font);
+    font-style: italic;
+    font-size: var(--fs-xs);
+    letter-spacing: 0.12em;
+    color: rgba(233,60,53,0.4);
+    pointer-events: none;
+  }
+  .tp-node__img-placeholder::after {
+    content: 'М 1:1 ЛИС. 1';
+    position: absolute;
+    bottom: var(--sp-3);
+    right: var(--sp-4);
+    font-family: var(--gost-font);
+    font-style: italic;
+    font-size: var(--fs-xs);
+    letter-spacing: 0.1em;
+    color: rgba(233,60,53,0.3);
+    pointer-events: none;
+  }
+  .tp-node__img-placeholder:hover {
+    border-color: rgba(233,60,53,0.55);
+    box-shadow: 0 0 20px rgba(233,60,53,0.1);
+  }
+  .tp-node__img-placeholder__text {
+    font-family: var(--gost-font);
+    font-style: italic;
+    letter-spacing: 0.06em;
+    font-size: var(--fs-sm);
+    color: rgba(255,255,255,0.5);
+    font-weight: var(--fw-medium);
+  }
+  /* When a real image is inserted into the placeholder */
+  .tp-node__img-placeholder img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .tp-node__img-placeholder:has(img) .tp-node__img-placeholder__text {
+    display: none;
   }
 
   /* Spacing between nodes */
