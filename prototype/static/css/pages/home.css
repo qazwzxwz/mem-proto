@@ -1343,90 +1343,6 @@
   align-items: stretch;
 }
 
-/* ── Image-expand effect (desktop only) ──
-   Hover on image = preview, click = latch via .tp-panel--expanded
-   Uses display:contents on col--solution so sol-text and img are direct
-   flex children of .tp-panel__inner — sol-text stays at fixed 40% basis,
-   only img animates its flex-basis (22% ↔ 60%). No reflow of text content. */
-@media (hover: hover) and (pointer: fine) and (min-width: 901px) {
-  .tp-panel__col--solution {
-    display: contents;
-  }
-  .tp-panel__col--problem {
-    flex: 0 0 38%;
-    transition: flex-basis 0.55s cubic-bezier(0.77,0,0.18,1),
-                padding 0.55s cubic-bezier(0.77,0,0.18,1),
-                opacity 0.3s ease,
-                border-color 0.35s ease;
-    will-change: flex-basis, opacity;
-  }
-  .tp-panel__arrow {
-    flex: 0 0 auto;
-    transition: flex-basis 0.55s cubic-bezier(0.77,0,0.18,1),
-                padding 0.55s cubic-bezier(0.77,0,0.18,1),
-                opacity 0.25s ease,
-                border-color 0.25s ease;
-    will-change: flex-basis, opacity;
-  }
-  .tp-panel__sol-text {
-    flex: 0 0 40%;
-  }
-  .tp-panel__img {
-    flex: 0 0 22%;
-    transition: flex-basis 0.55s cubic-bezier(0.77,0,0.18,1),
-                border-left-color 0.35s ease;
-    will-change: flex-basis;
-    cursor: zoom-in;
-  }
-  /* Soft pulsing red glow on idle (affordance hint) */
-  .tp-panel--active .tp-panel__img::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    pointer-events: none;
-    z-index: 3;
-    box-shadow: inset 0 0 40px 4px rgba(233, 60, 53, 0.45);
-    animation: tp-img-pulse 2.6s ease-in-out infinite;
-    transition: box-shadow 0.45s ease, animation 0.1s ease;
-  }
-  /* Expanded/hover: pulse stops, glow becomes quiet and steady */
-  .tp-panel--active .tp-panel__inner:has(.tp-panel__img:hover) .tp-panel__img::before,
-  .tp-panel--active.tp-panel--expanded .tp-panel__img::before {
-    animation: none;
-    box-shadow: inset 0 0 60px 2px rgba(233, 60, 53, 0.18);
-  }
-
-  /* Hover preview OR latched click */
-  .tp-panel--active .tp-panel__inner:has(.tp-panel__img:hover) .tp-panel__col--problem,
-  .tp-panel--active.tp-panel--expanded .tp-panel__col--problem {
-    flex-basis: 0%;
-    padding-left: 0;
-    padding-right: 0;
-    opacity: 0;
-    border-right-color: transparent;
-    pointer-events: none;
-  }
-  .tp-panel--active .tp-panel__inner:has(.tp-panel__img:hover) .tp-panel__arrow,
-  .tp-panel--active.tp-panel--expanded .tp-panel__arrow {
-    flex-basis: 0;
-    padding-left: 0;
-    padding-right: 0;
-    opacity: 0;
-    border-left-color: transparent;
-    border-right-color: transparent;
-  }
-  .tp-panel--active .tp-panel__inner:has(.tp-panel__img:hover) .tp-panel__img,
-  .tp-panel--active.tp-panel--expanded .tp-panel__img {
-    flex-basis: 60%;
-  }
-  .tp-panel--active.tp-panel--expanded .tp-panel__img { cursor: zoom-out; }
-
-  /* Brighten image a bit more in expanded/preview state */
-  .tp-panel--active .tp-panel__inner:has(.tp-panel__img:hover) .tp-panel__img img,
-  .tp-panel--active.tp-panel--expanded .tp-panel__img img {
-    filter: brightness(0.85) saturate(1);
-  }
-}
 /* Redraw animation: content draws in from top */
 .tp-panel--active .tp-panel__inner {
   animation: tp-redraw 0.38s cubic-bezier(0.4,0,0.2,1) both;
@@ -1496,6 +1412,135 @@
   color: rgba(255,255,255,0.4);
   letter-spacing: 0.08em;
   pointer-events: none;
+}
+
+/* ── Clickable-image indicator ──
+   One-to-one копия .f1-toggle-circle с таблицы сравнения на мобилке:
+   - idle: статичная обводка + внутренний пульс (scale 0.7 ↔ 1.1)
+   - раскрыто/hover: заливка акцентным цветом, внешний halo пульсирует
+     (box-shadow spread), внутренний пульс прячется
+   Переходы между состояниями плавные через transition.
+
+   ВАЖНО: span вставлен прямо в .tp-panel (не в .tp-panel__img),
+   потому что .tp-panel__img на desktop выпирает за правый край панели
+   из-за flex-basis без shrink — дот бы клипался через overflow:hidden.
+   .tp-panel имеет position:absolute + inset:0, и её границы совпадают
+   с видимыми границами панели — позиционирование чистое. */
+.tp-panel__dot {
+  position: absolute;
+  top: var(--sp-3);
+  right: var(--sp-3);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-accent);
+  background: transparent;
+  z-index: 5;
+  pointer-events: none;
+  box-shadow: 0 0 0 0 rgba(233,60,53,0);
+  transition: background 0.45s ease, box-shadow 0.45s ease;
+}
+.tp-panel__dot::before {
+  content: '';
+  position: absolute;
+  top: 3px; right: 3px; bottom: 3px; left: 3px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  opacity: 0.4;
+  animation: tp-dot-pulse 1.8s ease-in-out infinite;
+  transition: opacity 0.45s ease;
+}
+/* Active state (raised/hovered image): fill + halo pulse, inner hidden */
+.tp-panel:has(.tp-panel__img:hover) .tp-panel__dot,
+.tp-panel--expanded .tp-panel__dot {
+  background: var(--color-accent);
+  animation: tp-dot-halo 1.8s ease-in-out infinite;
+}
+.tp-panel:has(.tp-panel__img:hover) .tp-panel__dot::before,
+.tp-panel--expanded .tp-panel__dot::before {
+  opacity: 0;
+}
+
+/* Pulse circle indicator keyframes — reused style from .f1-toggle-circle
+   on the comparison table. Defined at top level so they're available in
+   all media query contexts. */
+@keyframes tp-dot-pulse {
+  0%, 100% { transform: scale(0.7); }
+  50%      { transform: scale(1.1); }
+}
+@keyframes tp-dot-halo {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(233,60,53,0); }
+  50%      { box-shadow: 0 0 0 7px rgba(233,60,53,0.15); }
+}
+
+/* ── Image-expand effect (desktop only) ──
+   Hover on image = preview, click = latch via .tp-panel--expanded.
+   Placed AFTER the base .tp-panel__img rules so the media query wins
+   the source-order tiebreak at equal specificity.
+   Uses display:contents on col--solution so sol-text and img become
+   direct flex children of .tp-panel__inner — sol-text stays at fixed
+   40% basis, only img animates its flex-basis (22% ↔ 60%). */
+@media (hover: hover) and (pointer: fine) and (min-width: 901px) {
+  .tp-panel__col--solution {
+    display: contents;
+  }
+  .tp-panel__col--problem {
+    flex: 0 0 38%;
+    transition: flex-basis 0.55s cubic-bezier(0.77,0,0.18,1),
+                padding 0.55s cubic-bezier(0.77,0,0.18,1),
+                opacity 0.3s ease,
+                border-color 0.35s ease;
+    will-change: flex-basis, opacity;
+  }
+  .tp-panel__arrow {
+    flex: 0 0 auto;
+    transition: flex-basis 0.55s cubic-bezier(0.77,0,0.18,1),
+                padding 0.55s cubic-bezier(0.77,0,0.18,1),
+                opacity 0.25s ease,
+                border-color 0.25s ease;
+    will-change: flex-basis, opacity;
+  }
+  .tp-panel__sol-text {
+    flex: 0 0 40%;
+  }
+  .tp-panel__img {
+    flex: 0 0 22%;
+    transition: flex-basis 0.55s cubic-bezier(0.77,0,0.18,1),
+                border-left-color 0.35s ease;
+    will-change: flex-basis;
+    cursor: zoom-in;
+  }
+
+  /* Hover preview OR latched click */
+  .tp-panel--active .tp-panel__inner:has(.tp-panel__img:hover) .tp-panel__col--problem,
+  .tp-panel--active.tp-panel--expanded .tp-panel__col--problem {
+    flex-basis: 0%;
+    padding-left: 0;
+    padding-right: 0;
+    opacity: 0;
+    border-right-color: transparent;
+    pointer-events: none;
+  }
+  .tp-panel--active .tp-panel__inner:has(.tp-panel__img:hover) .tp-panel__arrow,
+  .tp-panel--active.tp-panel--expanded .tp-panel__arrow {
+    flex-basis: 0;
+    padding-left: 0;
+    padding-right: 0;
+    opacity: 0;
+    border-left-color: transparent;
+    border-right-color: transparent;
+  }
+  .tp-panel--active .tp-panel__inner:has(.tp-panel__img:hover) .tp-panel__img,
+  .tp-panel--active.tp-panel--expanded .tp-panel__img {
+    flex-basis: 60%;
+  }
+  .tp-panel--active.tp-panel--expanded .tp-panel__img { cursor: zoom-out; }
+
+  /* Brighten image a bit more in expanded/preview state */
+  .tp-panel--active .tp-panel__inner:has(.tp-panel__img:hover) .tp-panel__img img,
+  .tp-panel--active.tp-panel--expanded .tp-panel__img img {
+    filter: brightness(0.85) saturate(1);
+  }
 }
 
 .tp-panel__arrow {
