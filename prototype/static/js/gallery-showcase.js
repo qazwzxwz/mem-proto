@@ -61,6 +61,7 @@ export function init(section) {
     /* — OLD PANEL: fade out — */
     const oldPanel = panels[prev];
     oldPanel.classList.remove('tp-panel--active');
+    oldPanel.classList.remove('tp-panel--expanded'); // reset latched zoom
 
     /* — NEW PANEL: redraw animation — */
     const newPanel = panels[idx];
@@ -117,6 +118,16 @@ export function init(section) {
   tabs.forEach((tab, i) => {
     tab.addEventListener('click', () => {
       if (window.innerWidth > DESKTOP_BP) desktopGoTo(i);
+    });
+  });
+
+  /* ── Desktop: click on image latches expanded state ── */
+  panels.forEach(panel => {
+    const img = panel.querySelector('.tp-panel__img');
+    if (!img) return;
+    img.addEventListener('click', () => {
+      if (window.innerWidth <= DESKTOP_BP) return;
+      panel.classList.toggle('tp-panel--expanded');
     });
   });
 

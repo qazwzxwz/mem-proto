@@ -1342,6 +1342,74 @@
   height: 100%;
   align-items: stretch;
 }
+
+/* ── Image-expand effect (desktop only) ──
+   Hover on image = preview, click = latch via .tp-panel--expanded
+   Uses display:contents on col--solution so sol-text and img are direct
+   flex children of .tp-panel__inner — sol-text stays at fixed 40% basis,
+   only img animates its flex-basis (22% ↔ 60%). No reflow of text content. */
+@media (hover: hover) and (pointer: fine) and (min-width: 901px) {
+  .tp-panel__col--solution {
+    display: contents;
+  }
+  .tp-panel__col--problem {
+    flex: 0 0 38%;
+    transition: flex-basis 0.55s cubic-bezier(0.77,0,0.18,1),
+                padding 0.55s cubic-bezier(0.77,0,0.18,1),
+                opacity 0.3s ease,
+                border-color 0.35s ease;
+    will-change: flex-basis, opacity;
+  }
+  .tp-panel__arrow {
+    flex: 0 0 auto;
+    transition: flex-basis 0.55s cubic-bezier(0.77,0,0.18,1),
+                padding 0.55s cubic-bezier(0.77,0,0.18,1),
+                opacity 0.25s ease,
+                border-color 0.25s ease;
+    will-change: flex-basis, opacity;
+  }
+  .tp-panel__sol-text {
+    flex: 0 0 40%;
+  }
+  .tp-panel__img {
+    flex: 0 0 22%;
+    transition: flex-basis 0.55s cubic-bezier(0.77,0,0.18,1),
+                border-left-color 0.35s ease;
+    will-change: flex-basis;
+    cursor: zoom-in;
+  }
+
+  /* Hover preview OR latched click */
+  .tp-panel--active .tp-panel__inner:has(.tp-panel__img:hover) .tp-panel__col--problem,
+  .tp-panel--active.tp-panel--expanded .tp-panel__col--problem {
+    flex-basis: 0%;
+    padding-left: 0;
+    padding-right: 0;
+    opacity: 0;
+    border-right-color: transparent;
+    pointer-events: none;
+  }
+  .tp-panel--active .tp-panel__inner:has(.tp-panel__img:hover) .tp-panel__arrow,
+  .tp-panel--active.tp-panel--expanded .tp-panel__arrow {
+    flex-basis: 0;
+    padding-left: 0;
+    padding-right: 0;
+    opacity: 0;
+    border-left-color: transparent;
+    border-right-color: transparent;
+  }
+  .tp-panel--active .tp-panel__inner:has(.tp-panel__img:hover) .tp-panel__img,
+  .tp-panel--active.tp-panel--expanded .tp-panel__img {
+    flex-basis: 60%;
+  }
+  .tp-panel--active.tp-panel--expanded .tp-panel__img { cursor: zoom-out; }
+
+  /* Brighten image a bit more in expanded/preview state */
+  .tp-panel--active .tp-panel__inner:has(.tp-panel__img:hover) .tp-panel__img img,
+  .tp-panel--active.tp-panel--expanded .tp-panel__img img {
+    filter: brightness(0.85) saturate(1);
+  }
+}
 /* Redraw animation: content draws in from top */
 .tp-panel--active .tp-panel__inner {
   animation: tp-redraw 0.38s cubic-bezier(0.4,0,0.2,1) both;
@@ -1361,7 +1429,7 @@
   background: rgba(233,60,53,0.03);
   border-right: 1px solid rgba(233,60,53,0.1);
   min-width: 0;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 /* Solution column: text + image side by side */
@@ -1381,7 +1449,7 @@
   justify-content: center;
   padding: var(--sp-8) var(--sp-8);
   min-width: 0;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 /* Solution image */
