@@ -1891,7 +1891,9 @@
     font-family: var(--gost-font);
   }
 
-  /* Image placeholder — blueprint frame (matches .video-placeholder ГОСТ override) */
+  /* Image placeholder — blueprint frame.
+     Подпись — угловая ГОСТ-аннотация в левом нижнем углу (как на десктопе
+     у .tp-panel__img::after): полупрозрачный серый текст, без фона. */
   .tp-node__img-placeholder {
     position: relative;
     width: 100%;
@@ -1907,29 +1909,18 @@
     margin-left: var(--sp-5);
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
   }
-  .tp-node__img-placeholder::before {
+  .tp-node__img-placeholder::after {
     content: attr(data-label);
     position: absolute;
-    top: var(--sp-3);
-    left: var(--sp-4);
-    font-family: var(--gost-font);
-    font-style: italic;
-    font-size: var(--fs-xs);
-    letter-spacing: 0.12em;
-    color: rgba(233,60,53,0.4);
-    pointer-events: none;
-  }
-  .tp-node__img-placeholder::after {
-    content: 'М 1:1 ЛИС. 1';
-    position: absolute;
     bottom: var(--sp-3);
-    right: var(--sp-4);
+    left: var(--sp-3);
     font-family: var(--gost-font);
     font-style: italic;
-    font-size: var(--fs-xs);
-    letter-spacing: 0.1em;
-    color: rgba(233,60,53,0.3);
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.08em;
     pointer-events: none;
+    z-index: 2;
   }
   .tp-node__img-placeholder:hover {
     border-color: rgba(233,60,53,0.55);
@@ -1950,6 +1941,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    z-index: 1;
   }
   .tp-node__img-placeholder:has(img) .tp-node__img-placeholder__text {
     display: none;
@@ -2602,42 +2594,46 @@
   padding-bottom: var(--sp-3);
 }
 
-/* ── Video wrapper — blueprint frame ── */
+/* ── Video wrapper — blueprint frame ──
+   Подпись — угловая ГОСТ-аннотация в левом нижнем углу (как на десктопе
+   у .tp-panel__img::after): полупрозрачный серый текст, без фона. */
 .video-placeholder {
   background: transparent;
   border: 1px solid rgba(233,60,53,0.3);
   border-radius: 2px;
   box-shadow: none;
   position: relative;
-}
-.video-placeholder::before {
-  content: 'ВИДЕООБЗОР МЭМ-01';
-  position: absolute;
-  top: var(--sp-3);
-  left: var(--sp-4);
-  font-family: var(--gost-font);
-  font-style: italic;
-  font-size: var(--fs-xs);
-  letter-spacing: 0.12em;
-  color: rgba(233,60,53,0.4);
-  pointer-events: none;
+  overflow: hidden;
 }
 .video-placeholder::after {
-  content: 'М 1:1 ЛИС. 1';
+  content: 'ВИДЕООБЗОР МЭМ-01';
   position: absolute;
   bottom: var(--sp-3);
-  right: var(--sp-4);
+  left: var(--sp-3);
   font-family: var(--gost-font);
   font-style: italic;
-  font-size: var(--fs-xs);
-  letter-spacing: 0.1em;
-  color: rgba(233,60,53,0.3);
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.08em;
   pointer-events: none;
+  z-index: 2;
 }
 .video-placeholder:hover {
   border-color: rgba(233,60,53,0.55);
   box-shadow: 0 0 20px rgba(233,60,53,0.1);
   transform: none;
+}
+/* Real video/iframe inside .video-placeholder — stays behind the ГОСТ
+   label so that ::after annotation remains visible. */
+.video-placeholder > video,
+.video-placeholder > iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 2px;
+  box-shadow: none;
+  position: relative;
+  z-index: 1;
 }
 .video-placeholder__text {
   font-family: var(--gost-font);

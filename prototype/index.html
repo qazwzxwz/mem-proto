@@ -509,6 +509,7 @@
                   <div class="tp-nspec"><span class="tp-nspec__val">3&thinsp;ф.</span><span class="tp-nspec__key">питание</span></div>
                 </div>
                 <div class="tp-node__img-placeholder" data-label="МЭМ // ГЕНЕРАЦИЯ">
+                  <img src="static/img/photo1.jpg" alt="МЭМ — генерация и сварка" loading="lazy">
                   <span class="tp-node__img-placeholder__text">Место для фото</span>
                 </div>
               </div>
@@ -1011,21 +1012,12 @@
           <p>Посмотрите модуль в действии</p>
         </div>
 
-        <div class="video-wrapper">
-          <div class="video-placeholder" aria-label="Видеоплеер (заглушка)">
-            <div class="video-placeholder__play">
-              <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
-                <circle cx="32" cy="32" r="31" stroke="rgba(255,255,255,0.8)" stroke-width="2"/>
-                <path d="M26 20 L46 32 L26 44 Z" fill="rgba(255,255,255,0.9)"/>
-              </svg>
-            </div>
-            <div class="video-placeholder__text">Видео будет загружено с сервера</div>
-            <!-- Replace with real video: -->
-            <!-- <video src="video/mem-overview.mp4" controls poster="img/video-poster.jpg"></video> -->
-          </div>
+        <div class="video-placeholder">
+          <video controls preload="metadata" poster="static/img/MEM_preview.png">
+            <source src="static/video/MEM_video.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+          </video>
         </div>
-      </div>
-    </section>
 
   </main>
 

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>МЭМ — Варианты подписей ГОСТ</title>
+  <link rel="stylesheet" href="../static/css/tokens.css">
+  <link rel="stylesheet" href="../static/css/base.css">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────
+       Demo page — GOST label visibility variants
+       5 вариантов решения проблемы читаемости надписей
+       поверх загруженных медиа-файлов (фото/видео).
+       ───────────────────────────────────────────────────────── */
+
+    body {
+      background: #0b0d0f;
+      color: #e6e6e6;
+      font-family: var(--font-sans, 'Inter', system-ui, sans-serif);
+      padding: var(--sp-8) var(--sp-6);
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-family: var(--gost-font);
+      font-style: italic;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: var(--fs-3xl);
+      color: #fff;
+      margin-bottom: var(--sp-3);
+    }
+    h1 span { color: var(--color-accent); }
+
+    .demo-intro {
+      font-family: var(--gost-font);
+      font-style: italic;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.04em;
+      max-width: 720px;
+      margin-bottom: var(--sp-10);
+      line-height: 1.6;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: var(--sp-10) var(--sp-8);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .demo-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .demo-card__title {
+      font-family: var(--gost-font);
+      font-style: italic;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-accent);
+      font-size: var(--fs-lg);
+      margin-bottom: var(--sp-2);
+    }
+    .demo-card__title em {
+      font-style: normal;
+      color: #fff;
+      margin-right: var(--sp-3);
+    }
+
+    .demo-card__desc {
+      font-family: var(--gost-font);
+      font-style: italic;
+      color: rgba(255,255,255,0.5);
+      font-size: var(--fs-sm);
+      letter-spacing: 0.04em;
+      line-height: 1.5;
+      margin-bottom: var(--sp-5);
+      min-height: 3em;
+    }
+
+    /* ─── Base placeholder block (все варианты наследуют) ─── */
+    .demo-img {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: transparent;
+      border: 1px solid rgba(233,60,53,0.3);
+      border-radius: 2px;
+      overflow: hidden;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .demo-img img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
+    .demo-img:hover {
+      border-color: rgba(233,60,53,0.55);
+      box-shadow: 0 0 20px rgba(233,60,53,0.1);
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT 1 — Подписи ВНЕ рамки (в полях, как в ГОСТ-штампе)
+       ═══════════════════════════════════════════════════════════ */
+    .demo-card--v1 {
+      padding-top: calc(var(--sp-5) + 4px);
+      padding-bottom: calc(var(--sp-5) + 4px);
+    }
+    .demo-card--v1 .demo-img {
+      overflow: visible;
+    }
+    .demo-card--v1 .demo-img img { border-radius: 2px; }
+    .demo-card--v1 .demo-img::before {
+      content: attr(data-label);
+      position: absolute;
+      top: calc(-1 * var(--sp-5) - 2px);
+      left: 0;
+      font-family: var(--gost-font);
+      font-style: italic;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.12em;
+      color: rgba(233,60,53,0.7);
+      pointer-events: none;
+    }
+    .demo-card--v1 .demo-img::after {
+      content: 'М 1:1 ЛИС. 1';
+      position: absolute;
+      bottom: calc(-1 * var(--sp-5) - 2px);
+      right: 0;
+      font-family: var(--gost-font);
+      font-style: italic;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.1em;
+      color: rgba(233,60,53,0.6);
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT 2 — Полупрозрачная тёмная плашка под текст
+       ═══════════════════════════════════════════════════════════ */
+    .demo-card--v2 .demo-img::before {
+      content: attr(data-label);
+      position: absolute;
+      top: var(--sp-3);
+      left: var(--sp-3);
+      padding: 3px var(--sp-3);
+      font-family: var(--gost-font);
+      font-style: italic;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.12em;
+      color: rgba(233,60,53,0.95);
+      background: rgba(0,0,0,0.72);
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(233,60,53,0.4);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .demo-card--v2 .demo-img::after {
+      content: 'М 1:1 ЛИС. 1';
+      position: absolute;
+      bottom: var(--sp-3);
+      right: var(--sp-3);
+      padding: 3px var(--sp-3);
+      font-family: var(--gost-font);
+      font-style: italic;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.1em;
+      color: rgba(233,60,53,0.9);
+      background: rgba(0,0,0,0.72);
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(233,60,53,0.3);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT 3 — Картуш-полосы сверху и снизу (штамп чертежа)
+       ═══════════════════════════════════════════════════════════ */
+    .demo-card--v3 .demo-img::before {
+      content: attr(data-label);
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 22px;
+      padding: 0 var(--sp-4);
+      display: flex;
+      align-items: center;
+      font-family: var(--gost-font);
+      font-style: italic;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.12em;
+      color: rgba(233,60,53,0.95);
+      background: rgba(0,0,0,0.82);
+      border-bottom: 1px solid rgba(233,60,53,0.45);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .demo-card--v3 .demo-img::after {
+      content: 'М 1:1 ЛИС. 1 · ФОРМ А4';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 22px;
+      padding: 0 var(--sp-4);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      font-family: var(--gost-font);
+      font-style: italic;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.1em;
+      color: rgba(233,60,53,0.9);
+      background: rgba(0,0,0,0.82);
+      border-top: 1px solid rgba(233,60,53,0.45);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT 4 — Text-stroke обводка
+       ═══════════════════════════════════════════════════════════ */
+    .demo-card--v4 .demo-img::before {
+      content: attr(data-label);
+      position: absolute;
+      top: var(--sp-3);
+      left: var(--sp-4);
+      font-family: var(--gost-font);
+      font-style: italic;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.12em;
+      color: rgba(233,60,53,1);
+      -webkit-text-stroke: 0.6px rgba(0,0,0,0.95);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .demo-card--v4 .demo-img::after {
+      content: 'М 1:1 ЛИС. 1';
+      position: absolute;
+      bottom: var(--sp-3);
+      right: var(--sp-4);
+      font-family: var(--gost-font);
+      font-style: italic;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.1em;
+      color: rgba(233,60,53,1);
+      -webkit-text-stroke: 0.6px rgba(0,0,0,0.95);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT 6 — Tag-chip примыкает к изображению, справа сверху
+                    (гибрид 3+2 модифицированный)
+       Заголовок — бирка, чей нижний край сидит ровно на верхнем
+       крае рамки. Нижний border убран, чтобы не было двойной линии
+       в месте стыка — бирка и рамка визуально образуют одно целое.
+       ═══════════════════════════════════════════════════════════ */
+    .demo-card--v6 {
+      padding-top: var(--sp-7);
+    }
+    .demo-card--v6 .demo-img {
+      overflow: visible;
+    }
+    .demo-card--v6 .demo-img > img { border-radius: 2px; }
+    .demo-card--v6 .demo-img::before {
+      content: attr(data-label);
+      position: absolute;
+      bottom: 100%;
+      right: -1px;
+      padding: 4px var(--sp-4);
+      font-family: var(--gost-font);
+      font-style: italic;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(233,60,53,0.95);
+      background: rgba(0,0,0,0.85);
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(233,60,53,0.55);
+      border-bottom: none;
+      border-radius: 2px 2px 0 0;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .demo-card--v6 .demo-img::after {
+      content: 'М 1:1 ЛИС. 1';
+      position: absolute;
+      bottom: var(--sp-3);
+      right: var(--sp-3);
+      padding: 3px var(--sp-3);
+      font-family: var(--gost-font);
+      font-style: italic;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.1em;
+      color: rgba(233,60,53,0.9);
+      background: rgba(0,0,0,0.72);
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(233,60,53,0.3);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* ═══════════════════════════════════════════════════════════
+       VARIANT 5 — Гибрид: заголовок снаружи (v1) + мелкая подпись
+                    на плашке внутри (v2)
+       ═══════════════════════════════════════════════════════════ */
+    .demo-card--v5 {
+      padding-top: calc(var(--sp-5) + 4px);
+    }
+    .demo-card--v5 .demo-img {
+      overflow: visible;
+    }
+    .demo-card--v5 .demo-img > img { border-radius: 2px; }
+    .demo-card--v5 .demo-img::before {
+      content: attr(data-label);
+      position: absolute;
+      top: calc(-1 * var(--sp-5) - 2px);
+      left: 0;
+      font-family: var(--gost-font);
+      font-style: italic;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.12em;
+      color: rgba(233,60,53,0.7);
+      pointer-events: none;
+    }
+    .demo-card--v5 .demo-img::after {
+      content: 'М 1:1 ЛИС. 1';
+      position: absolute;
+      bottom: var(--sp-3);
+      right: var(--sp-3);
+      padding: 3px var(--sp-3);
+      font-family: var(--gost-font);
+      font-style: italic;
+      font-size: var(--fs-xs);
+      letter-spacing: 0.1em;
+      color: rgba(233,60,53,0.9);
+      background: rgba(0,0,0,0.72);
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(233,60,53,0.3);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Footer bar */
+    .demo-back {
+      display: inline-block;
+      margin-top: var(--sp-10);
+      padding: var(--sp-3) var(--sp-5);
+      font-family: var(--gost-font);
+      font-style: italic;
+      letter-spacing: 0.08em;
+      color: rgba(233,60,53,0.8);
+      text-decoration: none;
+      border: 1px solid rgba(233,60,53,0.3);
+      border-radius: 2px;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+    .demo-back:hover {
+      background: rgba(233,60,53,0.08);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Надписи ГОСТ <span>поверх медиа</span> — 5 вариантов</h1>
+  <p class="demo-intro">
+    Одна и та же фотка «Нет электричества → Генерация и сварка» с разным
+    подходом к ГОСТ-подписям <em>«МЭМ // ГЕНЕРАЦИЯ»</em> и
+    <em>«М 1:1 ЛИС. 1»</em>. Наведи на любую карточку, чтобы увидеть hover-эффект.
+  </p>
+
+  <div class="demo-grid">
+
+    <!-- ─── Variant 1 ─── -->
+    <div class="demo-card demo-card--v1">
+      <div class="demo-card__title"><em>01</em> В полях / снаружи рамки</div>
+      <p class="demo-card__desc">
+        Надписи живут СНАРУЖИ рамки, над и под фоткой — как в настоящем
+        ГОСТ-штампе. Проблема читаемости решена полностью, они на фоне
+        страницы, а не поверх картинки.
+      </p>
+      <div class="demo-img" data-label="МЭМ // ГЕНЕРАЦИЯ">
+        <img src="../static/img/photo1.jpg" alt="МЭМ — генерация и сварка">
+      </div>
+    </div>
+
+    <!-- ─── Variant 2 ─── -->
+    <div class="demo-card demo-card--v2">
+      <div class="demo-card__title"><em>02</em> Плашка с blur</div>
+      <p class="demo-card__desc">
+        Тёмная полупрозрачная плашка с backdrop-filter blur(4px) и красной
+        обводкой. Классический технический UI-чип, хорошо читается на
+        любом фоне.
+      </p>
+      <div class="demo-img" data-label="МЭМ // ГЕНЕРАЦИЯ">
+        <img src="../static/img/photo1.jpg" alt="МЭМ — генерация и сварка">
+      </div>
+    </div>
+
+    <!-- ─── Variant 3 ─── -->
+    <div class="demo-card demo-card--v3">
+      <div class="demo-card__title"><em>03</em> Картуш-полосы</div>
+      <p class="demo-card__desc">
+        Узкие тёмные полоски по верху и низу кадра, куда влиты подписи.
+        Полная имитация штампа на чертёжном листе. Самое «техничное», но
+        занимает часть кадра.
+      </p>
+      <div class="demo-img" data-label="МЭМ // ГЕНЕРАЦИЯ">
+        <img src="../static/img/photo1.jpg" alt="МЭМ — генерация и сварка">
+      </div>
+    </div>
+
+    <!-- ─── Variant 4 ─── -->
+    <div class="demo-card demo-card--v4">
+      <div class="demo-card__title"><em>04</em> Text-stroke обводка</div>
+      <p class="demo-card__desc">
+        Красный fill с тонкой 0.6px чёрной обводкой через
+        -webkit-text-stroke. Работает везде, но «мультяшнее» остальных —
+        не совсем стиль чертежа.
+      </p>
+      <div class="demo-img" data-label="МЭМ // ГЕНЕРАЦИЯ">
+        <img src="../static/img/photo1.jpg" alt="МЭМ — генерация и сварка">
+      </div>
+    </div>
+
+    <!-- ─── Variant 5 ─── -->
+    <div class="demo-card demo-card--v5">
+      <div class="demo-card__title"><em>05</em> Гибрид (01 + 02)</div>
+      <p class="demo-card__desc">
+        Главная подпись — снаружи сверху (как в ГОСТ-штампе), мелкая
+        угловая — внутри на плашке с blur. Баланс аутентичности и
+        компактности, кадр не обрезается.
+      </p>
+      <div class="demo-img" data-label="МЭМ // ГЕНЕРАЦИЯ">
+        <img src="../static/img/photo1.jpg" alt="МЭМ — генерация и сварка">
+      </div>
+    </div>
+
+    <!-- ─── Variant 6 ─── -->
+    <div class="demo-card demo-card--v6">
+      <div class="demo-card__title"><em>06</em> Tag-chip над кадром</div>
+      <p class="demo-card__desc">
+        Гибрид 3+2 модифицированный: главный заголовок — бирка над
+        правым верхним углом фотки, с обводкой и тёмной заливкой;
+        угловая подпись — внутри на плашке с blur.
+      </p>
+      <div class="demo-img" data-label="МЭМ // ГЕНЕРАЦИЯ">
+        <img src="../static/img/photo1.jpg" alt="МЭМ — генерация и сварка">
+      </div>
+    </div>
+
+  </div>
+
+  <a class="demo-back" href="../index.html">← вернуться к прототипу</a>
+
+</body>
+</html>
