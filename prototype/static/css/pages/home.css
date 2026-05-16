@@ -2018,6 +2018,9 @@
   max-height: 60vh;
   position: relative;
 }
+.f1-mobile-tap-note {
+  display: none;
+}
 
 /* Phantom-rail для шапки и футера:
    overflow-y: scroll резервирует такое же место под скроллбар, как и .f1-scroll-area,
@@ -2295,6 +2298,25 @@
   /* Redistribute: feature 45%, visible col 55% */
   .f1-table .f1-col-w1 { width: 44.3%; }
   .f1-table .f1-col-w3 { width: 55%; }
+
+  .comparison-section .f1-mobile-tap-note {
+    display: block;
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto var(--sp-2);
+    padding-left: 44.3%;
+    box-sizing: border-box;
+    font-family: var(--gost-font);
+    font-style: italic;
+    font-size: var(--fs-base);
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0.04em;
+    text-align: center;
+    text-transform: none;
+    color: rgba(255,255,255,0.4);
+    background: transparent;
+  }
 
   /* When toggled to МЭМ — hide col3, show col2 */
   .f1-table-wrap--mem .f1-table thead th:nth-child(2),
