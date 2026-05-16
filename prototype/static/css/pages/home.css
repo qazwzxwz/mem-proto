@@ -2027,6 +2027,9 @@
    но скроллбар прозрачный — колонки выравниваются автоматически */
 .f1-rail {
   overflow-y: scroll;
+  overflow-x: hidden;
+  flex-shrink: 0;
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
 }
@@ -2038,8 +2041,9 @@
 .f1-scroll-area {
   flex: 1;
   overflow-y: auto;
-  overflow-x: auto;
+  overflow-x: hidden;
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.15) transparent;
 }
@@ -2072,7 +2076,7 @@
   overflow: hidden;
   flex-shrink: 0;
   scrollbar-gutter: stable;
-  width: 99.1%;
+  width: 100%;
 }
 .f1-table--head th {
   padding: var(--sp-5) var(--sp-6);
@@ -2163,7 +2167,7 @@
   border-radius: 0 0 var(--radius-xl) var(--radius-xl);
   overflow: hidden;
   flex-shrink: 0;
-  width: 99.1%;
+  width: 100%;
 }
 .f1-table--foot td {
   padding: var(--sp-6) var(--sp-6);
@@ -2289,6 +2293,34 @@
 /* ══ Comparison — Mobile toggle (≤768px) ══
    Hide МЭМ col, show only "По отдельности" with toggle to switch */
 @media (max-width: 768px) {
+  .f1-table-wrap {
+    --f1-mem-fill: rgba(233,60,53,0.1);
+    --f1-gutter-fill-width: 16px;
+  }
+
+  .f1-scroll-area {
+    overflow-y: scroll;
+  }
+
+  .f1-table-wrap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--f1-mem-border-x, 44.3%);
+    width: 2px;
+    background: rgba(233,60,53,0.6);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-1px);
+    transition: opacity 0.5s ease;
+    z-index: 2;
+  }
+
+  .f1-table-wrap--mem-styled::after {
+    opacity: 1;
+  }
+
   /* Hide МЭМ column (2nd data col) by default on mobile */
   .f1-table .f1-col-w2 { width: 0; display: none;}
   .f1-table thead th:nth-child(2),
@@ -2298,6 +2330,8 @@
   /* Redistribute: feature 45%, visible col 55% */
   .f1-table .f1-col-w1 { width: 44.3%; }
   .f1-table .f1-col-w3 { width: 55%; }
+  .f1-table-wrap--mem .f1-table .f1-col-w2 { width: 55%; display: table-column; }
+  .f1-table-wrap--mem .f1-table .f1-col-w3 { width: 0; display: none; }
 
   .comparison-section .f1-mobile-tap-note {
     display: block;
@@ -2419,10 +2453,23 @@
   .f1-table-wrap--mem-styled .f1-col-mem,
   .f1-table-wrap--mem-styled .f1-table--body tbody tr:not(.f1-category) td:nth-child(2),
   .f1-table-wrap--mem-styled .f1-table--foot tfoot td:nth-child(2) {
-    background: rgba(233,60,53,0.1) !important;
+    position: relative;
+    background: var(--f1-mem-fill) !important;
     color: #fff !important;
-    border-left-color: rgba(233,60,53,0.6) !important;
+    border-left-color: transparent !important;
     border-right-color: rgba(233,60,53,0.6) !important;
+  }
+  .f1-table-wrap--mem-styled .f1-col-mem::after,
+  .f1-table-wrap--mem-styled .f1-table--body tbody tr:not(.f1-category) td:nth-child(2)::after,
+  .f1-table-wrap--mem-styled .f1-table--foot tfoot td:nth-child(2)::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: calc(-1 * var(--f1-gutter-fill-width));
+    bottom: 0;
+    width: var(--f1-gutter-fill-width);
+    background: var(--f1-mem-fill);
+    pointer-events: none;
   }
   .f1-table-wrap--mem-styled .f1-table--body tbody tr:not(.f1-category) td:nth-child(2) .f1-check {
     color: var(--color-accent);

@@ -77,6 +77,18 @@ export function init() {
       };
     }
 
+    function syncMemBorderLine() {
+      const source = rows.map(r => r.cells[1]).find(td => td && td.getClientRects().length) || thMem;
+      if (!source || !source.getClientRects().length) return;
+
+      const wrapRect = wrap.getBoundingClientRect();
+      const sourceRect = source.getBoundingClientRect();
+      wrap.style.setProperty('--f1-mem-border-x', `${sourceRect.left - wrapRect.left}px`);
+      wrap.style.setProperty('--f1-mem-fill-right-x', `${sourceRect.right - wrapRect.left}px`);
+    }
+
+    window.addEventListener('resize', syncMemBorderLine, { passive: true });
+
     // Click handlers on both headers
     if (thSep) thSep.addEventListener('click', () => toggle());
     if (thMem) thMem.addEventListener('click', () => toggle());
@@ -155,6 +167,8 @@ export function init() {
 
         // Wait a tick for DOM to update column visibility
         requestAnimationFrame(() => {
+          syncMemBorderLine();
+
           const newColIdx = toMem ? 1 : 2;
           const newCells = rows.map(r => r.cells[newColIdx]);
 
@@ -180,6 +194,7 @@ export function init() {
               // styled class at the very start of toggle() so the fade-out
               // runs while МЭМ column is still visible.
               if (toMem) {
+                syncMemBorderLine();
                 // Force reflow + rAF: МЭМ column only just unhid
                 // (display:none → table-cell), and browsers can skip the
                 // very first transition on freshly appeared elements.

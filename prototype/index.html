@@ -677,18 +677,20 @@
         <div class="f1-mobile-tap-note">(Можно нажать)</div>
         <div class="f1-table-wrap" id="f1-wrap">
           <!-- Fixed header -->
-          <table class="f1-table f1-table--head">
-            <colgroup>
-              <col class="f1-col-w1"><col class="f1-col-w2"><col class="f1-col-w3">
-            </colgroup>
-            <thead>
-              <tr>
-                <th>Характеристика</th>
-                <th class="f1-col-mem"><span class="f1-head-title">МЭМ</span><br><small class="f1-head-sub" style="font-weight:400;opacity:0.85;">Всё в одном модуле</small> <span class="f1-toggle-circle" aria-hidden="true"></span></th>
-                <th class="f1-col-separate"><span class="f1-head-title">По отдельности</span><br><small class="f1-head-sub" style="font-weight:400;">Генератор + Оборудование</small> <span class="f1-toggle-circle" aria-hidden="true"></span></th>
-              </tr>
-            </thead>
-          </table>
+          <div class="f1-rail">
+            <table class="f1-table f1-table--head">
+              <colgroup>
+                <col class="f1-col-w1"><col class="f1-col-w2"><col class="f1-col-w3">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Характеристика</th>
+                  <th class="f1-col-mem"><span class="f1-head-title">МЭМ</span><br><small class="f1-head-sub" style="font-weight:400;opacity:0.85;">Всё в одном модуле</small> <span class="f1-toggle-circle" aria-hidden="true"></span></th>
+                  <th class="f1-col-separate"><span class="f1-head-title">По отдельности</span><br><small class="f1-head-sub" style="font-weight:400;">Генератор + Оборудование</small> <span class="f1-toggle-circle" aria-hidden="true"></span></th>
+                </tr>
+              </thead>
+            </table>
+          </div>
 
           <!-- Scrollable body -->
           <div class="f1-scroll-area" id="f1-scroll">
@@ -781,24 +783,26 @@
           </div>
 
           <!-- Fixed footer -->
-          <table class="f1-table f1-table--foot">
-            <colgroup>
-              <col class="f1-col-w1"><col class="f1-col-w2"><col class="f1-col-w3">
-            </colgroup>
-            <tfoot>
-              <tr>
-                <td>Ориентировочная стоимость</td>
-                <td>
-                  <span class="f1-price-mem">от ??? ??? ₽</span>
-                  <span class="f1-price-sub">МЭМ-S (базовый)</span>
-                </td>
-                <td>
-                  <span class="f1-price-sep">от ??? ??? ₽</span>
-                  <span class="f1-price-sub">Генератор + насос + сварка + хранение</span>
-                </td>
-              </tr>
-            </tfoot>
-          </table>
+          <div class="f1-rail">
+            <table class="f1-table f1-table--foot">
+              <colgroup>
+                <col class="f1-col-w1"><col class="f1-col-w2"><col class="f1-col-w3">
+              </colgroup>
+              <tfoot>
+                <tr>
+                  <td>Ориентировочная стоимость</td>
+                  <td>
+                    <span class="f1-price-mem">от ??? ??? ₽</span>
+                    <span class="f1-price-sub">МЭМ-S (базовый)</span>
+                  </td>
+                  <td>
+                    <span class="f1-price-sep">от ??? ??? ₽</span>
+                    <span class="f1-price-sub">Генератор + насос + сварка + хранение</span>
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
       </div>
     </section>
